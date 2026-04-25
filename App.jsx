@@ -292,16 +292,37 @@ function Lobby({ room, players, isHost, onStart }) {
   );
 }
 
-function PlayerTable({ players, currentTurn }) {
+function PlayerTable({ players, currentTurn, pot, blinds, roundNumber }) {
+  const seatedPlayers = players.length ? players : [];
+
   return (
-    <div className="table">
-      {players.map((player) => (
-        <div className={`seat ${player.id === currentTurn ? "active" : ""} ${player.folded ? "folded" : ""}`} key={player.id}>
-          <span>{player.name}</span>
-          <strong>{player.coins}</strong>
-          <small>gesetzt: {player.committed || 0}</small>
+    <div className="tableScene" aria-label="Spieltisch">
+      <div className="feltTable">
+        <div className="tableCenter">
+          <span>Pot</span>
+          <strong>{pot}</strong>
+          <small>Runde {roundNumber} · SB {blinds.smallBlind} / BB {blinds.bigBlind}</small>
         </div>
-      ))}
+      </div>
+
+      {seatedPlayers.map((player, index) => {
+        const angle = -90 + (index * 360) / seatedPlayers.length;
+        const radians = (angle * Math.PI) / 180;
+        const x = 50 + Math.cos(radians) * 43;
+        const y = 50 + Math.sin(radians) * 37;
+
+        return (
+          <div
+            className={`seat ${player.id === currentTurn ? "active" : ""} ${player.folded ? "folded" : ""}`}
+            key={player.id}
+            style={{ "--seat-x": `${x}%`, "--seat-y": `${y}%` }}
+          >
+            <span>{player.name}</span>
+            <strong>{player.coins} Coins</strong>
+            <small>gesetzt: {player.committed || 0}</small>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -316,6 +337,7 @@ function Game({ room, players, userId }) {
   const currentBet = Math.max(0, ...players.map((player) => player.committed || 0));
   const isMyTurn = room.currentTurn === userId;
   const blinds = getBlinds(room.roundNumber || 1);
+  const pot = players.reduce((sum, player) => sum + Number(player.committed || 0), 0);
 
   const winnerText = useMemo(() => {
     if (!room.result) return "";
@@ -469,10 +491,10 @@ function Game({ room, players, userId }) {
         <span>Runde {room.roundNumber}</span>
         <span>Small {blinds.smallBlind}</span>
         <span>Big {blinds.bigBlind}</span>
-        <span>Pot {players.reduce((sum, player) => sum + Number(player.committed || 0), 0)}</span>
+        <span>Pot {pot}</span>
       </section>
 
-      <PlayerTable players={players} currentTurn={room.currentTurn} />
+      <PlayerTable players={players} currentTurn={room.currentTurn} pot={pot} blinds={blinds} roundNumber={room.roundNumber} />
 
       <section className="panel questionPanel">
         <p className="kicker">Frage</p>
