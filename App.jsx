@@ -24,7 +24,7 @@ import {
   Trophy,
   Users
 } from "lucide-react";
-import { db, ensureAnonymousUser } from "./firebase";
+import { db, ensureAnonymousUser } from "./firebase.js";
 
 const QUESTIONS = [
   {
