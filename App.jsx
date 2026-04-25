@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { db, ensureAnonymousUser } from "./firebase.js";
 import { QUESTIONS as QUESTION_BANK } from "./questions.js";
+import logoUrl from "./logo.png";
 
 const QUESTIONS = [
   {
@@ -143,7 +144,7 @@ function useRoom(roomCode) {
 function Logo() {
   return (
     <div className="logoWrap">
-      <img className="brandLogo" src="/logo.png" alt="TRY's Logo" />
+      <img className="brandLogo" src={logoUrl} alt="TRY's Logo" />
       <div>
         <p className="kicker">Spielmaster</p>
         <h1>Two Tipps One Cup</h1>
