@@ -77,6 +77,10 @@ function makeRoomCode() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 }
 
+function makePlayerId(authUid) {
+  return `${authUid}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
 function getBlindLevel(roundNumber) {
   return Math.floor(Math.max(0, roundNumber - 1) / 2);
 }
@@ -242,6 +246,10 @@ function Invite({ roomCode, roomName, onContinue }) {
             <Users size={18} />
             Zur Lobby
           </button>
+          <a className="ghost" href={`/join/${roomCode}`} target="_blank" rel="noreferrer">
+            <UserRound size={18} />
+            Als Spieler beitreten
+          </a>
         </div>
       </section>
     </main>
@@ -267,15 +275,10 @@ function Join({ roomCode, onJoined }) {
         return;
       }
 
-      const existingPlayer = await getDoc(doc(db, "rooms", roomCode, "players", user.uid));
-      if (existingPlayer.exists()) {
-        onJoined(roomCode, user.uid);
-        return;
-      }
-
       const playersSnap = await getDoc(doc(db, "rooms", roomCode, "meta", "counter"));
       const nextSeat = playersSnap.exists() ? Number(playersSnap.data().nextSeat || 0) : 0;
-      await setDoc(doc(db, "rooms", roomCode, "players", user.uid), {
+      const playerId = makePlayerId(user.uid);
+      await setDoc(doc(db, "rooms", roomCode, "players", playerId), {
         name: name.trim(),
         coins: STARTING_COINS,
         committed: 0,
@@ -283,11 +286,12 @@ function Join({ roomCode, onJoined }) {
         answered: false,
         answer: null,
         seat: nextSeat,
-        role: roomSnap.data().hostId === user.uid ? "host" : "player",
+        authUid: user.uid,
+        role: roomSnap.data().hostId === user.uid ? "host-player" : "player",
         joinedAt: serverTimestamp()
       });
       await setDoc(doc(db, "rooms", roomCode, "meta", "counter"), { nextSeat: nextSeat + 1 }, { merge: true });
-      onJoined(roomCode, user.uid);
+      onJoined(roomCode, playerId);
     } catch (err) {
       console.error(err);
       setError(userMessage(err, "Beitritt hat nicht geklappt."));
@@ -385,7 +389,7 @@ function LobbyV2({ room, players, isHost, onStart }) {
               <div className="lobbySeat" key={player.id}>
                 <UserRound size={20} />
                 <span>{player.name}</span>
-                {player.role === "host" && <em>Host</em>}
+                {(player.role === "host" || player.role === "host-player") && <em>Host</em>}
                 <strong>{player.coins} Coins</strong>
               </div>
             ))}
@@ -609,6 +613,44 @@ function Game({ room, players, userId }) {
     });
   }
 
+  if (!me && isHost) {
+    return (
+      <main className="shell gameShell">
+        <Logo />
+        <section className="statusBar">
+          <span><ShieldCheck size={16} /> Runde {room.roundNumber}</span>
+          <span>Small {blinds.smallBlind}</span>
+          <span>Big {blinds.bigBlind}</span>
+          <span><Wallet size={16} /> Pot {pot}</span>
+          <span>Host-Ansicht</span>
+        </section>
+        <PlayerTable players={players} currentTurn={room.currentTurn} pot={pot} blinds={blinds} roundNumber={room.roundNumber} />
+        <section className="panel questionPanel">
+          <p className="kicker">Host-Ansicht</p>
+          <h2>{currentQuestion.text}</h2>
+          {room.phase === "answer" && <p className="turnHint">Warten, bis alle Spieler ihre Antwort bestätigt haben.</p>}
+          {room.phase === "betting" && (
+            <div className="tips">
+              {room.street >= 1 && <p><Eye size={16} /> Tipp 1: {currentQuestion.tips[0]}</p>}
+              {room.street >= 2 && <p><Eye size={16} /> Tipp 2: {currentQuestion.tips[1]}</p>}
+            </div>
+          )}
+          {room.phase === "result" && (
+            <div className="result">
+              <Trophy size={28} />
+              <h2>{winnerText}</h2>
+              <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
+              <button className="primary" onClick={nextRound}>
+                <Play size={18} />
+                Nächste Runde
+              </button>
+            </div>
+          )}
+        </section>
+      </main>
+    );
+  }
+
   if (!me) return null;
 
   return (
@@ -690,13 +732,14 @@ function Game({ room, players, userId }) {
 }
 
 export default function App() {
-  const [userId, setUserId] = useState(localStorage.getItem("ttocUserId"));
+  const [userId, setUserId] = useState(sessionStorage.getItem("ttocPlayerId") || sessionStorage.getItem("ttocControllerId"));
   const [roomCode, setRoomCode] = useState(() => {
     const joinMatch = window.location.pathname.match(/\/join\/([^/]+)/);
-    return joinMatch?.[1]?.toUpperCase() || localStorage.getItem("ttocRoomCode") || "";
+    return joinMatch?.[1]?.toUpperCase() || sessionStorage.getItem("ttocRoomCode") || "";
   });
   const [screen, setScreen] = useState(() => (window.location.pathname.startsWith("/join/") ? "join" : "home"));
   const { room, players, loading } = useRoom(roomCode);
+  const isHostController = room?.hostId && userId === room.hostId;
 
   async function createRoom(roomName, hostName) {
     const user = await ensureAnonymousUser();
@@ -704,28 +747,18 @@ export default function App() {
     await setDoc(doc(db, "rooms", code), {
       name: roomName?.trim() || "Two Tipps One Cup Raum",
       hostId: user.uid,
+      hostName: hostName?.trim() || "Host",
       phase: "lobby",
       roundNumber: 1,
       questionIndex: 0,
       street: 0,
       createdAt: serverTimestamp()
     });
-    await setDoc(doc(db, "rooms", code, "meta", "counter"), { nextSeat: 1 });
-    await setDoc(doc(db, "rooms", code, "players", user.uid), {
-      name: hostName?.trim() || "Host",
-      coins: STARTING_COINS,
-      committed: 0,
-      folded: false,
-      answered: false,
-      answer: null,
-      seat: 0,
-      role: "host",
-      joinedAt: serverTimestamp()
-    });
+    await setDoc(doc(db, "rooms", code, "meta", "counter"), { nextSeat: 0 });
     setUserId(user.uid);
     setRoomCode(code);
-    localStorage.setItem("ttocUserId", user.uid);
-    localStorage.setItem("ttocRoomCode", code);
+    sessionStorage.setItem("ttocControllerId", user.uid);
+    sessionStorage.setItem("ttocRoomCode", code);
     setScreen("invite");
   }
 
@@ -757,8 +790,8 @@ export default function App() {
   function joined(code, uid) {
     setUserId(uid);
     setRoomCode(code);
-    localStorage.setItem("ttocUserId", uid);
-    localStorage.setItem("ttocRoomCode", code);
+    sessionStorage.setItem("ttocPlayerId", uid);
+    sessionStorage.setItem("ttocRoomCode", code);
     setScreen("room");
   }
 
@@ -770,7 +803,7 @@ export default function App() {
     return <Invite roomCode={roomCode} roomName={room?.name} onContinue={() => setScreen("room")} />;
   }
 
-  if (screen === "join" || !userId) {
+  if (screen === "join" || (!userId && !isHostController)) {
     return <Join roomCode={roomCode} onJoined={joined} />;
   }
 
