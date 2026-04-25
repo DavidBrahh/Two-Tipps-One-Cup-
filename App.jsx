@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  addDoc,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
@@ -14,17 +12,20 @@ import {
 } from "firebase/firestore";
 import {
   Clipboard,
-  Crown,
   Eye,
   LogIn,
   MessageCircle,
   Play,
   Plus,
   Send,
+  ShieldCheck,
   Trophy,
-  Users
+  UserRound,
+  Users,
+  Wallet
 } from "lucide-react";
 import { db, ensureAnonymousUser } from "./firebase.js";
+import { QUESTIONS as QUESTION_BANK } from "./questions.js";
 
 const QUESTIONS = [
   {
@@ -91,6 +92,21 @@ function normalizeMoney(value) {
   return Math.max(0, Math.round(Number(value || 0) / STEP) * STEP);
 }
 
+function formatNumber(value) {
+  return new Intl.NumberFormat("de-DE", { maximumFractionDigits: 4 }).format(Number(value || 0));
+}
+
+function answerUnit(question) {
+  return question.unit ? ` in ${question.unit}` : "";
+}
+
+function userMessage(error, fallback) {
+  if (!error) return fallback;
+  if (error.code === "permission-denied") return "Firebase blockiert die Aktion. Prüfe bitte die Firestore-Regeln.";
+  if (error.code?.startsWith("auth/")) return "Die Anmeldung ist gerade blockiert. Prüfe Anonymous Auth und die Vercel-Variablen.";
+  return fallback;
+}
+
 function useRoom(roomCode) {
   const [room, setRoom] = useState(null);
   const [players, setPlayers] = useState([]);
@@ -127,7 +143,7 @@ function useRoom(roomCode) {
 function Logo() {
   return (
     <div className="logoWrap">
-      <div className="logoMark">TRY's</div>
+      <img className="brandLogo" src="/logo.png" alt="TRY's Logo" />
       <div>
         <p className="kicker">Spielmaster</p>
         <h1>Two Tipps One Cup</h1>
@@ -138,7 +154,28 @@ function Logo() {
 
 function Home({ onHost, onJoin }) {
   const [roomName, setRoomName] = useState("");
+  const [hostName, setHostName] = useState("");
   const [joinCode, setJoinCode] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function createHostRoom() {
+    setError("");
+    if (!hostName.trim()) {
+      setError("Bitte gib deinen Namen ein.");
+      return;
+    }
+
+    setBusy(true);
+    try {
+      await onHost(roomName, hostName);
+    } catch (err) {
+      console.error(err);
+      setError(userMessage(err, "Raum konnte nicht erstellt werden."));
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <main className="shell home">
@@ -151,7 +188,12 @@ function Home({ onHost, onJoin }) {
               Raumname
               <input value={roomName} onChange={(event) => setRoomName(event.target.value)} placeholder="z. B. Samstag Abend" />
             </label>
-            <button className="primary" onClick={() => onHost(roomName)}>
+            <label>
+              Dein Name
+              <input value={hostName} onChange={(event) => setHostName(event.target.value)} placeholder="z. B. David" />
+            </label>
+            {error && <p className="notice error">{error}</p>}
+            <button className="primary" disabled={busy} onClick={createHostRoom}>
               <Plus size={18} />
               Raum erstellen
             </button>
@@ -166,6 +208,7 @@ function Home({ onHost, onJoin }) {
               <LogIn size={18} />
               Weiter
             </button>
+            <p className="miniInfo">{QUESTION_BANK.length} Schatzfragen geladen</p>
           </div>
         </div>
       </section>
@@ -207,34 +250,49 @@ function Invite({ roomCode, roomName, onContinue }) {
 function Join({ roomCode, onJoined }) {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function joinRoom() {
     if (!name.trim()) return;
+    setError("");
     setBusy(true);
-    const user = await ensureAnonymousUser();
-    const roomRef = doc(db, "rooms", roomCode);
-    const roomSnap = await getDoc(roomRef);
-    if (!roomSnap.exists()) {
-      alert("Diesen Raum gibt es nicht.");
-      setBusy(false);
-      return;
-    }
+    try {
+      const user = await ensureAnonymousUser();
+      const roomRef = doc(db, "rooms", roomCode);
+      const roomSnap = await getDoc(roomRef);
+      if (!roomSnap.exists()) {
+        setError("Diesen Raum gibt es nicht.");
+        setBusy(false);
+        return;
+      }
 
-    const playersSnap = await getDoc(doc(db, "rooms", roomCode, "meta", "counter"));
-    const nextSeat = playersSnap.exists() ? Number(playersSnap.data().nextSeat || 0) : 0;
-    await setDoc(doc(db, "rooms", roomCode, "players", user.uid), {
-      name: name.trim(),
-      coins: STARTING_COINS,
-      committed: 0,
-      folded: false,
-      answered: false,
-      answer: null,
-      seat: nextSeat,
-      role: roomSnap.data().hostId === user.uid ? "host" : "player",
-      joinedAt: serverTimestamp()
-    });
-    await setDoc(doc(db, "rooms", roomCode, "meta", "counter"), { nextSeat: nextSeat + 1 }, { merge: true });
-    onJoined(roomCode, user.uid);
+      const existingPlayer = await getDoc(doc(db, "rooms", roomCode, "players", user.uid));
+      if (existingPlayer.exists()) {
+        onJoined(roomCode, user.uid);
+        return;
+      }
+
+      const playersSnap = await getDoc(doc(db, "rooms", roomCode, "meta", "counter"));
+      const nextSeat = playersSnap.exists() ? Number(playersSnap.data().nextSeat || 0) : 0;
+      await setDoc(doc(db, "rooms", roomCode, "players", user.uid), {
+        name: name.trim(),
+        coins: STARTING_COINS,
+        committed: 0,
+        folded: false,
+        answered: false,
+        answer: null,
+        seat: nextSeat,
+        role: roomSnap.data().hostId === user.uid ? "host" : "player",
+        joinedAt: serverTimestamp()
+      });
+      await setDoc(doc(db, "rooms", roomCode, "meta", "counter"), { nextSeat: nextSeat + 1 }, { merge: true });
+      onJoined(roomCode, user.uid);
+    } catch (err) {
+      console.error(err);
+      setError(userMessage(err, "Beitritt hat nicht geklappt."));
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -247,6 +305,7 @@ function Join({ roomCode, onJoined }) {
           Dein Name
           <input value={name} onChange={(event) => setName(event.target.value)} placeholder="Spielername" />
         </label>
+        {error && <p className="notice error">{error}</p>}
         <button className="primary" disabled={busy} onClick={joinRoom}>
           <Send size={18} />
           Spiel beitreten
@@ -286,6 +345,64 @@ function Lobby({ room, players, isHost, onStart }) {
           <p>Nach jeweils zwei kompletten Table-Runden verdoppeln sich die Blinds: 50/100, danach 100/200 und so weiter.</p>
           <p>Alle geben verdeckt eine Zahlenantwort ab. Danach wird gesetzt, Tipp 1 erscheint, es wird gesetzt, Tipp 2 erscheint, es wird gesetzt, dann gewinnt die Antwort mit der kleinsten Entfernung zur Lösung.</p>
           <p>Setzen geht nur in 25er-Schritten. Fold spart weitere Coins, kann den Pot aber nicht mehr gewinnen.</p>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function LobbyV2({ room, players, isHost, onStart }) {
+  const joinUrl = `${window.location.origin}/join/${room.id}`;
+  const canStart = players.length >= 2;
+
+  return (
+    <main className="shell">
+      <Logo />
+      <section className="lobbyHeader panel">
+        <div>
+          <p className="kicker">Warteraum</p>
+          <h2>{room.name}</h2>
+          <p className="soft">Teile den Code oder Link. Ab zwei Spielern kann der Host starten.</p>
+        </div>
+        <div className="roomShare">
+          <div className="roomCode small">{room.id}</div>
+          <button className="secondary" onClick={() => navigator.clipboard.writeText(joinUrl)}>
+            <Clipboard size={18} />
+            Link kopieren
+          </button>
+        </div>
+      </section>
+
+      <section className="layout">
+        <div className="panel">
+          <div className="panelTitle">
+            <h2>Spieler</h2>
+            <span>{players.length} am Tisch</span>
+          </div>
+          <div className="lobbySeats">
+            {players.map((player) => (
+              <div className="lobbySeat" key={player.id}>
+                <UserRound size={20} />
+                <span>{player.name}</span>
+                {player.role === "host" && <em>Host</em>}
+                <strong>{player.coins} Coins</strong>
+              </div>
+            ))}
+          </div>
+          {isHost && (
+            <button className="primary wideButton" disabled={!canStart} onClick={onStart}>
+              <Play size={18} />
+              {canStart ? "Spiel starten" : "Mindestens 2 Spieler"}
+            </button>
+          )}
+        </div>
+        <div className="panel rules">
+          <h2>Kurzregeln</h2>
+          <p>Jeder Spieler startet mit 1000 Coins. Small Blind beginnt bei 25 Coins, Big Blind bei 50 Coins.</p>
+          <p>Nach jeweils zwei kompletten Table-Runden verdoppeln sich die Blinds: 50/100, danach 100/200 und so weiter.</p>
+          <p>Alle geben verdeckt eine Zahlenantwort ab. Danach wird gesetzt, Tipp 1 erscheint, es wird gesetzt, Tipp 2 erscheint, es wird gesetzt, dann gewinnt die Antwort mit der kleinsten Entfernung zur Lösung.</p>
+          <p>Setzen geht nur in 25er-Schritten. Fold spart weitere Coins, kann den Pot aber nicht mehr gewinnen.</p>
+          <p>{QUESTION_BANK.length} vorbereitete Schatzfragen sind im Spiel geladen.</p>
         </div>
       </section>
     </main>
@@ -332,17 +449,25 @@ function Game({ room, players, userId }) {
   const [raiseInput, setRaiseInput] = useState("");
   const me = players.find((player) => player.id === userId);
   const activePlayers = players.filter((player) => !player.folded);
-  const currentQuestion = QUESTIONS[room.questionIndex % QUESTIONS.length];
+  const currentQuestion = QUESTION_BANK[room.questionIndex % QUESTION_BANK.length];
   const isHost = room.hostId === userId;
   const currentBet = Math.max(0, ...players.map((player) => player.committed || 0));
   const isMyTurn = room.currentTurn === userId;
   const blinds = getBlinds(room.roundNumber || 1);
   const pot = players.reduce((sum, player) => sum + Number(player.committed || 0), 0);
+  const toCall = Math.max(0, currentBet - (me?.committed || 0));
+  const minimumRaise = currentBet + blinds.bigBlind;
 
   const winnerText = useMemo(() => {
     if (!room.result) return "";
     return room.result.winners?.length ? `${room.result.winners.join(", ")} gewinnt ${room.result.pot} Coins` : "";
   }, [room.result]);
+
+  useEffect(() => {
+    if (!isHost || room.phase !== "answer") return;
+    if (!players.length || !players.every((player) => player.answered || player.folded)) return;
+    updateDoc(doc(db, "rooms", room.id), { phase: "betting" }).catch(console.error);
+  }, [isHost, players, room.id, room.phase]);
 
   async function submitAnswer() {
     const numeric = Number(answerInput.replace(",", "."));
@@ -427,6 +552,7 @@ function Game({ room, players, userId }) {
       phase: "result",
       result: {
         answer: currentQuestion.answer,
+        answerText: currentQuestion.answerText || "",
         pot,
         winners: winners.map((winner) => winner.name),
         unit: currentQuestion.unit
@@ -488,10 +614,11 @@ function Game({ room, players, userId }) {
     <main className="shell gameShell">
       <Logo />
       <section className="statusBar">
-        <span>Runde {room.roundNumber}</span>
+        <span><ShieldCheck size={16} /> Runde {room.roundNumber}</span>
         <span>Small {blinds.smallBlind}</span>
         <span>Big {blinds.bigBlind}</span>
-        <span>Pot {pot}</span>
+        <span><Wallet size={16} /> Pot {pot}</span>
+        <span>{QUESTION_BANK.length} Fragen</span>
       </section>
 
       <PlayerTable players={players} currentTurn={room.currentTurn} pot={pot} blinds={blinds} roundNumber={room.roundNumber} />
@@ -503,10 +630,10 @@ function Game({ room, players, userId }) {
         {room.phase === "answer" && (
           <div className="answerBox">
             {me.answered ? (
-              <p className="locked">Deine Antwort ist gespeichert: {me.answer}</p>
+              <p className="locked">Deine Antwort ist gespeichert: {formatNumber(me.answer)}</p>
             ) : (
               <>
-                <input value={answerInput} onChange={(event) => setAnswerInput(event.target.value)} placeholder={`Antwort in ${currentQuestion.unit}`} />
+                <input value={answerInput} onChange={(event) => setAnswerInput(event.target.value)} placeholder={`Antwort${answerUnit(currentQuestion)}`} />
                 <button className="primary" onClick={submitAnswer}>
                   <Send size={18} />
                   Antwort bestätigen
@@ -530,14 +657,16 @@ function Game({ room, players, userId }) {
             </div>
             <div className="actions">
               <button className="ghost" disabled={!isMyTurn} onClick={() => act("fold")}>Fold</button>
-              <button className="secondary" disabled={!isMyTurn || (me.committed || 0) < currentBet} onClick={() => act("check", me.committed)}>Check</button>
-              <button className="secondary" disabled={!isMyTurn} onClick={() => act("call", currentBet)}>Call {Math.max(0, currentBet - (me.committed || 0))}</button>
-              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`mind. ${currentBet + blinds.bigBlind}`} />
-              <button className="primary" disabled={!isMyTurn} onClick={() => act("raise", Math.max(currentBet + blinds.bigBlind, Number(raiseInput)))}>
-                Raise
+              <button className="secondary" disabled={!isMyTurn || toCall > 0} onClick={() => act("check", me.committed)}>Check</button>
+              <button className="secondary" disabled={!isMyTurn || toCall === 0} onClick={() => act("call", currentBet)}>Mitgehen {toCall}</button>
+              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhöhen auf mind. ${minimumRaise}`} />
+              <button className="primary" disabled={!isMyTurn} onClick={() => act("raise", Math.max(minimumRaise, Number(raiseInput)))}>
+                Erhöhen
               </button>
             </div>
-            <p className="soft">{isMyTurn ? "Du bist dran." : "Warten auf den nächsten Spieler."}</p>
+            <p className="turnHint">
+              {isMyTurn ? `Du bist dran. ${toCall > 0 ? `Zum Mitgehen brauchst du ${toCall} Coins.` : "Du kannst checken oder erhöhen."}` : "Warten auf den nächsten Spieler."}
+            </p>
           </>
         )}
 
@@ -545,7 +674,7 @@ function Game({ room, players, userId }) {
           <div className="result">
             <Trophy size={28} />
             <h2>{winnerText}</h2>
-            <p>Richtige Antwort: {room.result.answer} {room.result.unit}</p>
+            <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
             {isHost && (
               <button className="primary" onClick={nextRound}>
                 <Play size={18} />
@@ -568,7 +697,7 @@ export default function App() {
   const [screen, setScreen] = useState(() => (window.location.pathname.startsWith("/join/") ? "join" : "home"));
   const { room, players, loading } = useRoom(roomCode);
 
-  async function createRoom(roomName) {
+  async function createRoom(roomName, hostName) {
     const user = await ensureAnonymousUser();
     const code = makeRoomCode();
     await setDoc(doc(db, "rooms", code), {
@@ -582,7 +711,7 @@ export default function App() {
     });
     await setDoc(doc(db, "rooms", code, "meta", "counter"), { nextSeat: 1 });
     await setDoc(doc(db, "rooms", code, "players", user.uid), {
-      name: "Host",
+      name: hostName?.trim() || "Host",
       coins: STARTING_COINS,
       committed: 0,
       folded: false,
@@ -653,7 +782,7 @@ export default function App() {
   }
 
   if (room.phase === "lobby") {
-    return <Lobby room={room} players={players} isHost={room.hostId === userId} onStart={startGame} />;
+    return <LobbyV2 room={room} players={players} isHost={room.hostId === userId} onStart={startGame} />;
   }
 
   return <Game room={room} players={players} userId={userId} />;

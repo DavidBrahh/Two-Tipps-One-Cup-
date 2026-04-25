@@ -15,9 +15,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 10%, rgba(234, 54, 82, 0.26), transparent 26rem),
-    radial-gradient(circle at 85% 5%, rgba(33, 169, 138, 0.2), transparent 24rem),
-    linear-gradient(135deg, #101114 0%, #171a1f 45%, #23161a 100%);
+    radial-gradient(circle at 15% 8%, rgba(239, 32, 174, 0.3), transparent 26rem),
+    radial-gradient(circle at 88% 5%, rgba(18, 196, 255, 0.22), transparent 24rem),
+    linear-gradient(135deg, #07080d 0%, #101114 48%, #1b0e1a 100%);
 }
 
 button,
@@ -131,19 +131,14 @@ h2 {
   margin-bottom: 1.5rem;
 }
 
-.logoMark {
-  align-items: center;
+.brandLogo {
   aspect-ratio: 1;
-  background: #f3c64d;
-  border: 4px solid #101114;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px #ea3652;
-  color: #101114;
-  display: flex;
-  flex: 0 0 clamp(4.2rem, 10vw, 6.4rem);
-  font-size: clamp(1rem, 2vw, 1.45rem);
-  font-weight: 950;
-  justify-content: center;
+  border-radius: 8px;
+  flex: 0 0 clamp(5rem, 12vw, 8rem);
+  height: clamp(5rem, 12vw, 8rem);
+  object-fit: cover;
+  object-position: center;
+  width: clamp(5rem, 12vw, 8rem);
 }
 
 .kicker {
@@ -219,6 +214,96 @@ h2 {
   margin: 1rem 0;
 }
 
+.lobbyHeader {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.roomShare {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.panelTitle {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.panelTitle h2 {
+  margin-bottom: 0;
+}
+
+.panelTitle span,
+.miniInfo {
+  color: #8feaff;
+  font-weight: 800;
+}
+
+.lobbySeats {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.lobbySeat {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.25rem 0.55rem;
+  grid-template-columns: auto 1fr auto;
+  min-height: 4.4rem;
+  padding: 0.75rem;
+}
+
+.lobbySeat svg {
+  color: #8feaff;
+  grid-row: span 2;
+}
+
+.lobbySeat span {
+  font-weight: 900;
+}
+
+.lobbySeat em {
+  background: rgba(243, 198, 77, 0.18);
+  border-radius: 999px;
+  color: #f3c64d;
+  font-style: normal;
+  font-weight: 900;
+  padding: 0.2rem 0.5rem;
+}
+
+.lobbySeat strong {
+  color: #d8d0c2;
+  grid-column: 2 / -1;
+}
+
+.wideButton {
+  width: 100%;
+}
+
+.notice {
+  border-radius: 8px;
+  font-weight: 800;
+  margin: 0.25rem 0 0;
+  padding: 0.75rem;
+}
+
+.notice.error {
+  background: rgba(234, 54, 82, 0.14);
+  color: #ffc6cf;
+}
+
 .playerRow,
 .statusBar {
   align-items: center;
@@ -244,6 +329,9 @@ h2 {
 }
 
 .statusBar span {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
   font-weight: 900;
 }
 
@@ -365,6 +453,10 @@ h2 {
   min-height: 20rem;
 }
 
+.questionPanel h2 {
+  max-width: 980px;
+}
+
 .answerBox input,
 .actions input {
   max-width: 260px;
@@ -398,6 +490,16 @@ h2 {
   padding: 0.8rem;
 }
 
+.turnHint {
+  background: rgba(143, 234, 255, 0.12);
+  border: 1px solid rgba(143, 234, 255, 0.22);
+  border-radius: 8px;
+  color: #dff8ff;
+  font-weight: 800;
+  margin-top: 1rem;
+  padding: 0.8rem;
+}
+
 .result {
   display: grid;
   gap: 0.8rem;
@@ -414,9 +516,37 @@ h2 {
     flex-direction: column;
   }
 
+  h1 {
+    font-size: clamp(2rem, 13vw, 3.4rem);
+  }
+
   .heroGrid,
   .layout {
     grid-template-columns: 1fr;
+  }
+
+  .lobbyHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .roomShare {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .tableScene {
+    height: 36rem;
+  }
+
+  .feltTable {
+    height: 35%;
+    width: 82%;
+  }
+
+  .seat {
+    min-width: 7.6rem;
+    width: 42vw;
   }
 
   .buttonRow > *,
