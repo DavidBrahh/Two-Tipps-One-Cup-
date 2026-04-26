@@ -76,7 +76,7 @@ function getQuestionNumber(room) {
 }
 
 function isHostUser(room, userId, me) {
-  return Boolean(room?.hostId && (room.hostId === userId || room.hostId === me?.authUid));
+  return Boolean(room?.hostId && (room.hostId === userId || me?.role === "host-player"));
 }
 
 function playerName(players, id, fallback = "Spieler") {
@@ -97,8 +97,8 @@ function answerUnit(question) {
 
 function userMessage(error, fallback) {
   if (!error) return fallback;
-  if (error.code === "permission-denied") return "Firebase blockiert die Aktion. Pruefe bitte die Firestore-Regeln.";
-  if (error.code?.startsWith("auth/")) return "Die Anmeldung ist gerade blockiert. Pruefe Anonymous Auth und die Vercel-Variablen.";
+  if (error.code === "permission-denied") return "Firebase blockiert die Aktion. Prüfe bitte die Firestore-Regeln.";
+  if (error.code?.startsWith("auth/")) return "Die Anmeldung ist gerade blockiert. Prüfe Anonymous Auth und die Vercel-Variablen.";
   return fallback;
 }
 
@@ -405,7 +405,7 @@ function LobbyV2({ room, players, isHost, onStart }) {
           <p>Jeder Spieler startet mit 1000 Coins. Small Blind beginnt bei 25 Coins, Big Blind bei 50 Coins.</p>
           <p>Nach zwei kompletten Tischrunden verdoppeln sich die Blinds.</p>
           <p>Antworten, setzen, Tipp 1, setzen, Tipp 2, letzte Setzphase, Auswertung.</p>
-          <p>Setzen geht nur in 25er-Schritten. Pro Setzphase darf jeder Spieler maximal zweimal erhoehen.</p>
+          <p>Setzen geht nur in 25er-Schritten. Pro Setzphase darf jeder Spieler maximal zweimal erhöhen.</p>
         </div>
       </section>
     </main>
@@ -500,7 +500,7 @@ function ResultOverlay({ result, question, onClose }) {
             </React.Fragment>
           ))}
         </div>
-        <button className="ghost wideButton" onClick={onClose}>Schliessen</button>
+        <button className="ghost wideButton" onClick={onClose}>Schließen</button>
       </div>
     </div>
   );
@@ -534,7 +534,7 @@ function HostTools({ room, players, onForceStreet, onForceResult, onNextRound, o
         <button className="secondary" onClick={() => onForceStreet(1)}>Tipp 1 einblenden</button>
         <button className="secondary" onClick={() => onForceStreet(2)}>Tipp 2 einblenden</button>
         <button className="primary" onClick={onForceResult}>Auswertung der Runde</button>
-        {room.phase === "result" && <button className="primary" onClick={onNextRound}>Naechste Runde</button>}
+        {room.phase === "result" && <button className="primary" onClick={onNextRound}>Nächste Runde</button>}
         <button className="ghost" onClick={() => setOpen((value) => !value)}>Manuelle Zuteilung</button>
       </div>
       {open && (
@@ -580,7 +580,7 @@ function GameOver({ room, players, me, isHost, onRematch, onStartRematch }) {
           Nochmal spielen
         </button>
       )}
-      {me?.wantsRematch && <p className="turnHint">Du bist fuer die naechste Partie vorgemerkt.</p>}
+      {me?.wantsRematch && <p className="turnHint">Du bist für die nächste Partie vorgemerkt.</p>}
       {isHost && (
         <button className="primary" disabled={rematchCount < 2} onClick={onStartRematch}>
           <Play size={18} />
@@ -608,7 +608,7 @@ function Game({ room, players, userId }) {
   const pot = players.reduce((sum, player) => sum + Number(player.committed || 0), 0);
   const toCall = Math.max(0, currentBet - (me?.committed || 0));
   const minimumRaise = currentBet + blinds.bigBlind;
-  const currentTurnName = playerName(players, room.currentTurn, "naechsten Spieler");
+  const currentTurnName = playerName(players, room.currentTurn, "nächsten Spieler");
   const winnerIds = room.result?.winnerIds || [];
   const raiseCounts = room.raiseCounts || {};
   const myRaises = raiseCounts[userId] || 0;
@@ -645,7 +645,7 @@ function Game({ room, players, userId }) {
           kind: "tip",
           kicker: "Tipp 1",
           title: currentQuestion.tips?.[0] || "Kein Tipp vorhanden",
-          text: `${currentTurnName} ist als naechstes dran.`,
+          text: `${currentTurnName} ist als nächstes dran.`,
           duration: 8000
         });
       } else if (room.street === 2) {
@@ -654,7 +654,7 @@ function Game({ room, players, userId }) {
           kicker: "Tipp 2",
           title: currentQuestion.tips?.[1] || "Kein Tipp vorhanden",
           text: "Letzte Setzphase",
-          sub: `${currentTurnName} ist als naechstes dran.`,
+          sub: `${currentTurnName} ist als nächstes dran.`,
           duration: 8000
         });
       } else if (room.currentTurn) {
@@ -694,7 +694,7 @@ function Game({ room, players, userId }) {
   async function submitAnswer() {
     const numeric = Number(answerInput.replace(",", "."));
     if (!Number.isFinite(numeric)) {
-      setActionError("Bitte gib eine gueltige Zahl ein.");
+      setActionError("Bitte gib eine gültige Zahl ein.");
       return;
     }
     await updateDoc(doc(db, "rooms", room.id, "players", userId), {
@@ -748,15 +748,15 @@ function Game({ room, players, userId }) {
     } else if (type === "raise") {
       const target = normalizeMoney(amount);
       if (myRaises >= MAX_RAISES_PER_STREET) {
-        setActionError("Du hast in dieser Setzphase bereits 2x erhoeht.");
+        setActionError("Du hast in dieser Setzphase bereits 2x erhöht.");
         return;
       }
       if (target < minimumRaise) {
-        setActionError(`Erhoehung muss mindestens auf ${minimumRaise} Coins gesetzt werden.`);
+        setActionError(`Erhöhung muss mindestens auf ${minimumRaise} Coins gesetzt werden.`);
         return;
       }
       if (target > (me.committed || 0) + me.coins) {
-        setActionError("Du hast nicht genug Coins fuer diese Erhoehung.");
+        setActionError("Du hast nicht genug Coins für diese Erhöhung.");
         return;
       }
       const pay = Math.max(0, Math.min(me.coins, target - (me.committed || 0)));
@@ -764,7 +764,7 @@ function Game({ room, players, userId }) {
       updates.coins = me.coins - pay;
       nextRaiseCounts[userId] = myRaises + 1;
       actedThisStreet = { [userId]: true };
-      actionText = `${me.name} erhoeht auf ${updates.committed}`;
+      actionText = `${me.name} erhöht auf ${updates.committed}`;
       setRaiseInput("");
     }
 
@@ -798,7 +798,7 @@ function Game({ room, players, userId }) {
       bettingStart: nextStarter,
       actedThisStreet: {},
       raiseCounts: {},
-      actionFeed: { text: nextStreet === 2 ? "Letzte Setzphase startet" : "Naechste Setzphase startet", at: Date.now() }
+      actionFeed: { text: nextStreet === 2 ? "Letzte Setzphase startet" : "Nächste Setzphase startet", at: Date.now() }
     });
   }
 
@@ -1042,7 +1042,7 @@ function Game({ room, players, userId }) {
         <section className="panel questionPanel">
           <p className="kicker">{phaseLabel(room)}</p>
           <h2>{currentQuestion.text}</h2>
-          {room.phase === "answer" && <p className="turnHint">Warten, bis alle Spieler ihre Antwort bestaetigt haben.</p>}
+          {room.phase === "answer" && <p className="turnHint">Warten, bis alle Spieler ihre Antwort bestätigt haben.</p>}
           {room.phase === "betting" && <p className="turnHint">Spieler setzen gerade. Warten auf {currentTurnName}.</p>}
           {room.phase === "result" && (
             <div className="result">
@@ -1050,7 +1050,7 @@ function Game({ room, players, userId }) {
               <h2>{winnerText}</h2>
               <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
               <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
-              <button className="primary" onClick={nextRound}><Play size={18} />Naechste Runde</button>
+              <button className="primary" onClick={nextRound}><Play size={18} />Nächste Runde</button>
             </div>
           )}
           <HostTools room={room} players={players} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} />
@@ -1092,7 +1092,7 @@ function Game({ room, players, userId }) {
                 <button className="primary" onClick={submitAnswer}><Send size={18} />Antwort bestaetigen</button>
               </>
             )}
-            {isHost && <button className="secondary" onClick={openBetting}><Play size={18} />Setzrunde oeffnen</button>}
+            {isHost && <button className="secondary" onClick={openBetting}><Play size={18} />Setzrunde öffnen</button>}
           </div>
         )}
         {me.eliminated && room.phase !== "gameOver" && (
@@ -1113,11 +1113,11 @@ function Game({ room, players, userId }) {
               <button className="ghost" disabled={!isMyTurn} onClick={() => act("fold")}>Fold</button>
               <button className="secondary" disabled={!isMyTurn || toCall > 0} onClick={() => act("check")}>Check</button>
               <button className="secondary" disabled={!isMyTurn || toCall === 0} onClick={() => act("call")}>Mitgehen {toCall}</button>
-              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhoehen auf mind. ${minimumRaise}`} />
-              <button className="primary" disabled={!canRaise} onClick={() => act("raise", Number(raiseInput))}>Erhoehen</button>
+              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhöhen auf mind. ${minimumRaise}`} />
+              <button className="primary" disabled={!canRaise} onClick={() => act("raise", Number(raiseInput))}>Erhöhen</button>
             </div>
             <p className="turnHint">
-              {isMyTurn ? `Du bist dran. ${toCall > 0 ? `Zum Mitgehen brauchst du ${toCall} Coins.` : "Du kannst checken oder erhoehen."}` : `Warten auf ${currentTurnName}.`}
+              {isMyTurn ? `Du bist dran. ${toCall > 0 ? `Zum Mitgehen brauchst du ${toCall} Coins.` : "Du kannst checken oder erhöhen."}` : `Warten auf ${currentTurnName}.`}
             </p>
           </>
         )}
@@ -1128,7 +1128,7 @@ function Game({ room, players, userId }) {
             <h2>{winnerText}</h2>
             <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
             <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
-            {isHost && <button className="primary" onClick={nextRound}><Play size={18} />Naechste Runde</button>}
+            {isHost && <button className="primary" onClick={nextRound}><Play size={18} />Nächste Runde</button>}
           </div>
         )}
 
