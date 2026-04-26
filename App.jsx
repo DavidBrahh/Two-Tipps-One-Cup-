@@ -460,7 +460,7 @@ function TimedOverlay({ overlay, onClose }) {
 
   return (
     <div className="centerOverlay" onClick={onClose}>
-      <div className={`centerCard ${overlay.kind || ""}`} onClick={(event) => event.stopPropagation()}>
+      <div className={`centerCard ${overlay.kind || ""}`}>
         {overlay.kicker && <p className="kicker">{overlay.kicker}</p>}
         <h2>{overlay.title}</h2>
         {overlay.text && <p>{overlay.text}</p>}
@@ -635,7 +635,9 @@ function Game({ room, players, userId }) {
   }, [isHost, players, room.id, room.phase, room.bigBlindId, room.smallBlindId]);
 
   useEffect(() => {
-    const key = `${room.phase}-${room.street || 0}-${room.currentTurn || ""}-${room.result?.pot || ""}-${room.roundNumber || 0}`;
+    const key = room.phase === "betting" && (room.street || 0) > 0
+      ? `${room.phase}-street-${room.street || 0}-round-${room.roundNumber || 0}`
+      : `${room.phase}-${room.street || 0}-${room.currentTurn || ""}-${room.result?.pot || ""}-${room.result?.answer || ""}-${room.roundNumber || 0}`;
     if (key === lastOverlayKey) return;
     setLastOverlayKey(key);
 
@@ -668,6 +670,7 @@ function Game({ room, players, userId }) {
     }
 
     if (room.phase === "result" && room.result) {
+      setShowResult(false);
       setOverlay({
         kind: "winner",
         kicker: "Rundensieger",
@@ -1073,7 +1076,7 @@ function Game({ room, players, userId }) {
         <span>Small {blinds.smallBlind}</span>
         <span>Big {blinds.bigBlind}</span>
         <span><Wallet size={16} /> Pot {pot}</span>
-        <span>{room.phase === "betting" ? `Dran: ${currentTurnName}` : me.name}</span>
+        <span>{me.name}</span>
       </section>
 
       {commonTable}
