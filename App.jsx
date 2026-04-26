@@ -17,8 +17,10 @@ import {
   MessageCircle,
   Play,
   Plus,
+  RotateCcw,
   Send,
   ShieldCheck,
+  Sparkles,
   Trophy,
   UserRound,
   Users,
@@ -28,49 +30,11 @@ import { db, ensureAnonymousUser } from "./firebase.js";
 import { QUESTIONS as QUESTION_BANK } from "./questions.js";
 import logoUrl from "./logo.png";
 
-const QUESTIONS = [
-  {
-    text: "Wie hoch ist der Eiffelturm in Metern?",
-    answer: 330,
-    unit: "m",
-    tips: [
-      "Aus 1 km Entfernung wirkt der Eiffelturm ungefähr wie ein Gegenstand von rund 20 cm in der Hand.",
-      "Er ist höher als der Berliner Fernsehturm bis zur Aussichtsplattform, aber niedriger als dessen Antenne."
-    ]
-  },
-  {
-    text: "Wie viele Knochen hat ein erwachsener Mensch?",
-    answer: 206,
-    unit: "Knochen",
-    tips: [
-      "Babys haben deutlich mehr, weil einige Knochen erst später zusammenwachsen.",
-      "Die Zahl liegt knapp über 200."
-    ]
-  },
-  {
-    text: "Wie lang ist ein Fußballfeld in der Bundesliga im Normalfall?",
-    answer: 105,
-    unit: "m",
-    tips: [
-      "Internationale Spielfelder liegen meist um die 100 Meter.",
-      "Die typische Breite dazu beträgt 68 Meter."
-    ]
-  },
-  {
-    text: "Wie viele Minuten dauert ein reguläres Eishockeyspiel netto?",
-    answer: 60,
-    unit: "Minuten",
-    tips: [
-      "Es wird in drei gleich lange Drittel aufgeteilt.",
-      "Die Uhr stoppt bei Unterbrechungen."
-    ]
-  }
-];
-
 const STARTING_COINS = 1000;
 const BASE_SMALL_BLIND = 25;
 const BASE_BIG_BLIND = 50;
 const STEP = 25;
+const MAX_RAISES_PER_STREET = 2;
 
 function makeRoomCode() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -81,16 +45,42 @@ function makePlayerId(authUid) {
   return `${authUid}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function getBlindLevel(roundNumber) {
-  return Math.floor(Math.max(0, roundNumber - 1) / 2);
+function shuffleQuestionOrder(excluded = []) {
+  const blocked = new Set(excluded);
+  const pool = QUESTION_BANK.map((_, index) => index).filter((index) => !blocked.has(index));
+  return pool.sort(() => Math.random() - 0.5);
 }
 
-function getBlinds(roundNumber) {
-  const multiplier = 2 ** getBlindLevel(roundNumber);
+function getBlindLevel(roundNumber, playerCount = 2) {
+  const roundsPerLevel = Math.max(1, playerCount * 2);
+  return Math.floor(Math.max(0, roundNumber - 1) / roundsPerLevel);
+}
+
+function getBlinds(roundNumber, playerCount = 2) {
+  const multiplier = 2 ** getBlindLevel(roundNumber, playerCount);
   return {
     smallBlind: BASE_SMALL_BLIND * multiplier,
     bigBlind: BASE_BIG_BLIND * multiplier
   };
+}
+
+function getCurrentQuestion(room) {
+  const order = Array.isArray(room.questionOrder) ? room.questionOrder : [];
+  const fallbackIndex = room.questionIndex || 0;
+  const index = order[fallbackIndex] ?? fallbackIndex;
+  return QUESTION_BANK[index % QUESTION_BANK.length];
+}
+
+function getQuestionNumber(room) {
+  return Number(room.questionIndex || 0) + 1;
+}
+
+function isHostUser(room, userId, me) {
+  return Boolean(room?.hostId && (room.hostId === userId || room.hostId === me?.authUid));
+}
+
+function playerName(players, id, fallback = "Spieler") {
+  return players.find((player) => player.id === id)?.name || fallback;
 }
 
 function normalizeMoney(value) {
@@ -107,9 +97,48 @@ function answerUnit(question) {
 
 function userMessage(error, fallback) {
   if (!error) return fallback;
-  if (error.code === "permission-denied") return "Firebase blockiert die Aktion. Prüfe bitte die Firestore-Regeln.";
-  if (error.code?.startsWith("auth/")) return "Die Anmeldung ist gerade blockiert. Prüfe Anonymous Auth und die Vercel-Variablen.";
+  if (error.code === "permission-denied") return "Firebase blockiert die Aktion. Pruefe bitte die Firestore-Regeln.";
+  if (error.code?.startsWith("auth/")) return "Die Anmeldung ist gerade blockiert. Pruefe Anonymous Auth und die Vercel-Variablen.";
   return fallback;
+}
+
+function livePlayers(players) {
+  return players.filter((player) => !player.eliminated);
+}
+
+function activePlayers(players) {
+  return players.filter((player) => !player.eliminated && !player.folded);
+}
+
+function actors(players) {
+  return players.filter((player) => !player.eliminated && !player.folded && Number(player.coins || 0) > 0);
+}
+
+function nextTurnFrom(list, afterId) {
+  const eligible = actors(list);
+  if (!eligible.length) return null;
+  const index = eligible.findIndex((player) => player.id === afterId);
+  return eligible[(index + 1 + eligible.length) % eligible.length]?.id || eligible[0].id;
+}
+
+function shouldEndStreet(list, acted = {}) {
+  const remaining = activePlayers(list);
+  if (remaining.length <= 1) return true;
+  const maxCommitted = Math.max(0, ...remaining.map((player) => Number(player.committed || 0)));
+  return remaining.every((player) => {
+    if (Number(player.coins || 0) <= 0) return true;
+    return Boolean(acted[player.id]) && Number(player.committed || 0) >= maxCommitted;
+  });
+}
+
+function phaseLabel(room) {
+  if (room.phase === "answer") return "Antwortphase";
+  if (room.phase === "betting" && (room.street || 0) === 0) return "Erste Setzphase";
+  if (room.phase === "betting" && room.street === 1) return "Setzphase nach Tipp 1";
+  if (room.phase === "betting" && room.street === 2) return "Letzte Setzphase";
+  if (room.phase === "result") return "Rundenauswertung";
+  if (room.phase === "gameOver") return "Spielende";
+  return "Warteraum";
 }
 
 function useRoom(roomCode) {
@@ -246,7 +275,7 @@ function Invite({ roomCode, roomName, onContinue }) {
             <Users size={18} />
             Zur Lobby
           </button>
-          <a className="ghost" href={`/join/${roomCode}`} target="_blank" rel="noreferrer">
+          <a className="ghost" href={`/join/${roomCode}?host=1`} target="_blank" rel="noreferrer">
             <UserRound size={18} />
             Als Spieler beitreten
           </a>
@@ -260,6 +289,7 @@ function Join({ roomCode, onJoined }) {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const isHostJoin = new URLSearchParams(window.location.search).get("host") === "1";
 
   async function joinRoom() {
     if (!name.trim()) return;
@@ -277,17 +307,21 @@ function Join({ roomCode, onJoined }) {
 
       const playersSnap = await getDoc(doc(db, "rooms", roomCode, "meta", "counter"));
       const nextSeat = playersSnap.exists() ? Number(playersSnap.data().nextSeat || 0) : 0;
+      const roomData = roomSnap.data();
       const playerId = makePlayerId(user.uid);
       await setDoc(doc(db, "rooms", roomCode, "players", playerId), {
         name: name.trim(),
         coins: STARTING_COINS,
         committed: 0,
         folded: false,
+        eliminated: false,
+        placement: null,
+        wantsRematch: false,
         answered: false,
         answer: null,
         seat: nextSeat,
         authUid: user.uid,
-        role: roomSnap.data().hostId === user.uid ? "host-player" : "player",
+        role: isHostJoin && roomData.hostId === user.uid ? "host-player" : "player",
         joinedAt: serverTimestamp()
       });
       await setDoc(doc(db, "rooms", roomCode, "meta", "counter"), { nextSeat: nextSeat + 1 }, { merge: true });
@@ -315,42 +349,6 @@ function Join({ roomCode, onJoined }) {
           <Send size={18} />
           Spiel beitreten
         </button>
-      </section>
-    </main>
-  );
-}
-
-function Lobby({ room, players, isHost, onStart }) {
-  return (
-    <main className="shell">
-      <Logo />
-      <section className="layout">
-        <div className="panel">
-          <p className="kicker">Warteraum</p>
-          <h2>{room.name}</h2>
-          <p className="soft">Bitte warten, bis der Host das Spiel startet.</p>
-          <div className="players">
-            {players.map((player) => (
-              <div className="playerRow" key={player.id}>
-                <span>{player.name}</span>
-                <strong>{player.coins} Coins</strong>
-              </div>
-            ))}
-          </div>
-          {isHost && (
-            <button className="primary" disabled={players.length < 2} onClick={onStart}>
-              <Play size={18} />
-              Spiel starten
-            </button>
-          )}
-        </div>
-        <div className="panel rules">
-          <h2>Kurzregeln</h2>
-          <p>Jeder Spieler startet mit 1000 Coins. Small Blind beginnt bei 25 Coins, Big Blind bei 50 Coins.</p>
-          <p>Nach jeweils zwei kompletten Table-Runden verdoppeln sich die Blinds: 50/100, danach 100/200 und so weiter.</p>
-          <p>Alle geben verdeckt eine Zahlenantwort ab. Danach wird gesetzt, Tipp 1 erscheint, es wird gesetzt, Tipp 2 erscheint, es wird gesetzt, dann gewinnt die Antwort mit der kleinsten Entfernung zur Lösung.</p>
-          <p>Setzen geht nur in 25er-Schritten. Fold spart weitere Coins, kann den Pot aber nicht mehr gewinnen.</p>
-        </div>
       </section>
     </main>
   );
@@ -389,7 +387,8 @@ function LobbyV2({ room, players, isHost, onStart }) {
               <div className="lobbySeat" key={player.id}>
                 <UserRound size={20} />
                 <span>{player.name}</span>
-                {(player.role === "host" || player.role === "host-player") && <em>Host</em>}
+                {player.role === "host-player" && <em>Host</em>}
+                {player.role !== "host-player" && <em className="playerBadge">Spieler</em>}
                 <strong>{player.coins} Coins</strong>
               </div>
             ))}
@@ -404,17 +403,16 @@ function LobbyV2({ room, players, isHost, onStart }) {
         <div className="panel rules">
           <h2>Kurzregeln</h2>
           <p>Jeder Spieler startet mit 1000 Coins. Small Blind beginnt bei 25 Coins, Big Blind bei 50 Coins.</p>
-          <p>Nach jeweils zwei kompletten Table-Runden verdoppeln sich die Blinds: 50/100, danach 100/200 und so weiter.</p>
-          <p>Alle geben verdeckt eine Zahlenantwort ab. Danach wird gesetzt, Tipp 1 erscheint, es wird gesetzt, Tipp 2 erscheint, es wird gesetzt, dann gewinnt die Antwort mit der kleinsten Entfernung zur Lösung.</p>
-          <p>Setzen geht nur in 25er-Schritten. Fold spart weitere Coins, kann den Pot aber nicht mehr gewinnen.</p>
-          <p>{QUESTION_BANK.length} vorbereitete Schatzfragen sind im Spiel geladen.</p>
+          <p>Nach zwei kompletten Tischrunden verdoppeln sich die Blinds.</p>
+          <p>Antworten, setzen, Tipp 1, setzen, Tipp 2, letzte Setzphase, Auswertung.</p>
+          <p>Setzen geht nur in 25er-Schritten. Pro Setzphase darf jeder Spieler maximal zweimal erhoehen.</p>
         </div>
       </section>
     </main>
   );
 }
 
-function PlayerTable({ players, currentTurn, pot, blinds, roundNumber }) {
+function PlayerTable({ players, currentTurn, pot, blinds, roundNumber, smallBlindId, bigBlindId, winnerIds = [] }) {
   const seatedPlayers = players.length ? players : [];
 
   return (
@@ -435,13 +433,15 @@ function PlayerTable({ players, currentTurn, pot, blinds, roundNumber }) {
 
         return (
           <div
-            className={`seat ${player.id === currentTurn ? "active" : ""} ${player.folded ? "folded" : ""}`}
+            className={`seat ${player.id === currentTurn ? "active" : ""} ${player.folded || player.eliminated ? "folded" : ""} ${winnerIds.includes(player.id) ? "winnerSeat" : ""}`}
             key={player.id}
             style={{ "--seat-x": `${x}%`, "--seat-y": `${y}%` }}
           >
+            {player.id === smallBlindId && <b className="blindChip">SB</b>}
+            {player.id === bigBlindId && <b className="blindChip big">BB</b>}
             <span>{player.name}</span>
             <strong>{player.coins} Coins</strong>
-            <small>gesetzt: {player.committed || 0}</small>
+            <small>{player.eliminated ? `Platz ${player.placement || "-"}` : `gesetzt: ${player.committed || 0}`}</small>
           </div>
         );
       })}
@@ -449,101 +449,378 @@ function PlayerTable({ players, currentTurn, pot, blinds, roundNumber }) {
   );
 }
 
+function TimedOverlay({ overlay, onClose }) {
+  useEffect(() => {
+    if (!overlay) return undefined;
+    const timeout = window.setTimeout(onClose, overlay.duration || 2500);
+    return () => window.clearTimeout(timeout);
+  }, [overlay, onClose]);
+
+  if (!overlay) return null;
+
+  return (
+    <div className="centerOverlay" onClick={onClose}>
+      <div className={`centerCard ${overlay.kind || ""}`} onClick={(event) => event.stopPropagation()}>
+        {overlay.kicker && <p className="kicker">{overlay.kicker}</p>}
+        <h2>{overlay.title}</h2>
+        {overlay.text && <p>{overlay.text}</p>}
+        {overlay.sub && <small>{overlay.sub}</small>}
+        {overlay.kind === "winner" && <div className="celebrate"><Sparkles size={24} /> ✦ ✦ ✦</div>}
+      </div>
+    </div>
+  );
+}
+
+function ResultOverlay({ result, question, onClose }) {
+  useEffect(() => {
+    if (!result) return undefined;
+    const timeout = window.setTimeout(onClose, 15000);
+    return () => window.clearTimeout(timeout);
+  }, [result, onClose]);
+
+  if (!result) return null;
+
+  return (
+    <div className="centerOverlay" onClick={onClose}>
+      <div className="centerCard resultTableCard" onClick={(event) => event.stopPropagation()}>
+        <p className="kicker">Rundenauswertung</p>
+        <h2>{question.text}</h2>
+        <p className="answerLine">Richtige Antwort: <strong>{question.answerText || formatNumber(question.answer)}</strong></p>
+        <div className="resultTable">
+          <div>Spieler</div>
+          <div>Antwort</div>
+          <div>Abstand</div>
+          <div>Status</div>
+          {(result.responses || []).map((entry) => (
+            <React.Fragment key={entry.playerId}>
+              <strong className={entry.won ? "winnerName" : ""}>{entry.name}</strong>
+              <span>{entry.folded ? "Fold" : formatNumber(entry.answer)}</span>
+              <span>{entry.folded ? "-" : formatNumber(entry.distance)}</span>
+              <span>{entry.won ? `Gewinnt ${result.share} Coins` : entry.folded ? "Gefoldet" : "Dabei"}</span>
+            </React.Fragment>
+          ))}
+        </div>
+        <button className="ghost wideButton" onClick={onClose}>Schliessen</button>
+      </div>
+    </div>
+  );
+}
+
+function ActionFeed({ action }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!action?.text) return undefined;
+    setVisible(true);
+    const timeout = window.setTimeout(() => setVisible(false), 3500);
+    return () => window.clearTimeout(timeout);
+  }, [action?.at, action?.text]);
+
+  if (!action?.text || !visible) return null;
+  return <div className="actionToast">{action.text}</div>;
+}
+
+function HostTools({ room, players, onForceStreet, onForceResult, onNextRound, onSaveCoins }) {
+  const [open, setOpen] = useState(false);
+  const [coins, setCoins] = useState({});
+
+  useEffect(() => {
+    setCoins(Object.fromEntries(players.map((player) => [player.id, player.coins || 0])));
+  }, [players]);
+
+  return (
+    <div className="hostTools">
+      <div className="buttonRow">
+        <button className="secondary" onClick={() => onForceStreet(1)}>Tipp 1 einblenden</button>
+        <button className="secondary" onClick={() => onForceStreet(2)}>Tipp 2 einblenden</button>
+        <button className="primary" onClick={onForceResult}>Auswertung der Runde</button>
+        {room.phase === "result" && <button className="primary" onClick={onNextRound}>Naechste Runde</button>}
+        <button className="ghost" onClick={() => setOpen((value) => !value)}>Manuelle Zuteilung</button>
+      </div>
+      {open && (
+        <div className="coinEditor">
+          {players.map((player) => (
+            <label key={player.id}>
+              {player.name} derzeit {player.coins || 0}
+              <input
+                type="number"
+                value={coins[player.id] ?? 0}
+                onChange={(event) => setCoins({ ...coins, [player.id]: Number(event.target.value) })}
+              />
+            </label>
+          ))}
+          <button className="primary" onClick={() => onSaveCoins(coins)}>Zuteilung speichern</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GameOver({ room, players, me, isHost, onRematch, onStartRematch }) {
+  const standings = room.standings || players.slice().sort((a, b) => (a.placement || 99) - (b.placement || 99));
+  const rematchCount = players.filter((player) => player.wantsRematch).length;
+
+  return (
+    <section className="panel result">
+      <Trophy size={34} />
+      <p className="kicker">Spielende</p>
+      <h2>{standings[0]?.name || "Gewinner"} gewinnt das Spiel</h2>
+      <div className="standings">
+        {standings.map((entry, index) => (
+          <div className="standingRow" key={entry.playerId || entry.id}>
+            <strong>#{entry.placement || index + 1}</strong>
+            <span>{entry.name}</span>
+            <em>{entry.coins || 0} Coins</em>
+          </div>
+        ))}
+      </div>
+      {me && !me.wantsRematch && (
+        <button className="secondary" onClick={onRematch}>
+          <RotateCcw size={18} />
+          Nochmal spielen
+        </button>
+      )}
+      {me?.wantsRematch && <p className="turnHint">Du bist fuer die naechste Partie vorgemerkt.</p>}
+      {isHost && (
+        <button className="primary" disabled={rematchCount < 2} onClick={onStartRematch}>
+          <Play size={18} />
+          Neues Spiel mit {rematchCount} Spielern starten
+        </button>
+      )}
+    </section>
+  );
+}
+
 function Game({ room, players, userId }) {
   const [answerInput, setAnswerInput] = useState("");
   const [raiseInput, setRaiseInput] = useState("");
+  const [overlay, setOverlay] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [lastOverlayKey, setLastOverlayKey] = useState("");
   const me = players.find((player) => player.id === userId);
-  const activePlayers = players.filter((player) => !player.folded);
-  const currentQuestion = QUESTION_BANK[room.questionIndex % QUESTION_BANK.length];
-  const isHost = room.hostId === userId;
-  const currentBet = Math.max(0, ...players.map((player) => player.committed || 0));
+  const currentQuestion = getCurrentQuestion(room);
+  const isHost = isHostUser(room, userId, me);
+  const gamePlayers = livePlayers(players);
+  const currentBet = Math.max(0, ...gamePlayers.map((player) => player.committed || 0));
   const isMyTurn = room.currentTurn === userId;
-  const blinds = getBlinds(room.roundNumber || 1);
+  const blinds = getBlinds(room.roundNumber || 1, Math.max(2, gamePlayers.length || players.length));
   const pot = players.reduce((sum, player) => sum + Number(player.committed || 0), 0);
   const toCall = Math.max(0, currentBet - (me?.committed || 0));
   const minimumRaise = currentBet + blinds.bigBlind;
+  const currentTurnName = playerName(players, room.currentTurn, "naechsten Spieler");
+  const winnerIds = room.result?.winnerIds || [];
+  const raiseCounts = room.raiseCounts || {};
+  const myRaises = raiseCounts[userId] || 0;
+  const canRaise = isMyTurn && me && myRaises < MAX_RAISES_PER_STREET && Number(me.coins || 0) > toCall;
 
   const winnerText = useMemo(() => {
     if (!room.result) return "";
-    return room.result.winners?.length ? `${room.result.winners.join(", ")} gewinnt ${room.result.pot} Coins` : "";
+    if ((room.result.winners || []).length > 1) return `${room.result.winners.join(", ")} splitten ${room.result.pot} Coins`;
+    return room.result.winners?.length ? `${room.result.winners[0]} gewinnt ${room.result.pot} Coins` : "";
   }, [room.result]);
 
   useEffect(() => {
     if (!isHost || room.phase !== "answer") return;
-    if (!players.length || !players.every((player) => player.answered || player.folded)) return;
-    updateDoc(doc(db, "rooms", room.id), { phase: "betting" }).catch(console.error);
-  }, [isHost, players, room.id, room.phase]);
+    const inRound = livePlayers(players);
+    if (!inRound.length || !inRound.every((player) => player.answered || player.folded || player.eliminated)) return;
+    updateDoc(doc(db, "rooms", room.id), {
+      phase: "betting",
+      currentTurn: nextTurnFrom(players, room.bigBlindId) || room.smallBlindId || inRound[0]?.id,
+      bettingStart: nextTurnFrom(players, room.bigBlindId) || room.smallBlindId || inRound[0]?.id,
+      actedThisStreet: {},
+      raiseCounts: {},
+      actionFeed: { text: "Erste Setzphase startet", at: Date.now() }
+    }).catch(console.error);
+  }, [isHost, players, room.id, room.phase, room.bigBlindId, room.smallBlindId]);
+
+  useEffect(() => {
+    const key = `${room.phase}-${room.street || 0}-${room.currentTurn || ""}-${room.result?.pot || ""}-${room.roundNumber || 0}`;
+    if (key === lastOverlayKey) return;
+    setLastOverlayKey(key);
+
+    if (room.phase === "betting") {
+      if ((room.street || 0) === 1) {
+        setOverlay({
+          kind: "tip",
+          kicker: "Tipp 1",
+          title: currentQuestion.tips?.[0] || "Kein Tipp vorhanden",
+          text: `${currentTurnName} ist als naechstes dran.`,
+          duration: 8000
+        });
+      } else if (room.street === 2) {
+        setOverlay({
+          kind: "tip",
+          kicker: "Tipp 2",
+          title: currentQuestion.tips?.[1] || "Kein Tipp vorhanden",
+          text: "Letzte Setzphase",
+          sub: `${currentTurnName} ist als naechstes dran.`,
+          duration: 8000
+        });
+      } else if (room.currentTurn) {
+        setOverlay({
+          kind: "turn",
+          kicker: "Setzphase",
+          title: `${currentTurnName} ist dran`,
+          duration: 1800
+        });
+      }
+    }
+
+    if (room.phase === "result" && room.result) {
+      setOverlay({
+        kind: "winner",
+        kicker: "Rundensieger",
+        title: winnerText,
+        text: `Antwort: ${room.result.winnerAnswers?.join(", ") || "-"}`,
+        duration: 2200
+      });
+      const timeout = window.setTimeout(() => setShowResult(true), 2200);
+      return () => window.clearTimeout(timeout);
+    }
+
+    if (room.blindNotice) {
+      setOverlay({
+        kind: "blind",
+        kicker: "Blinds angepasst",
+        title: `SB ${room.blindNotice.smallBlind} / BB ${room.blindNotice.bigBlind}`,
+        duration: 3000
+      });
+    }
+
+    return undefined;
+  }, [room.phase, room.street, room.currentTurn, room.result, room.blindNotice, room.roundNumber, currentQuestion, currentTurnName, winnerText, lastOverlayKey]);
 
   async function submitAnswer() {
     const numeric = Number(answerInput.replace(",", "."));
-    if (!Number.isFinite(numeric)) return;
+    if (!Number.isFinite(numeric)) {
+      setActionError("Bitte gib eine gueltige Zahl ein.");
+      return;
+    }
     await updateDoc(doc(db, "rooms", room.id, "players", userId), {
       answer: numeric,
       answered: true
     });
     setAnswerInput("");
+    setActionError("");
   }
 
-  function nextTurnFrom(list, afterId) {
-    const eligible = list.filter((player) => !player.folded && player.coins > 0);
-    if (!eligible.length) return null;
-    const index = eligible.findIndex((player) => player.id === afterId);
-    return eligible[(index + 1 + eligible.length) % eligible.length]?.id || eligible[0].id;
-  }
-
-  async function act(type, amount = 0) {
-    if (!me || !isMyTurn) return;
-    const playerRef = doc(db, "rooms", room.id, "players", userId);
-    const updates = {};
-    let nextCommitted = me.committed || 0;
-
-    if (type === "fold") {
-      updates.folded = true;
-    } else {
-      const target = normalizeMoney(amount);
-      const required = type === "check" ? nextCommitted : Math.max(target, currentBet);
-      const pay = Math.max(0, Math.min(me.coins, required - nextCommitted));
-      updates.committed = nextCommitted + pay;
-      updates.coins = me.coins - pay;
-      nextCommitted = updates.committed;
-    }
-
-    await updateDoc(playerRef, updates);
-    const updatedPlayers = players.map((player) => (player.id === userId ? { ...player, ...updates } : player));
-    const remaining = updatedPlayers.filter((player) => !player.folded);
+  async function handlePostAction(updatedPlayers, actedThisStreet) {
+    const remaining = activePlayers(updatedPlayers);
     if (remaining.length <= 1) {
       await finishRound(updatedPlayers);
       return;
     }
 
-    const settled = remaining.every((player) => (player.committed || 0) === Math.max(...remaining.map((p) => p.committed || 0)));
-    const nextTurn = nextTurnFrom(updatedPlayers, userId);
-    if (settled && nextTurn === room.bettingStart) {
-      await advanceStreet(updatedPlayers);
-    } else {
-      await updateDoc(doc(db, "rooms", room.id), { currentTurn: nextTurn });
+    if (actors(updatedPlayers).length <= 1 && remaining.every((player) => Number(player.coins || 0) <= 0 || Number(player.committed || 0) >= currentBet)) {
+      await finishRound(updatedPlayers);
+      return;
     }
+
+    if (shouldEndStreet(updatedPlayers, actedThisStreet)) {
+      await advanceStreet(updatedPlayers);
+      return;
+    }
+
+    const nextTurn = nextTurnFrom(updatedPlayers, userId);
+    await updateDoc(doc(db, "rooms", room.id), { currentTurn: nextTurn });
+  }
+
+  async function act(type, amount = 0) {
+    if (!me || !isMyTurn || me.eliminated) return;
+    const playerRef = doc(db, "rooms", room.id, "players", userId);
+    const updates = {};
+    let actedThisStreet = { ...(room.actedThisStreet || {}), [userId]: true };
+    const nextRaiseCounts = { ...(room.raiseCounts || {}) };
+    let actionText = "";
+
+    if (type === "fold") {
+      updates.folded = true;
+      actionText = `${me.name} foldet`;
+    } else if (type === "check") {
+      if (toCall > 0) return;
+      actionText = `${me.name} checkt`;
+    } else if (type === "call") {
+      const pay = Math.max(0, Math.min(me.coins, toCall));
+      updates.committed = (me.committed || 0) + pay;
+      updates.coins = me.coins - pay;
+      actionText = `${me.name} geht mit ${pay} mit`;
+    } else if (type === "raise") {
+      const target = normalizeMoney(amount);
+      if (myRaises >= MAX_RAISES_PER_STREET) {
+        setActionError("Du hast in dieser Setzphase bereits 2x erhoeht.");
+        return;
+      }
+      if (target < minimumRaise) {
+        setActionError(`Erhoehung muss mindestens auf ${minimumRaise} Coins gesetzt werden.`);
+        return;
+      }
+      if (target > (me.committed || 0) + me.coins) {
+        setActionError("Du hast nicht genug Coins fuer diese Erhoehung.");
+        return;
+      }
+      const pay = Math.max(0, Math.min(me.coins, target - (me.committed || 0)));
+      updates.committed = (me.committed || 0) + pay;
+      updates.coins = me.coins - pay;
+      nextRaiseCounts[userId] = myRaises + 1;
+      actedThisStreet = { [userId]: true };
+      actionText = `${me.name} erhoeht auf ${updates.committed}`;
+      setRaiseInput("");
+    }
+
+    await updateDoc(playerRef, updates);
+    setActionError("");
+    const updatedPlayers = players.map((player) => (player.id === userId ? { ...player, ...updates } : player));
+    await updateDoc(doc(db, "rooms", room.id), {
+      actedThisStreet,
+      raiseCounts: nextRaiseCounts,
+      bettingStart: type === "raise" ? userId : room.bettingStart,
+      actionFeed: { text: actionText, at: Date.now() }
+    });
+    await handlePostAction(updatedPlayers, actedThisStreet);
   }
 
   async function advanceStreet(updatedPlayers) {
+    if (actors(updatedPlayers).length <= 1) {
+      await finishRound(updatedPlayers);
+      return;
+    }
+
     const nextStreet = (room.street || 0) + 1;
     if (nextStreet >= 3) {
       await finishRound(updatedPlayers);
       return;
     }
+    const nextStarter = nextTurnFrom(updatedPlayers, room.smallBlindId) || actors(updatedPlayers)[0]?.id || null;
     await updateDoc(doc(db, "rooms", room.id), {
       street: nextStreet,
-      currentTurn: room.smallBlindId,
-      bettingStart: room.smallBlindId
+      currentTurn: nextStarter,
+      bettingStart: nextStarter,
+      actedThisStreet: {},
+      raiseCounts: {},
+      actionFeed: { text: nextStreet === 2 ? "Letzte Setzphase startet" : "Naechste Setzphase startet", at: Date.now() }
     });
   }
 
   async function finishRound(currentPlayers = players) {
-    const contenders = currentPlayers.filter((player) => !player.folded && player.answered);
-    const pot = currentPlayers.reduce((sum, player) => sum + Number(player.committed || 0), 0);
+    const contenders = currentPlayers.filter((player) => !player.eliminated && !player.folded && player.answered);
+    const roundPot = currentPlayers.reduce((sum, player) => sum + Number(player.committed || 0), 0);
     const bestDistance = contenders.length ? Math.min(...contenders.map((player) => Math.abs(Number(player.answer) - currentQuestion.answer))) : 0;
     const winners = contenders.filter((player) => Math.abs(Number(player.answer) - currentQuestion.answer) === bestDistance);
-    const share = winners.length ? Math.floor(pot / winners.length) : 0;
+    const share = winners.length ? Math.floor(roundPot / winners.length) : 0;
+    const winnerIdsNext = winners.map((winner) => winner.id);
+    const responses = currentPlayers.map((player) => {
+      const answer = Number(player.answer);
+      const folded = Boolean(player.folded || player.eliminated);
+      return {
+        playerId: player.id,
+        name: player.name,
+        answer: player.answer,
+        distance: folded || !Number.isFinite(answer) ? null : Math.abs(answer - currentQuestion.answer),
+        folded,
+        won: winnerIdsNext.includes(player.id)
+      };
+    });
 
     await Promise.all(
       winners.map((winner) =>
@@ -553,29 +830,79 @@ function Game({ room, players, userId }) {
       )
     );
 
+    const afterPayout = currentPlayers.map((player) =>
+      winnerIdsNext.includes(player.id) ? { ...player, coins: Number(player.coins || 0) + share } : player
+    );
+    const stillAlive = afterPayout.filter((player) => !player.eliminated && Number(player.coins || 0) > 0);
+    const newlyEliminated = afterPayout.filter((player) => !player.eliminated && Number(player.coins || 0) <= 0);
+    const placements = {};
+    newlyEliminated.forEach((player, index) => {
+      placements[player.id] = stillAlive.length + newlyEliminated.length - index;
+    });
+
+    await Promise.all(
+      newlyEliminated.map((player) =>
+        updateDoc(doc(db, "rooms", room.id, "players", player.id), {
+          eliminated: true,
+          placement: placements[player.id]
+        })
+      )
+    );
+
+    const gameOver = stillAlive.length <= 1 && livePlayers(afterPayout).length > 1;
+    const standings = gameOver
+      ? afterPayout
+          .map((player) => ({
+            playerId: player.id,
+            name: player.name,
+            coins: Number(player.coins || 0),
+            placement: stillAlive[0]?.id === player.id ? 1 : placements[player.id] || player.placement || 2
+          }))
+          .sort((a, b) => a.placement - b.placement)
+      : null;
+
     await updateDoc(doc(db, "rooms", room.id), {
-      phase: "result",
+      phase: gameOver ? "gameOver" : "result",
       result: {
         answer: currentQuestion.answer,
         answerText: currentQuestion.answerText || "",
-        pot,
+        pot: roundPot,
+        share,
         winners: winners.map((winner) => winner.name),
-        unit: currentQuestion.unit
-      }
+        winnerIds: winnerIdsNext,
+        winnerAnswers: winners.map((winner) => formatNumber(winner.answer)),
+        responses,
+        unit: currentQuestion.unit || ""
+      },
+      standings,
+      currentTurn: null,
+      actionFeed: { text: winners.length > 1 ? "Der Pot wird gesplittet" : `${winners[0]?.name || "Niemand"} gewinnt die Runde`, at: Date.now() }
     });
   }
 
   async function nextRound() {
-    const ordered = players.slice().sort((a, b) => a.seat - b.seat);
+    const ordered = players.filter((player) => !player.eliminated && Number(player.coins || 0) > 0).slice().sort((a, b) => a.seat - b.seat);
+    if (ordered.length < 2) {
+      await finishRound(players);
+      return;
+    }
     const nextRoundNumber = (room.roundNumber || 1) + 1;
     const smallIndex = ((room.smallBlindSeat || 0) + 1) % ordered.length;
     const bigIndex = (smallIndex + 1) % ordered.length;
-    const nextBlinds = getBlinds(nextRoundNumber);
+    const previousBlinds = getBlinds(room.roundNumber || 1, Math.max(2, ordered.length));
+    const nextBlinds = getBlinds(nextRoundNumber, Math.max(2, ordered.length));
     const small = ordered[smallIndex];
     const big = ordered[bigIndex];
+    const used = Array.isArray(room.usedQuestionIds) ? room.usedQuestionIds : [];
+    let questionOrder = Array.isArray(room.questionOrder) ? room.questionOrder : [];
+    let nextQuestionIndex = (room.questionIndex || 0) + 1;
+
+    if (questionOrder[nextQuestionIndex] === undefined) {
+      questionOrder = [...questionOrder, ...shuffleQuestionOrder(used)];
+    }
 
     await Promise.all(
-      ordered.map((player) =>
+      players.map((player) =>
         updateDoc(doc(db, "rooms", room.id, "players", player.id), {
           committed: 0,
           folded: false,
@@ -595,23 +922,109 @@ function Game({ room, players, userId }) {
     await updateDoc(doc(db, "rooms", room.id), {
       phase: "answer",
       roundNumber: nextRoundNumber,
-      questionIndex: nextRoundNumber - 1,
+      questionIndex: nextQuestionIndex,
+      questionOrder,
+      usedQuestionIds: [...used, questionOrder[nextQuestionIndex]].filter((value) => value !== undefined),
       street: 0,
       smallBlindSeat: smallIndex,
       smallBlindId: small.id,
       bigBlindId: big.id,
       currentTurn: ordered[(bigIndex + 1) % ordered.length].id,
       bettingStart: ordered[(bigIndex + 1) % ordered.length].id,
-      result: null
+      actedThisStreet: {},
+      raiseCounts: {},
+      result: null,
+      blindNotice: previousBlinds.bigBlind !== nextBlinds.bigBlind ? nextBlinds : null
     });
+    setShowResult(false);
   }
 
   async function openBetting() {
-    if (!players.every((player) => player.answered || player.folded)) return;
+    if (!livePlayers(players).every((player) => player.answered || player.folded)) return;
+    const first = nextTurnFrom(players, room.bigBlindId) || room.smallBlindId;
     await updateDoc(doc(db, "rooms", room.id), {
-      phase: "betting"
+      phase: "betting",
+      currentTurn: first,
+      bettingStart: first,
+      actedThisStreet: {},
+      raiseCounts: {}
     });
   }
+
+  async function forceStreet(street) {
+    const first = nextTurnFrom(players, room.smallBlindId) || actors(players)[0]?.id || null;
+    await updateDoc(doc(db, "rooms", room.id), {
+      phase: "betting",
+      street,
+      currentTurn: first,
+      bettingStart: first,
+      actedThisStreet: {},
+      raiseCounts: {},
+      actionFeed: { text: street === 2 ? "Tipp 2 wurde eingeblendet" : "Tipp 1 wurde eingeblendet", at: Date.now() }
+    });
+  }
+
+  async function saveCoins(coins) {
+    await Promise.all(
+      Object.entries(coins).map(([playerId, value]) =>
+        updateDoc(doc(db, "rooms", room.id, "players", playerId), {
+          coins: normalizeMoney(value),
+          eliminated: false,
+          placement: null
+        })
+      )
+    );
+  }
+
+  async function markRematch() {
+    if (!me) return;
+    await updateDoc(doc(db, "rooms", room.id, "players", me.id), { wantsRematch: true });
+  }
+
+  async function startRematch() {
+    const rematchPlayers = players.filter((player) => player.wantsRematch);
+    if (rematchPlayers.length < 2) return;
+    const used = Array.isArray(room.usedQuestionIds) ? room.usedQuestionIds : [];
+    const questionOrder = shuffleQuestionOrder(used);
+    await Promise.all(
+      players.map((player) =>
+        updateDoc(doc(db, "rooms", room.id, "players", player.id), {
+          coins: player.wantsRematch ? STARTING_COINS : 0,
+          committed: 0,
+          folded: false,
+          eliminated: !player.wantsRematch,
+          placement: null,
+          wantsRematch: false,
+          answered: false,
+          answer: null
+        })
+      )
+    );
+    await updateDoc(doc(db, "rooms", room.id), {
+      phase: "lobby",
+      roundNumber: 1,
+      questionIndex: 0,
+      questionOrder,
+      usedQuestionIds: [...used, questionOrder[0]].filter((value) => value !== undefined),
+      street: 0,
+      result: null,
+      standings: null,
+      gameNumber: Number(room.gameNumber || 1) + 1
+    });
+  }
+
+  const commonTable = (
+    <PlayerTable
+      players={players}
+      currentTurn={room.currentTurn}
+      pot={pot}
+      blinds={blinds}
+      roundNumber={room.roundNumber}
+      smallBlindId={room.smallBlindId}
+      bigBlindId={room.bigBlindId}
+      winnerIds={winnerIds}
+    />
+  );
 
   if (!me && isHost) {
     return (
@@ -619,34 +1032,32 @@ function Game({ room, players, userId }) {
         <Logo />
         <section className="statusBar">
           <span><ShieldCheck size={16} /> Runde {room.roundNumber}</span>
+          <span>Frage {getQuestionNumber(room)}</span>
           <span>Small {blinds.smallBlind}</span>
           <span>Big {blinds.bigBlind}</span>
           <span><Wallet size={16} /> Pot {pot}</span>
           <span>Host-Ansicht</span>
         </section>
-        <PlayerTable players={players} currentTurn={room.currentTurn} pot={pot} blinds={blinds} roundNumber={room.roundNumber} />
+        {commonTable}
         <section className="panel questionPanel">
-          <p className="kicker">Host-Ansicht</p>
+          <p className="kicker">{phaseLabel(room)}</p>
           <h2>{currentQuestion.text}</h2>
-          {room.phase === "answer" && <p className="turnHint">Warten, bis alle Spieler ihre Antwort bestätigt haben.</p>}
-          {room.phase === "betting" && (
-            <div className="tips">
-              {room.street >= 1 && <p><Eye size={16} /> Tipp 1: {currentQuestion.tips[0]}</p>}
-              {room.street >= 2 && <p><Eye size={16} /> Tipp 2: {currentQuestion.tips[1]}</p>}
-            </div>
-          )}
+          {room.phase === "answer" && <p className="turnHint">Warten, bis alle Spieler ihre Antwort bestaetigt haben.</p>}
+          {room.phase === "betting" && <p className="turnHint">Spieler setzen gerade. Warten auf {currentTurnName}.</p>}
           {room.phase === "result" && (
             <div className="result">
               <Trophy size={28} />
               <h2>{winnerText}</h2>
               <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
-              <button className="primary" onClick={nextRound}>
-                <Play size={18} />
-                Nächste Runde
-              </button>
+              <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
+              <button className="primary" onClick={nextRound}><Play size={18} />Naechste Runde</button>
             </div>
           )}
+          <HostTools room={room} players={players} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} />
         </section>
+        <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
+        {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
+        <ActionFeed action={room.actionFeed} />
       </main>
     );
   }
@@ -658,41 +1069,41 @@ function Game({ room, players, userId }) {
       <Logo />
       <section className="statusBar">
         <span><ShieldCheck size={16} /> Runde {room.roundNumber}</span>
+        <span>Frage {getQuestionNumber(room)}</span>
         <span>Small {blinds.smallBlind}</span>
         <span>Big {blinds.bigBlind}</span>
         <span><Wallet size={16} /> Pot {pot}</span>
-        <span>{QUESTION_BANK.length} Fragen</span>
+        <span>{room.phase === "betting" ? `Dran: ${currentTurnName}` : me.name}</span>
       </section>
 
-      <PlayerTable players={players} currentTurn={room.currentTurn} pot={pot} blinds={blinds} roundNumber={room.roundNumber} />
+      {commonTable}
 
       <section className="panel questionPanel">
-        <p className="kicker">Frage</p>
+        <p className="kicker">{room.phase === "answer" ? `Frage ${getQuestionNumber(room)}` : phaseLabel(room)}</p>
         <h2>{currentQuestion.text}</h2>
 
-        {room.phase === "answer" && (
+        {room.phase === "answer" && !me.eliminated && (
           <div className="answerBox">
             {me.answered ? (
               <p className="locked">Deine Antwort ist gespeichert: {formatNumber(me.answer)}</p>
             ) : (
               <>
                 <input value={answerInput} onChange={(event) => setAnswerInput(event.target.value)} placeholder={`Antwort${answerUnit(currentQuestion)}`} />
-                <button className="primary" onClick={submitAnswer}>
-                  <Send size={18} />
-                  Antwort bestätigen
-                </button>
+                <button className="primary" onClick={submitAnswer}><Send size={18} />Antwort bestaetigen</button>
               </>
             )}
-            {isHost && (
-              <button className="secondary" onClick={openBetting}>
-                <Play size={18} />
-                Setzrunde öffnen
-              </button>
-            )}
+            {isHost && <button className="secondary" onClick={openBetting}><Play size={18} />Setzrunde oeffnen</button>}
           </div>
         )}
+        {me.eliminated && room.phase !== "gameOver" && (
+          <div className="answerBox">
+            <p className="locked">Du schaust weiter zu. Platzierung: {me.placement || "offen"}</p>
+            {!me.wantsRematch && <button className="secondary" onClick={markRematch}>Nochmal spielen</button>}
+          </div>
+        )}
+        {actionError && <p className="notice error">{actionError}</p>}
 
-        {room.phase === "betting" && (
+        {room.phase === "betting" && !me.eliminated && (
           <>
             <div className="tips">
               {room.street >= 1 && <p><Eye size={16} /> Tipp 1: {currentQuestion.tips[0]}</p>}
@@ -700,15 +1111,13 @@ function Game({ room, players, userId }) {
             </div>
             <div className="actions">
               <button className="ghost" disabled={!isMyTurn} onClick={() => act("fold")}>Fold</button>
-              <button className="secondary" disabled={!isMyTurn || toCall > 0} onClick={() => act("check", me.committed)}>Check</button>
-              <button className="secondary" disabled={!isMyTurn || toCall === 0} onClick={() => act("call", currentBet)}>Mitgehen {toCall}</button>
-              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhöhen auf mind. ${minimumRaise}`} />
-              <button className="primary" disabled={!isMyTurn} onClick={() => act("raise", Math.max(minimumRaise, Number(raiseInput)))}>
-                Erhöhen
-              </button>
+              <button className="secondary" disabled={!isMyTurn || toCall > 0} onClick={() => act("check")}>Check</button>
+              <button className="secondary" disabled={!isMyTurn || toCall === 0} onClick={() => act("call")}>Mitgehen {toCall}</button>
+              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhoehen auf mind. ${minimumRaise}`} />
+              <button className="primary" disabled={!canRaise} onClick={() => act("raise", Number(raiseInput))}>Erhoehen</button>
             </div>
             <p className="turnHint">
-              {isMyTurn ? `Du bist dran. ${toCall > 0 ? `Zum Mitgehen brauchst du ${toCall} Coins.` : "Du kannst checken oder erhöhen."}` : "Warten auf den nächsten Spieler."}
+              {isMyTurn ? `Du bist dran. ${toCall > 0 ? `Zum Mitgehen brauchst du ${toCall} Coins.` : "Du kannst checken oder erhoehen."}` : `Warten auf ${currentTurnName}.`}
             </p>
           </>
         )}
@@ -718,15 +1127,18 @@ function Game({ room, players, userId }) {
             <Trophy size={28} />
             <h2>{winnerText}</h2>
             <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
-            {isHost && (
-              <button className="primary" onClick={nextRound}>
-                <Play size={18} />
-                Nächste Runde
-              </button>
-            )}
+            <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
+            {isHost && <button className="primary" onClick={nextRound}><Play size={18} />Naechste Runde</button>}
           </div>
         )}
+
+        {room.phase === "gameOver" && <GameOver room={room} players={players} me={me} isHost={isHost} onRematch={markRematch} onStartRematch={startRematch} />}
+
+        {isHost && <HostTools room={room} players={players} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} />}
       </section>
+      <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
+      {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
+      <ActionFeed action={room.actionFeed} />
     </main>
   );
 }
@@ -739,11 +1151,13 @@ export default function App() {
   });
   const [screen, setScreen] = useState(() => (window.location.pathname.startsWith("/join/") ? "join" : "home"));
   const { room, players, loading } = useRoom(roomCode);
+  const me = players.find((player) => player.id === userId);
   const isHostController = room?.hostId && userId === room.hostId;
 
   async function createRoom(roomName, hostName) {
     const user = await ensureAnonymousUser();
     const code = makeRoomCode();
+    const questionOrder = shuffleQuestionOrder();
     await setDoc(doc(db, "rooms", code), {
       name: roomName?.trim() || "Two Tipps One Cup Raum",
       hostId: user.uid,
@@ -751,6 +1165,9 @@ export default function App() {
       phase: "lobby",
       roundNumber: 1,
       questionIndex: 0,
+      questionOrder,
+      usedQuestionIds: questionOrder[0] !== undefined ? [questionOrder[0]] : [],
+      gameNumber: 1,
       street: 0,
       createdAt: serverTimestamp()
     });
@@ -763,12 +1180,25 @@ export default function App() {
   }
 
   async function startGame() {
-    const ordered = players.slice().sort((a, b) => a.seat - b.seat);
+    const ordered = players.filter((player) => !player.eliminated).slice().sort((a, b) => a.seat - b.seat);
     if (ordered.length < 2) return;
     const small = ordered[0];
     const big = ordered[1];
-    const blinds = getBlinds(1);
+    const blinds = getBlinds(1, Math.max(2, ordered.length));
 
+    await Promise.all(
+      ordered.map((player) =>
+        updateDoc(doc(db, "rooms", room.id, "players", player.id), {
+          coins: Number(player.coins ?? STARTING_COINS),
+          committed: 0,
+          folded: false,
+          answered: false,
+          answer: null,
+          eliminated: false,
+          placement: null
+        })
+      )
+    );
     await updateDoc(doc(db, "rooms", room.id, "players", small.id), {
       committed: Math.min(small.coins, blinds.smallBlind),
       coins: Math.max(0, small.coins - blinds.smallBlind)
@@ -783,7 +1213,11 @@ export default function App() {
       smallBlindId: small.id,
       bigBlindId: big.id,
       currentTurn: ordered[2 % ordered.length].id,
-      bettingStart: ordered[2 % ordered.length].id
+      bettingStart: ordered[2 % ordered.length].id,
+      actedThisStreet: {},
+      raiseCounts: {},
+      result: null,
+      standings: null
     });
   }
 
@@ -816,7 +1250,7 @@ export default function App() {
   }
 
   if (room.phase === "lobby") {
-    return <LobbyV2 room={room} players={players} isHost={room.hostId === userId} onStart={startGame} />;
+    return <LobbyV2 room={room} players={players} isHost={isHostUser(room, userId, me)} onStart={startGame} />;
   }
 
   return <Game room={room} players={players} userId={userId} />;

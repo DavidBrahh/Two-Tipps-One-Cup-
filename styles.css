@@ -283,6 +283,11 @@ h2 {
   padding: 0.2rem 0.5rem;
 }
 
+.lobbySeat .playerBadge {
+  background: rgba(143, 234, 255, 0.12);
+  color: #8feaff;
+}
+
 .lobbySeat strong {
   color: #d8d0c2;
   grid-column: 2 / -1;
@@ -421,6 +426,7 @@ h2 {
   right: 0.65rem;
   top: -0.55rem;
   width: 1rem;
+  opacity: 0;
 }
 
 .seat.active {
@@ -430,8 +436,56 @@ h2 {
     0 18px 45px rgba(0, 0, 0, 0.38);
 }
 
+.seat.active::before {
+  animation: pulseDot 900ms ease-in-out infinite;
+  opacity: 1;
+}
+
 .seat.folded {
+  background: rgba(40, 42, 46, 0.78);
+  filter: grayscale(0.95);
   opacity: 0.5;
+}
+
+.winnerSeat {
+  border-color: #33d69f;
+  box-shadow:
+    0 0 0 2px rgba(51, 214, 159, 0.5),
+    0 18px 45px rgba(0, 0, 0, 0.38);
+}
+
+.blindChip,
+.turnDot {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.68rem;
+  font-weight: 950;
+  justify-content: center;
+  position: absolute;
+}
+
+.blindChip {
+  background: #f3c64d;
+  color: #101114;
+  height: 1.55rem;
+  left: 0.65rem;
+  top: -0.78rem;
+  width: 1.55rem;
+  z-index: 3;
+}
+
+.blindChip.big {
+  background: #8feaff;
+}
+
+.turnDot {
+  background: #33d69f;
+  box-shadow: 0 0 0 5px rgba(51, 214, 159, 0.16);
+  height: 0.9rem;
+  right: 2rem;
+  top: -0.5rem;
+  width: 0.9rem;
 }
 
 .seat span {
@@ -506,6 +560,158 @@ h2 {
   justify-items: start;
 }
 
+.hostTools {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+}
+
+.coinEditor {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 1rem;
+}
+
+.coinEditor .primary {
+  align-self: end;
+}
+
+.centerOverlay {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.62);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  z-index: 50;
+}
+
+.centerCard {
+  background: rgba(18, 20, 24, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 32px 110px rgba(0, 0, 0, 0.54);
+  max-width: 760px;
+  padding: clamp(1rem, 4vw, 2rem);
+  text-align: center;
+  width: min(100%, 760px);
+}
+
+.centerCard h2 {
+  font-size: clamp(1.8rem, 6vw, 4rem);
+  margin-bottom: 0.6rem;
+}
+
+.centerCard.tip h2 {
+  color: #fff6d1;
+  font-size: clamp(1.6rem, 5vw, 3.2rem);
+}
+
+.centerCard.turn h2,
+.centerCard.winner h2,
+.centerCard.blind h2 {
+  color: #f3c64d;
+}
+
+.celebrate {
+  align-items: center;
+  color: #8feaff;
+  display: flex;
+  font-size: 1.5rem;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.8rem;
+}
+
+.resultTableCard {
+  max-width: 900px;
+  text-align: left;
+}
+
+.resultTableCard h2 {
+  font-size: clamp(1.15rem, 3vw, 1.6rem);
+}
+
+.answerLine {
+  color: #fff6d1;
+}
+
+.resultTable {
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(110px, 1.3fr) repeat(3, minmax(90px, 1fr));
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.resultTable > * {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.65rem 0.5rem;
+}
+
+.resultTable > div:nth-child(-n + 4) {
+  color: #8feaff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.winnerName {
+  color: #33d69f;
+}
+
+.actionToast {
+  background: rgba(18, 20, 24, 0.96);
+  border: 1px solid rgba(243, 198, 77, 0.38);
+  border-radius: 8px;
+  bottom: 1rem;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.38);
+  color: #fff6d1;
+  font-weight: 950;
+  max-width: min(90vw, 360px);
+  padding: 0.85rem 1rem;
+  position: fixed;
+  right: 1rem;
+  z-index: 60;
+}
+
+.standings {
+  display: grid;
+  gap: 0.55rem;
+  width: min(100%, 520px);
+}
+
+.standingRow {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto 1fr auto;
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.standingRow strong {
+  color: #f3c64d;
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.9);
+  }
+
+  50% {
+    transform: scale(1.18);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+}
+
 @media (max-width: 760px) {
   .home {
     align-items: flex-start;
@@ -558,5 +764,16 @@ h2 {
   .answerBox input,
   .actions input {
     max-width: none;
+  }
+
+  .resultTable {
+    grid-template-columns: minmax(90px, 1.1fr) repeat(3, minmax(74px, 1fr));
+    min-width: 540px;
+  }
+
+  .actionToast {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
   }
 }
