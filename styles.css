@@ -615,6 +615,67 @@ h2 {
   color: #f3c64d;
 }
 
+.centerCard.winner {
+  overflow: hidden;
+  position: relative;
+}
+
+.partyBurst {
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.partyBurst span {
+  animation: floatParty 1800ms ease-in-out infinite;
+  background: #f3c64d;
+  border-radius: 999px;
+  box-shadow: 0 0 18px rgba(243, 198, 77, 0.45);
+  height: 0.8rem;
+  position: absolute;
+  width: 0.8rem;
+}
+
+.partyBurst span:nth-child(1) {
+  background: #8feaff;
+  left: 12%;
+  top: 22%;
+}
+
+.partyBurst span:nth-child(2) {
+  background: #ea3652;
+  animation-delay: 140ms;
+  left: 22%;
+  top: 72%;
+}
+
+.partyBurst span:nth-child(3) {
+  animation-delay: 260ms;
+  right: 16%;
+  top: 18%;
+}
+
+.partyBurst span:nth-child(4) {
+  background: #33d69f;
+  animation-delay: 380ms;
+  right: 24%;
+  top: 72%;
+}
+
+.partyBurst span:nth-child(5) {
+  background: #ff55d6;
+  animation-delay: 500ms;
+  left: 48%;
+  top: 10%;
+}
+
+.partyBurst span:nth-child(6) {
+  background: #8feaff;
+  animation-delay: 620ms;
+  left: 52%;
+  bottom: 10%;
+}
+
 .celebrate {
   align-items: center;
   color: #8feaff;
@@ -641,7 +702,7 @@ h2 {
 .resultTable {
   display: grid;
   gap: 0;
-  grid-template-columns: minmax(110px, 1.3fr) repeat(3, minmax(90px, 1fr));
+  grid-template-columns: minmax(105px, 1.2fr) repeat(4, minmax(82px, 1fr));
   margin: 1rem 0;
   overflow-x: auto;
 }
@@ -651,7 +712,7 @@ h2 {
   padding: 0.65rem 0.5rem;
 }
 
-.resultTable > div:nth-child(-n + 4) {
+.resultTable > div:nth-child(-n + 5) {
   color: #8feaff;
   font-size: 0.78rem;
   font-weight: 950;
@@ -712,6 +773,20 @@ h2 {
   }
 }
 
+@keyframes floatParty {
+  0% {
+    transform: translateY(0) scale(0.8);
+  }
+
+  50% {
+    transform: translateY(-0.65rem) scale(1.18);
+  }
+
+  100% {
+    transform: translateY(0) scale(0.8);
+  }
+}
+
 @media (max-width: 760px) {
   .home {
     align-items: flex-start;
@@ -767,8 +842,8 @@ h2 {
   }
 
   .resultTable {
-    grid-template-columns: minmax(90px, 1.1fr) repeat(3, minmax(74px, 1fr));
-    min-width: 540px;
+    grid-template-columns: minmax(90px, 1.1fr) repeat(4, minmax(76px, 1fr));
+    min-width: 660px;
   }
 
   .actionToast {

@@ -88,7 +88,31 @@ function normalizeMoney(value) {
 }
 
 function formatNumber(value) {
-  return new Intl.NumberFormat("de-DE", { maximumFractionDigits: 4 }).format(Number(value || 0));
+  const numeric = Number(value || 0);
+  if (Number.isInteger(numeric) && numeric >= 1000 && numeric <= 2999) {
+    return String(numeric);
+  }
+  return new Intl.NumberFormat("de-DE", { maximumFractionDigits: 4 }).format(numeric);
+}
+
+function formatAnswerInput(value) {
+  const raw = String(value || "").replace(/[^\d,.-]/g, "");
+  const negative = raw.startsWith("-");
+  const clean = raw.replace(/-/g, "").replace(/\./g, "");
+  const [integerPart = "", ...decimalParts] = clean.split(",");
+  const decimals = decimalParts.join("");
+  const groupedInteger = integerPart.replace(/^0+(?=\d)/, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  const prefix = negative ? "-" : "";
+
+  if (clean.includes(",")) {
+    return `${prefix}${groupedInteger || "0"},${decimals}`;
+  }
+
+  return `${prefix}${groupedInteger}`;
+}
+
+function parseAnswerInput(value) {
+  return Number(String(value || "").replace(/\./g, "").replace(",", "."));
 }
 
 function answerUnit(question) {
@@ -462,6 +486,16 @@ function TimedOverlay({ overlay, onClose }) {
     <div className="centerOverlay" onClick={onClose}>
       <div className={`centerCard ${overlay.kind || ""}`}>
         {overlay.kicker && <p className="kicker">{overlay.kicker}</p>}
+        {overlay.kind === "winner" && (
+          <div className="partyBurst" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        )}
         <h2>{overlay.title}</h2>
         {overlay.text && <p>{overlay.text}</p>}
         {overlay.sub && <small>{overlay.sub}</small>}
@@ -482,7 +516,7 @@ function ResultOverlay({ result, question, onClose }) {
 
   return (
     <div className="centerOverlay" onClick={onClose}>
-      <div className="centerCard resultTableCard" onClick={(event) => event.stopPropagation()}>
+      <div className="centerCard resultTableCard">
         <p className="kicker">Rundenauswertung</p>
         <h2>{question.text}</h2>
         <p className="answerLine">Richtige Antwort: <strong>{question.answerText || formatNumber(question.answer)}</strong></p>
@@ -491,12 +525,14 @@ function ResultOverlay({ result, question, onClose }) {
           <div>Antwort</div>
           <div>Abstand</div>
           <div>Status</div>
+          <div>Coins</div>
           {(result.responses || []).map((entry) => (
             <React.Fragment key={entry.playerId}>
               <strong className={entry.won ? "winnerName" : ""}>{entry.name}</strong>
               <span>{entry.folded ? "Fold" : formatNumber(entry.answer)}</span>
               <span>{entry.folded ? "-" : formatNumber(entry.distance)}</span>
-              <span>{entry.won ? `Gewinnt ${result.share} Coins` : entry.folded ? "Gefoldet" : "Dabei"}</span>
+              <span>{entry.won ? `Gewinnt ${result.share} Coins` : entry.folded ? `Gefoldet · verliert ${entry.committed || 0}` : `Verloren · verliert ${entry.committed || 0}`}</span>
+              <strong>{entry.coinsAfter ?? "-"}</strong>
             </React.Fragment>
           ))}
         </div>
@@ -608,6 +644,7 @@ function Game({ room, players, userId }) {
   const pot = players.reduce((sum, player) => sum + Number(player.committed || 0), 0);
   const toCall = Math.max(0, currentBet - (me?.committed || 0));
   const minimumRaise = currentBet + blinds.bigBlind;
+  const minimumRaiseAdd = Math.max(STEP, minimumRaise - (me?.committed || 0));
   const currentTurnName = playerName(players, room.currentTurn, "nächsten Spieler");
   const winnerIds = room.result?.winnerIds || [];
   const raiseCounts = room.raiseCounts || {};
@@ -673,12 +710,17 @@ function Game({ room, players, userId }) {
       setShowResult(false);
       setOverlay({
         kind: "winner",
-        kicker: "Rundensieger",
-        title: winnerText,
-        text: `Antwort: ${room.result.winnerAnswers?.join(", ") || "-"}`,
-        duration: 2200
+        kicker: "Gratulation",
+        title: room.result.winners?.length > 1
+          ? `${room.result.winners.join(", ")} haben die Runde gewonnen`
+          : `${room.result.winners?.[0] || "Der Gewinner"} hat die Runde gewonnen`,
+        text: room.result.winners?.length > 1
+          ? `Split-Pot: ${room.result.pot} Coins · je ${room.result.share} Coins`
+          : `Pot: ${room.result.pot} Coins`,
+        sub: `Antwort: ${room.result.winnerAnswers?.join(", ") || "-"}`,
+        duration: 2700
       });
-      const timeout = window.setTimeout(() => setShowResult(true), 2200);
+      const timeout = window.setTimeout(() => setShowResult(true), 2700);
       return () => window.clearTimeout(timeout);
     }
 
@@ -695,7 +737,7 @@ function Game({ room, players, userId }) {
   }, [room.phase, room.street, room.currentTurn, room.result, room.blindNotice, room.roundNumber, currentQuestion, currentTurnName, winnerText, lastOverlayKey]);
 
   async function submitAnswer() {
-    const numeric = Number(answerInput.replace(",", "."));
+    const numeric = parseAnswerInput(answerInput);
     if (!Number.isFinite(numeric)) {
       setActionError("Bitte gib eine gültige Zahl ein.");
       return;
@@ -749,25 +791,26 @@ function Game({ room, players, userId }) {
       updates.coins = me.coins - pay;
       actionText = `${me.name} geht mit ${pay} mit`;
     } else if (type === "raise") {
-      const target = normalizeMoney(amount);
+      const raiseAdd = normalizeMoney(amount);
+      const target = (me.committed || 0) + raiseAdd;
       if (myRaises >= MAX_RAISES_PER_STREET) {
         setActionError("Du hast in dieser Setzphase bereits 2x erhöht.");
         return;
       }
       if (target < minimumRaise) {
-        setActionError(`Erhöhung muss mindestens auf ${minimumRaise} Coins gesetzt werden.`);
+        setActionError(`Du musst mindestens um ${minimumRaiseAdd} Coins erhöhen.`);
         return;
       }
-      if (target > (me.committed || 0) + me.coins) {
+      if (raiseAdd > me.coins) {
         setActionError("Du hast nicht genug Coins für diese Erhöhung.");
         return;
       }
-      const pay = Math.max(0, Math.min(me.coins, target - (me.committed || 0)));
+      const pay = Math.max(0, Math.min(me.coins, raiseAdd));
       updates.committed = (me.committed || 0) + pay;
       updates.coins = me.coins - pay;
       nextRaiseCounts[userId] = myRaises + 1;
       actedThisStreet = { [userId]: true };
-      actionText = `${me.name} erhöht auf ${updates.committed}`;
+      actionText = `${me.name} erhöht um ${pay} auf ${updates.committed}`;
       setRaiseInput("");
     }
 
@@ -812,7 +855,10 @@ function Game({ room, players, userId }) {
     const winners = contenders.filter((player) => Math.abs(Number(player.answer) - currentQuestion.answer) === bestDistance);
     const share = winners.length ? Math.floor(roundPot / winners.length) : 0;
     const winnerIdsNext = winners.map((winner) => winner.id);
-    const responses = currentPlayers.map((player) => {
+    const afterPayout = currentPlayers.map((player) =>
+      winnerIdsNext.includes(player.id) ? { ...player, coins: Number(player.coins || 0) + share } : player
+    );
+    const responses = afterPayout.map((player) => {
       const answer = Number(player.answer);
       const folded = Boolean(player.folded || player.eliminated);
       return {
@@ -820,6 +866,8 @@ function Game({ room, players, userId }) {
         name: player.name,
         answer: player.answer,
         distance: folded || !Number.isFinite(answer) ? null : Math.abs(answer - currentQuestion.answer),
+        committed: Number(player.committed || 0),
+        coinsAfter: Number(player.coins || 0),
         folded,
         won: winnerIdsNext.includes(player.id)
       };
@@ -833,9 +881,6 @@ function Game({ room, players, userId }) {
       )
     );
 
-    const afterPayout = currentPlayers.map((player) =>
-      winnerIdsNext.includes(player.id) ? { ...player, coins: Number(player.coins || 0) + share } : player
-    );
     const stillAlive = afterPayout.filter((player) => !player.eliminated && Number(player.coins || 0) > 0);
     const newlyEliminated = afterPayout.filter((player) => !player.eliminated && Number(player.coins || 0) <= 0);
     const placements = {};
@@ -1091,11 +1136,11 @@ function Game({ room, players, userId }) {
               <p className="locked">Deine Antwort ist gespeichert: {formatNumber(me.answer)}</p>
             ) : (
               <>
-                <input value={answerInput} onChange={(event) => setAnswerInput(event.target.value)} placeholder={`Antwort${answerUnit(currentQuestion)}`} />
-                <button className="primary" onClick={submitAnswer}><Send size={18} />Antwort bestaetigen</button>
+                <input value={answerInput} onChange={(event) => setAnswerInput(formatAnswerInput(event.target.value))} placeholder={`Antwort${answerUnit(currentQuestion)}`} />
+                <button className="primary" onClick={submitAnswer}><Send size={18} />Antwort bestätigen</button>
               </>
             )}
-            {isHost && <button className="secondary" onClick={openBetting}><Play size={18} />Setzrunde öffnen</button>}
+            {isHost && <button className="secondary" onClick={openBetting}><Play size={18} />Setzphase starten</button>}
           </div>
         )}
         {me.eliminated && room.phase !== "gameOver" && (
@@ -1116,7 +1161,7 @@ function Game({ room, players, userId }) {
               <button className="ghost" disabled={!isMyTurn} onClick={() => act("fold")}>Fold</button>
               <button className="secondary" disabled={!isMyTurn || toCall > 0} onClick={() => act("check")}>Check</button>
               <button className="secondary" disabled={!isMyTurn || toCall === 0} onClick={() => act("call")}>Mitgehen {toCall}</button>
-              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhöhen auf mind. ${minimumRaise}`} />
+              <input value={raiseInput} onChange={(event) => setRaiseInput(event.target.value)} placeholder={`Erhöhen um mind. ${minimumRaiseAdd}`} />
               <button className="primary" disabled={!canRaise} onClick={() => act("raise", Number(raiseInput))}>Erhöhen</button>
             </div>
             <p className="turnHint">

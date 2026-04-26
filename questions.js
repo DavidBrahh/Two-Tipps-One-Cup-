@@ -2,7 +2,7 @@ export const QUESTIONS = [
   {
     "id": 1,
     "text": "Wie hoch ist das weltberühmte Bild „Mona Lisa“ im Louvre in Zentimetern?",
-    "answer": 77.0,
+    "answer": 77,
     "answerText": "77 Zentimeter",
     "unit": "Zentimeter",
     "tips": [
@@ -13,7 +13,7 @@ export const QUESTIONS = [
   {
     "id": 2,
     "text": "Wie viele Tasten hat das weltweit über 160 Millionen Mal verkaufte Nokia 3210 auf der Vorderseite?",
-    "answer": 15.0,
+    "answer": 15,
     "answerText": "15",
     "unit": "",
     "tips": [
@@ -24,7 +24,7 @@ export const QUESTIONS = [
   {
     "id": 3,
     "text": "Wie viele Stufen hat die spanische Treppe in Rom?",
-    "answer": 138.0,
+    "answer": 138,
     "answerText": "138",
     "unit": "",
     "tips": [
@@ -46,7 +46,7 @@ export const QUESTIONS = [
   {
     "id": 5,
     "text": "Nach wie vielen Jahren Ehe darf man die Perlenhochzeit feiern?",
-    "answer": 30.0,
+    "answer": 30,
     "answerText": "30 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -68,7 +68,7 @@ export const QUESTIONS = [
   {
     "id": 7,
     "text": "In wie viele Zeitzonen ist Kanada unterteilt?",
-    "answer": 6.0,
+    "answer": 6,
     "answerText": "6",
     "unit": "",
     "tips": [
@@ -79,7 +79,7 @@ export const QUESTIONS = [
   {
     "id": 8,
     "text": "Wie lange dauerte der 100-jährige Krieg? (in Jahren)",
-    "answer": 116.0,
+    "answer": 116,
     "answerText": "116",
     "unit": "",
     "tips": [
@@ -90,7 +90,7 @@ export const QUESTIONS = [
   {
     "id": 9,
     "text": "Wie alt wurde Albert Einstein?",
-    "answer": 76.0,
+    "answer": 76,
     "answerText": "76",
     "unit": "",
     "tips": [
@@ -101,7 +101,7 @@ export const QUESTIONS = [
   {
     "id": 10,
     "text": "Wie viele Städte haben mehr als 500.000 Einwohner? (Stand 11/2016)",
-    "answer": 14.0,
+    "answer": 14,
     "answerText": "14",
     "unit": "",
     "tips": [
@@ -112,7 +112,7 @@ export const QUESTIONS = [
   {
     "id": 11,
     "text": "Wie hoch ist die Anzahl der Einwohner pro km² in Deutschland (Stand 11/2016)",
-    "answer": 225.0,
+    "answer": 225,
     "answerText": "225",
     "unit": "",
     "tips": [
@@ -123,7 +123,7 @@ export const QUESTIONS = [
   {
     "id": 12,
     "text": "Wie viele Liter Wasser kann ein Kamel in 15 Minuten zu sich nehmen und speichern?",
-    "answer": 200.0,
+    "answer": 200,
     "answerText": "200",
     "unit": "",
     "tips": [
@@ -134,9 +134,9 @@ export const QUESTIONS = [
   {
     "id": 13,
     "text": "Wie viel Geld warfen Rom-Besucher im Jahr 2016 in den berühmten Trevi-Brunnen?",
-    "answer": 1400.0,
+    "answer": 1400000,
     "answerText": "1.400.000",
-    "unit": "000",
+    "unit": "",
     "tips": [
       "Mehr als 400.000 €",
       "Mehr als 800.000 €"
@@ -145,7 +145,7 @@ export const QUESTIONS = [
   {
     "id": 14,
     "text": "Wie viel Liter Kunstblut verwendete man für beide \"Kill Bill\"-Filme zusammen?",
-    "answer": 1700.0,
+    "answer": 1700,
     "answerText": "1700l",
     "unit": "l",
     "tips": [
@@ -156,7 +156,7 @@ export const QUESTIONS = [
   {
     "id": 15,
     "text": "In welchem Jahr wurde Lucky Luke zum Nichtraucher?",
-    "answer": 1982.0,
+    "answer": 1982,
     "answerText": "1982",
     "unit": "",
     "tips": [
@@ -167,7 +167,7 @@ export const QUESTIONS = [
   {
     "id": 16,
     "text": "Wie lang ist der Begattungsapparat der 15 cm langen Bananenschnecke?",
-    "answer": 80.0,
+    "answer": 80,
     "answerText": "Ca. 80 cm, das entspricht 550% der Körpergröße",
     "unit": "cm, das entspricht 550% der Körpergröße",
     "tips": [
@@ -178,7 +178,7 @@ export const QUESTIONS = [
   {
     "id": 17,
     "text": "Wie viele Psalmen enthält die Bibel?",
-    "answer": 150.0,
+    "answer": 150,
     "answerText": "150",
     "unit": "",
     "tips": [
@@ -189,22 +189,22 @@ export const QUESTIONS = [
   {
     "id": 18,
     "text": "Wie viele Tonnen kann ein ausgewachsener Blauwal wiegen?",
-    "answer": 200.0,
+    "answer": 200,
     "answerText": "200 Tonnen bzw. 200.000 Kilogramm",
     "unit": "Tonnen bzw. 200.000 Kilogramm",
     "tips": [
       "Ein Blauwal wird bis zu 33 Meter lang.",
-      "40 Millionen Kleinkrebse mit einem Gesamtgewicht vondreieinhalb Tonnen frisst er pro Tag."
+      "40 Millionen Kleinkrebse mit einem Gesamtgewicht von dreieinhalb Tonnen frisst er pro Tag."
     ]
   },
   {
     "id": 19,
     "text": "Wie viele Mitglieder hatte 2013 die evangelische Kirche in Deutschland?",
-    "answer": 23040000.0,
+    "answer": 23040000,
     "answerText": "23,04 Millionen",
     "unit": "Millionen",
     "tips": [
-      "Anfang Juni 2015 war der Eurojackpot so hoch wie diegesuchte Zahl.",
+      "Anfang Juni 2015 war der Eurojackpot so hoch wie die gesuchte Zahl.",
       "2003 wäre die Antwort 24,84 Millionen gewesen."
     ]
   },
@@ -222,7 +222,7 @@ export const QUESTIONS = [
   {
     "id": 21,
     "text": "In wie vielen Spielfilmen wirkte Elvis Presley als Schauspieler mit?",
-    "answer": 31.0,
+    "answer": 31,
     "answerText": "31",
     "unit": "",
     "tips": [
@@ -233,7 +233,7 @@ export const QUESTIONS = [
   {
     "id": 22,
     "text": "Wie viele Weintrauben aß Ashrita Furman in 3 Minuten?",
-    "answer": 186.0,
+    "answer": 186,
     "answerText": "186",
     "unit": "",
     "tips": [
@@ -244,12 +244,12 @@ export const QUESTIONS = [
   {
     "id": 23,
     "text": "Wie oft wurden FC Barcelona und Real Madrid zusammen spanischer Fußball-Meister der Herren? Stand: 2016",
-    "answer": 56.0,
+    "answer": 56,
     "answerText": "56 – Real Madrid (32), FC Barcelona (24)",
     "unit": "– Real Madrid (32), FC Barcelona (24",
     "tips": [
       "Einer der beiden Vereine gewann erstmal 1929 den Titel.",
-      "Den spanischen Pokal haben beide insgesamt 47 Malgewonnen. Und das ist weniger als die gesuchte Zahl."
+      "Den spanischen Pokal haben beide insgesamt 47 Mal gewonnen. Und das ist weniger als die gesuchte Zahl."
     ]
   },
   {
@@ -266,7 +266,7 @@ export const QUESTIONS = [
   {
     "id": 25,
     "text": "Wie viel Millionen wurden insgesamt bei „Schlag den Raab“ gewonnen?",
-    "answer": 27500000.0,
+    "answer": 27500000,
     "answerText": "27,5 Millionen Euro",
     "unit": "Millionen Euro",
     "tips": [
@@ -288,7 +288,7 @@ export const QUESTIONS = [
   {
     "id": 27,
     "text": "Wie viele Jahre würde es dauern, die Distanz zwischen der Erde und der Sonne zu Fuß zurückzulegen?",
-    "answer": 3425.0,
+    "answer": 3425,
     "answerText": "3425 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -299,7 +299,7 @@ export const QUESTIONS = [
   {
     "id": 28,
     "text": "In welchem Jahr wurde Margaret Thatcher geboren?",
-    "answer": 1925.0,
+    "answer": 1925,
     "answerText": "1925",
     "unit": "",
     "tips": [
@@ -310,7 +310,7 @@ export const QUESTIONS = [
   {
     "id": 29,
     "text": "Aus wie vielen Inseln bestehen die Malediven?",
-    "answer": 1196.0,
+    "answer": 1196,
     "answerText": "1196",
     "unit": "",
     "tips": [
@@ -332,18 +332,18 @@ export const QUESTIONS = [
   {
     "id": 31,
     "text": "Wie viele der höchsten Berge der Welt liegen in Asien?",
-    "answer": 187.0,
+    "answer": 187,
     "answerText": "187",
     "unit": "",
     "tips": [
-      "Der höchste Berg, der NICHT in Asien liegt ist 1886mKLEINER als der höchste Berg Asiens.",
+      "Der höchste Berg, der NICHT in Asien liegt ist 1886 m kleiner als der höchste Berg Asiens.",
       "Die Zahl ist höher als 150."
     ]
   },
   {
     "id": 32,
     "text": "In welchem Jahr startete in Deutschland das Farbfernsehen?",
-    "answer": 1967.0,
+    "answer": 1967,
     "answerText": "1967",
     "unit": "",
     "tips": [
@@ -354,18 +354,18 @@ export const QUESTIONS = [
   {
     "id": 33,
     "text": "Um wie viel Prozent ist die Selbstmordrate von Frauen mit künstlichen Brüsten höher im Vergleich zu Frauen mit naturbelassenen Brüsten?",
-    "answer": 73.0,
+    "answer": 73,
     "answerText": "73 Prozent",
     "unit": "Prozent",
     "tips": [
       "Die Selbstmordrate von Männern in Litauen liegt bei 61,3 %und ist damit niedriger als die gesuchte Prozentzahl.",
-      "Laut Sheldon Cooper aus „The Big Bang Theory“ ist diegesuchte Zahl die beste aller Zahlen. In Binärcode lautet diese 1001001."
+      "Laut Sheldon Cooper aus „The Big Bang Theory“ ist die gesuchte Zahl die beste aller Zahlen. In Binärcode lautet diese 1001001."
     ]
   },
   {
     "id": 34,
     "text": "Wie viel US-Dollar hat der Film mit den bisher meisten erzielten Einnahmen Avatar - Aufbruch nach Pandora weltweit von 2009 bis 2015 eingespielt?",
-    "answer": 2782000000.0,
+    "answer": 2782000000,
     "answerText": "2,782 Milliarden US-Dollar",
     "unit": "Milliarden US-Dollar",
     "tips": [
@@ -376,7 +376,7 @@ export const QUESTIONS = [
   {
     "id": 35,
     "text": "In welchem Jahr wurde in Deutschland die erste Briefmarke ausgegeben?",
-    "answer": 1849.0,
+    "answer": 1849,
     "answerText": "1849",
     "unit": "",
     "tips": [
@@ -387,7 +387,7 @@ export const QUESTIONS = [
   {
     "id": 36,
     "text": "Wie viele Tasten hat ein modernes Klavier?",
-    "answer": 88.0,
+    "answer": 88,
     "answerText": "88",
     "unit": "",
     "tips": [
@@ -398,11 +398,11 @@ export const QUESTIONS = [
   {
     "id": 37,
     "text": "Masanobu Sato gewann 2009 den Masturbate-a-thon – ein Wettbewerb im Dauer-Masturbieren. Nach wie vielen Minuten gewann er?",
-    "answer": 573.0,
+    "answer": 573,
     "answerText": "573 Minuten",
     "unit": "Minuten",
     "tips": [
-      "Es ist exakt die gleiche Minutenanzahl wie Greuther Fürth inder Saison 2014/15 ohne Torerfolg war.",
+      "Es ist exakt die gleiche Minutenanzahl wie Greuther Fürth in der Saison 2014/15 ohne Torerfolg war.",
       "Schaut man sich die jeweils erste Staffel der Serien„Breaking Bad“ und „The Walking Dead“ an ist man keine Stunde länger beschäftigt als Sato bei seinem Rekord."
     ]
   },
@@ -420,7 +420,7 @@ export const QUESTIONS = [
   {
     "id": 39,
     "text": "Wie viele gesetzliche Krankenkassen gibt es in Deutschland?",
-    "answer": 134.0,
+    "answer": 134,
     "answerText": "134",
     "unit": "",
     "tips": [
@@ -431,7 +431,7 @@ export const QUESTIONS = [
   {
     "id": 40,
     "text": "Wie viele Liter Wasser werden benötigt, um 1 Kilo Baumwolle anzubauen?",
-    "answer": 10000.0,
+    "answer": 10000,
     "answerText": "10.000 Liter",
     "unit": "Liter",
     "tips": [
@@ -442,7 +442,7 @@ export const QUESTIONS = [
   {
     "id": 41,
     "text": "In welchem Jahr wurde der erste Game Boy veröffentlicht?",
-    "answer": 1989.0,
+    "answer": 1989,
     "answerText": "1989",
     "unit": "",
     "tips": [
@@ -453,7 +453,7 @@ export const QUESTIONS = [
   {
     "id": 42,
     "text": "Wie viel Kilo wiegt der schwerste Mann der Welt?",
-    "answer": 435.0,
+    "answer": 435,
     "answerText": "435 Kilo",
     "unit": "Kilo",
     "tips": [
@@ -464,7 +464,7 @@ export const QUESTIONS = [
   {
     "id": 43,
     "text": "Wie viel Grad Celsius warm kann es an der Oberfläche der Sonne werden?",
-    "answer": 5780.0,
+    "answer": 5780,
     "answerText": "5780 Grad Celsius",
     "unit": "Grad Celsius",
     "tips": [
@@ -475,7 +475,7 @@ export const QUESTIONS = [
   {
     "id": 44,
     "text": "Wie viele Mitglieder hat der Sportverein FC Schalke 04? (Stand Dezember 2016)",
-    "answer": 144761.0,
+    "answer": 144761,
     "answerText": "144.761 Mitglieder",
     "unit": "Mitglieder",
     "tips": [
@@ -486,7 +486,7 @@ export const QUESTIONS = [
   {
     "id": 45,
     "text": "In welchem Jahr veröffentlichte Charles Darwin sein Buch \"Über die Entstehung der Arten\"?",
-    "answer": 1859.0,
+    "answer": 1859,
     "answerText": "1859",
     "unit": "",
     "tips": [
@@ -508,7 +508,7 @@ export const QUESTIONS = [
   {
     "id": 47,
     "text": "Wie hoch war die höchste überlebte Geschwindigkeit bei einem Motorradunfall?",
-    "answer": 322.0,
+    "answer": 322,
     "answerText": "322 km/h",
     "unit": "km/h",
     "tips": [
@@ -519,9 +519,9 @@ export const QUESTIONS = [
   {
     "id": 48,
     "text": "Welche Zahl muss man bei der Bildersuche von Google eingeben, um Bilder von Menschen zu finden die ihren Kopf in einen Kühlschrank stecken? Stand: 2015",
-    "answer": 241543.0,
+    "answer": 241543903,
     "answerText": "241.543.903",
-    "unit": "903",
+    "unit": "",
     "tips": [
       "Die Zahl ist größer als es Einwohner in Deutschland gibt.",
       "Die Einwohnerzahl von Amerika ist größer als die gesuchteZahl."
@@ -541,7 +541,7 @@ export const QUESTIONS = [
   {
     "id": 50,
     "text": "In welchem Jahr schlug Martin Luther seine 95 Thesen an die Türe der Schlosskirche in Wittenberg?",
-    "answer": 1517.0,
+    "answer": 1517,
     "answerText": "1517",
     "unit": "",
     "tips": [
@@ -552,7 +552,7 @@ export const QUESTIONS = [
   {
     "id": 51,
     "text": "Wie viele Stockwerke hat das \"Empire State Building\" in New York?",
-    "answer": 102.0,
+    "answer": 102,
     "answerText": "102 Stockwerke",
     "unit": "Stockwerke",
     "tips": [
@@ -563,7 +563,7 @@ export const QUESTIONS = [
   {
     "id": 52,
     "text": "In welchem Jahr fand die Markteinführung der Playmobilfiguren statt?",
-    "answer": 1974.0,
+    "answer": 1974,
     "answerText": "1974",
     "unit": "",
     "tips": [
@@ -574,7 +574,7 @@ export const QUESTIONS = [
   {
     "id": 53,
     "text": "Wie viele Kilometer Luftlinie liegen zwischen Hamburg und dem Südpol?",
-    "answer": 15961.0,
+    "answer": 15961,
     "answerText": "15.961 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -585,7 +585,7 @@ export const QUESTIONS = [
   {
     "id": 54,
     "text": "Wie viele Einzelsprachen gibt es ungefähr auf der Erde?",
-    "answer": 6500.0,
+    "answer": 6500,
     "answerText": "6500",
     "unit": "",
     "tips": [
@@ -596,7 +596,7 @@ export const QUESTIONS = [
   {
     "id": 55,
     "text": "Wie hoch ist die Zugspitze?",
-    "answer": 2962.0,
+    "answer": 2962,
     "answerText": "2.962 Meter",
     "unit": "Meter",
     "tips": [
@@ -640,7 +640,7 @@ export const QUESTIONS = [
   {
     "id": 59,
     "text": "Wie viele Folgen hatte die ursprüngliche Serie Dallas? Wichtig: Die Fortsetzung von 2013 gehört nicht dazu.",
-    "answer": 357.0,
+    "answer": 357,
     "answerText": "357",
     "unit": "",
     "tips": [
@@ -651,7 +651,7 @@ export const QUESTIONS = [
   {
     "id": 60,
     "text": "Wie viel Prozent der Apple Watch Käufer sind mit der Apple Watch lt. einer Umfrage vom September 2015 nicht zufrieden?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -662,7 +662,7 @@ export const QUESTIONS = [
   {
     "id": 61,
     "text": "Wie viele Strophen hat das Weihnachtslied „Oh Tannenbaum“?",
-    "answer": 3.0,
+    "answer": 3,
     "answerText": "3",
     "unit": "",
     "tips": [
@@ -673,7 +673,7 @@ export const QUESTIONS = [
   {
     "id": 62,
     "text": "An wie vielen Spieltagen war Bayer Leverkusen (einschließlich der Spielzeit 2015/16) Tabellenführer der Fußball-Bundesliga der Männer?",
-    "answer": 71.0,
+    "answer": 71,
     "answerText": "71",
     "unit": "",
     "tips": [
@@ -684,18 +684,18 @@ export const QUESTIONS = [
   {
     "id": 63,
     "text": "Wie viele Jahre und Monate alt wurde der Australian Cattle Dog „Bluey“, der wohl älteste Hund der Welt?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Jahre und 5 Monate. Bluey lebte von 1910-1939",
     "unit": "Jahre und 5 Monate. Bluey lebte von 1910-1939",
     "tips": [
-      "Die durchschnittliche Lebenserwartung bei Hunden liegt bei10-16 Jahren.",
+      "Die durchschnittliche Lebenserwartung bei Hunden liegt bei 10-16 Jahren.",
       "Bluey erlebte 12 Olympische Spiele der Neuzeit."
     ]
   },
   {
     "id": 64,
     "text": "Wie viele verschiedene Zahlen kommen im Pipi Langstrumpf-Lied vor?",
-    "answer": 6.0,
+    "answer": 6,
     "answerText": "6 ( 2x3 macht 4 widdewiddewitt und 3 macht 9.3x3 macht 6 widdewiddewitt wer mags von uns lernen? )",
     "unit": "2x3 macht 4 widdewiddewitt und 3 macht 9.3x3 macht 6 widdewiddewitt wer mags von uns lernen?",
     "tips": [
@@ -706,7 +706,7 @@ export const QUESTIONS = [
   {
     "id": 65,
     "text": "Wieviele katholische Päbste waren trotz Zölibats nachweislich verheiratet ?",
-    "answer": 39.0,
+    "answer": 39,
     "answerText": "39 – Als römische Zahl XXXIX",
     "unit": "– Als römische Zahl XXXIX",
     "tips": [
@@ -717,9 +717,9 @@ export const QUESTIONS = [
   {
     "id": 66,
     "text": "Wie viele Kino-Zuschauer hatte der Film „Der Schuh des Manitu“?",
-    "answer": 11721.0,
+    "answer": 11721183,
     "answerText": "11.721.183",
-    "unit": "183",
+    "unit": "",
     "tips": [
       "Der Film hat - Stand 2015 - die meisten Zuschauer, die ein deutscher Film je hatte.",
       "Traumschiff Surprise auf Platz 2 hatte 9.165.932 Zuschauer"
@@ -739,7 +739,7 @@ export const QUESTIONS = [
   {
     "id": 68,
     "text": "Kristina House aus Kalifornien hat die meisten Kindern per Kaiserschnitt auf die Welt gebracht. Wie viele Kaiserschnitte hatte sie?",
-    "answer": 11.0,
+    "answer": 11,
     "answerText": "11",
     "unit": "",
     "tips": [
@@ -761,7 +761,7 @@ export const QUESTIONS = [
   {
     "id": 70,
     "text": "In welchem Jahr wurde die erste SMS versandt?",
-    "answer": 1992.0,
+    "answer": 1992,
     "answerText": "1992",
     "unit": "",
     "tips": [
@@ -772,7 +772,7 @@ export const QUESTIONS = [
   {
     "id": 71,
     "text": "Der Urwald wird immer mehr abgeholzt. Alle wie viele Sekunden verschwindet ein ganzes Fußballfeld?",
-    "answer": 2.0,
+    "answer": 2,
     "answerText": "2 Sekunden!!!",
     "unit": "Sekunden!!!",
     "tips": [
@@ -783,7 +783,7 @@ export const QUESTIONS = [
   {
     "id": 72,
     "text": "Wie viele Scheidungen gab es 2014 in Deutschland?",
-    "answer": 166199.0,
+    "answer": 166199,
     "answerText": "166.199",
     "unit": "",
     "tips": [
@@ -794,7 +794,7 @@ export const QUESTIONS = [
   {
     "id": 73,
     "text": "Wie viele Fotos wurden am Silvesterwochenende 2011/2012 bei Facebook hochgeladen?",
-    "answer": 750000000.0,
+    "answer": 750000000,
     "answerText": "750 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -805,7 +805,7 @@ export const QUESTIONS = [
   {
     "id": 74,
     "text": "In welchem Jahr lief zum ersten Mal „Germany‘s Next Topmodel“ im Fernsehen?",
-    "answer": 2006.0,
+    "answer": 2006,
     "answerText": "2006",
     "unit": "",
     "tips": [
@@ -816,7 +816,7 @@ export const QUESTIONS = [
   {
     "id": 75,
     "text": "Wie viel Kilogramm Gewicht stemmte der Tao-Meister Mo Ka Wang aus Hongkong mit seinem Penis in die Höhe?",
-    "answer": 120.0,
+    "answer": 120,
     "answerText": "120 Kilo",
     "unit": "Kilo",
     "tips": [
@@ -827,18 +827,18 @@ export const QUESTIONS = [
   {
     "id": 76,
     "text": "Welche Zahl ergibt sich, wenn man Ende 2015 das Alter der Darsteller von Harry Potter, Ron Wesley und Hermine Granger aufaddiert?",
-    "answer": 78.0,
+    "answer": 78,
     "answerText": "78",
     "unit": "",
     "tips": [
-      "Die Summe aus Buchstaben der vollständigen Namen derFilmcharaktere ist um 25 kleiner.",
+      "Die Summe aus Buchstaben der vollständigen Namen der Filmcharaktere ist um 25 kleiner.",
       "Die Zahl entspricht dem Alter von Roberto Blanco Ende2015."
     ]
   },
   {
     "id": 77,
     "text": "Seit welchem Jahr gibt es Ballmädchen in Wimbledon?",
-    "answer": 1977.0,
+    "answer": 1977,
     "answerText": "1977",
     "unit": "",
     "tips": [
@@ -849,7 +849,7 @@ export const QUESTIONS = [
   {
     "id": 78,
     "text": "Wie viel Volt kann ein Zitteraal produzieren?",
-    "answer": 500.0,
+    "answer": 500,
     "answerText": "500 Volt",
     "unit": "Volt",
     "tips": [
@@ -860,7 +860,7 @@ export const QUESTIONS = [
   {
     "id": 79,
     "text": "Aus wie vielen Metern ist Felix Baumgartner gesprungen?",
-    "answer": 38969.0,
+    "answer": 38969,
     "answerText": "38.969,4 Meter",
     "unit": ",4 Meter",
     "tips": [
@@ -871,7 +871,7 @@ export const QUESTIONS = [
   {
     "id": 80,
     "text": "Wie viele Studio- und Livealben veröffentlichte Madonna bis 2015?",
-    "answer": 17.0,
+    "answer": 17,
     "answerText": "17",
     "unit": "",
     "tips": [
@@ -882,7 +882,7 @@ export const QUESTIONS = [
   {
     "id": 81,
     "text": "Wie viele Autobahnkilometer gibt es in Deutschland?",
-    "answer": 12900.0,
+    "answer": 12900,
     "answerText": "12900",
     "unit": "",
     "tips": [
@@ -904,7 +904,7 @@ export const QUESTIONS = [
   {
     "id": 83,
     "text": "Wann wurde Dinner for One das erste Mal ausgetrahlt?",
-    "answer": 1963.0,
+    "answer": 1963,
     "answerText": "1963",
     "unit": "",
     "tips": [
@@ -915,7 +915,7 @@ export const QUESTIONS = [
   {
     "id": 84,
     "text": "Wie viele Kilometer lang ist die Donau?",
-    "answer": 2857.0,
+    "answer": 2857,
     "answerText": "2.857 km",
     "unit": "km",
     "tips": [
@@ -926,7 +926,7 @@ export const QUESTIONS = [
   {
     "id": 85,
     "text": "Das Erotikmodell Beshine rühmt sich damit, die größten Brüste der Welt zu haben. Wie viel Kilogramm wiegt eine Brust?",
-    "answer": 9.0,
+    "answer": 9,
     "answerText": "9 Kilo – in der Show wurden 23 Kilo genannt, was falsch ist!",
     "unit": "Kilo – in der Show wurden 23 Kilo genannt, was falsch ist!",
     "tips": [
@@ -948,7 +948,7 @@ export const QUESTIONS = [
   {
     "id": 87,
     "text": "Wie viel Prozent der Deutschen haben lt. einer Umfrage von 2015 schon einmal angehalten und einem liegengebliebenen Autofahrer geholfen?",
-    "answer": 26.0,
+    "answer": 26,
     "answerText": "26 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -959,7 +959,7 @@ export const QUESTIONS = [
   {
     "id": 88,
     "text": "Wie viele Liter Bier wurden in Deutschland pro Kopf 2013 getrunken?",
-    "answer": 107.0,
+    "answer": 107,
     "answerText": "107 Liter",
     "unit": "Liter",
     "tips": [
@@ -970,18 +970,18 @@ export const QUESTIONS = [
   {
     "id": 89,
     "text": "Wie viele Menschen kommen im ersten Teil der legendären Actionfilm-Reihe „Rambo“ ums Leben?",
-    "answer": 1.0,
+    "answer": 1,
     "answerText": "1",
     "unit": "",
     "tips": [
-      "In allen 4 Rambo-Filmen kamen insgesamt 438 Menschenums Leben",
-      "Es sind mehr als die aktuelle Anzahl von Starbuck-Fillialenin Italien. Stand: Ende 2015"
+      "In allen 4 Rambo-Filmen kamen insgesamt 438 Menschen ums Leben",
+      "Es sind mehr als die aktuelle Anzahl von Starbuck-Filialen in Italien. Stand: Ende 2015"
     ]
   },
   {
     "id": 90,
     "text": "Der Baikalsee in Sibirien ist der tiefste See der Erde. Wie viel Meter ist die tiefste Stelle?",
-    "answer": 1642.0,
+    "answer": 1642,
     "answerText": "1642 Meter",
     "unit": "Meter",
     "tips": [
@@ -992,7 +992,7 @@ export const QUESTIONS = [
   {
     "id": 91,
     "text": "Wie oft pro Jahr zwinkert ein durchschnittlicher Mensch?",
-    "answer": 84000000.0,
+    "answer": 84000000,
     "answerText": "84 Millionen mal",
     "unit": "Millionen mal",
     "tips": [
@@ -1003,7 +1003,7 @@ export const QUESTIONS = [
   {
     "id": 92,
     "text": "Wie viele Jahre war Sepp Maier Fußball Nationaltorhüter?",
-    "answer": 13.0,
+    "answer": 13,
     "answerText": "13 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -1014,7 +1014,7 @@ export const QUESTIONS = [
   {
     "id": 93,
     "text": "Bei wie vielen Schwertern liegt der Weltrekord im Schwertschlucken? Stand: Ende 2015",
-    "answer": 24.0,
+    "answer": 24,
     "answerText": "24",
     "unit": "",
     "tips": [
@@ -1025,7 +1025,7 @@ export const QUESTIONS = [
   {
     "id": 94,
     "text": "Wie viele Autos verkaufte VW im Jahr 2011?",
-    "answer": 805746.0,
+    "answer": 805746,
     "answerText": "805.746 Autos",
     "unit": "Autos",
     "tips": [
@@ -1051,14 +1051,14 @@ export const QUESTIONS = [
     "answerText": "Am 10.06.1909",
     "unit": "1909",
     "tips": [
-      "Das Radrennen Giro d’Italia wurde im gleichen Jahr zumersten Mal ausgetragen.",
+      "Das Radrennen Giro d’Italia wurde im gleichen Jahr zum ersten Mal ausgetragen.",
       "Im gleichen Jahr geboren sind Errol Flynn, Heinz Erhardtund Willy Millowitsch."
     ]
   },
   {
     "id": 97,
     "text": "Wie viel Prozent der dt. Frauen kommen lt. Umfrage von 2015 immer zum Höhepunkt beim Sex?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1069,7 +1069,7 @@ export const QUESTIONS = [
   {
     "id": 98,
     "text": "Wie viele Studioalben hat „Eminem“ bisher auf den Markt gebracht? Stand: Ende 2015",
-    "answer": 8.0,
+    "answer": 8,
     "answerText": "8",
     "unit": "",
     "tips": [
@@ -1080,7 +1080,7 @@ export const QUESTIONS = [
   {
     "id": 99,
     "text": "Wie viele Quadratkilometer groß ist das Great Barrier Reef vor der Küste Australiens?",
-    "answer": 207000.0,
+    "answer": 207000,
     "answerText": "207.000",
     "unit": "",
     "tips": [
@@ -1091,7 +1091,7 @@ export const QUESTIONS = [
   {
     "id": 100,
     "text": "Wie viele Kaiserschnitte wurden 2014 in Deutschland durchgeführt?",
-    "answer": 220500.0,
+    "answer": 220500,
     "answerText": "220.500",
     "unit": "",
     "tips": [
@@ -1101,21 +1101,21 @@ export const QUESTIONS = [
   },
   {
     "id": 101,
-    "text": "Der SC Tasmania 1900 Berlin spielte in der Saison 1965/66 die bisher schlechteste Saison der Fußball-Bundesliga-Geschichte. Wie war die negative Tordifferenz? (Beispiel: Bei 1:5 wäre die An t",
-    "answer": 93.0,
+    "text": "Der SC Tasmania 1900 Berlin spielte in der Saison 1965/66 die bisher schlechteste Saison der Fußball-Bundesliga-Geschichte. Wie hoch war die negative Tordifferenz? (Beispiel: Bei 1:5 wäre die Antwort 4.)",
+    "answer": 93,
     "answerText": "93 – das Torverhältnis war 15:108",
-    "unit": "– das Torverhältnis war 15:108",
+    "unit": "Tore",
     "tips": [
-      "Tasmania hält den Rekord der wenigsten geschossenen Torein einer Fußball-Bundesliga-Saison.",
-      "Tasmania hält den Rekord der meisten Gegentore in einerFußball-Bundesliga-Saison.."
+      "Tasmania hält den Rekord der wenigsten geschossenen Tore in einer Fußball-Bundesliga-Saison.",
+      "Tasmania hält den Rekord der meisten Gegentore in einer Fußball-Bundesliga-Saison."
     ]
   },
   {
     "id": 102,
     "text": "Wie viele Einwohner hatte Australien 2014?",
-    "answer": 23625.0,
+    "answer": 23625600,
     "answerText": "23.625.600",
-    "unit": "600",
+    "unit": "",
     "tips": [
       "Es sind 3 Einwohner pro Quadratkilometer.",
       "Es sind mehr als in Kamerun, aber weniger als in Nordkorea."
@@ -1135,7 +1135,7 @@ export const QUESTIONS = [
   {
     "id": 104,
     "text": "In welchem Jahr wurde der Bleistift erfunden?",
-    "answer": 1662.0,
+    "answer": 1662,
     "answerText": "1662",
     "unit": "",
     "tips": [
@@ -1146,7 +1146,7 @@ export const QUESTIONS = [
   {
     "id": 105,
     "text": "Wie viele Monde haben die Planeten des Sonnensystems insgesamt?",
-    "answer": 173.0,
+    "answer": 173,
     "answerText": "173",
     "unit": "",
     "tips": [
@@ -1157,29 +1157,29 @@ export const QUESTIONS = [
   {
     "id": 106,
     "text": "Welche Dollarsumme verdient jeder einzelne der amerikanischen Synchronsprecher der Simpsonfamilie angeblich pro Episode?",
-    "answer": 400000.0,
+    "answer": 400000,
     "answerText": "400.000",
     "unit": "",
     "tips": [
       "Weniger als Manuel Neuer bei Wer wird Millionär gewann",
-      "Als Kleinsparer gilt jemand, der bis zu 100.000 Euro auf derBank hat. Die Synchronsprecher sind keine Kleinsparer."
+      "Als Kleinsparer gilt jemand, der bis zu 100.000 Euro auf der Bank hat. Die Synchronsprecher sind keine Kleinsparer."
     ]
   },
   {
     "id": 107,
     "text": "Wann kam das Brettspiel „Risiko“ erstmals auf den deutschen Markt?",
-    "answer": 1961.0,
+    "answer": 1961,
     "answerText": "1961",
     "unit": "",
     "tips": [
       "In diesem Jahr war Juri Alexejewitsch Gagarin als ersterMensch im Weltraum.",
-      "In diesem Jahr wurde mit dem Bau der Berliner Mauergestartet."
+      "In diesem Jahr wurde mit dem Bau der Berliner Mauer gestartet."
     ]
   },
   {
     "id": 108,
     "text": "Wie viele Tore wurden 2014/15 in der Fußball-Bundesliga der Männer erzielt?",
-    "answer": 843.0,
+    "answer": 843,
     "answerText": "843",
     "unit": "",
     "tips": [
@@ -1190,7 +1190,7 @@ export const QUESTIONS = [
   {
     "id": 109,
     "text": "Um wie viel würde der Meeresspiegel ansteigen, wenn das gesamte Eis in Grönland und der Antarktis schmelzen würde?",
-    "answer": 68.0,
+    "answer": 68,
     "answerText": "68 Meter",
     "unit": "Meter",
     "tips": [
@@ -1201,7 +1201,7 @@ export const QUESTIONS = [
   {
     "id": 110,
     "text": "Wie viele Millionen Menschen in Deutschland nutzten im Juli 2015 ein Smartphone?",
-    "answer": 46.0,
+    "answer": 46,
     "answerText": "46",
     "unit": "",
     "tips": [
@@ -1212,7 +1212,7 @@ export const QUESTIONS = [
   {
     "id": 111,
     "text": "Wie viel Euro ist die Differenz dessen, was der durchschnittliche Deutsche 2010 und 2015 für Weihnachtsgeschenke ausgeben wollte?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Euro",
     "unit": "Euro",
     "tips": [
@@ -1223,7 +1223,7 @@ export const QUESTIONS = [
   {
     "id": 112,
     "text": "Wie viele Spiele absolvierte Franz Beckenbauer für die deutsche Nationalmannschaft?",
-    "answer": 103.0,
+    "answer": 103,
     "answerText": "103",
     "unit": "",
     "tips": [
@@ -1234,7 +1234,7 @@ export const QUESTIONS = [
   {
     "id": 113,
     "text": "Wie hoch ist das Kapitol in Washington D.C.?",
-    "answer": 88.0,
+    "answer": 88,
     "answerText": "88 Meter",
     "unit": "Meter",
     "tips": [
@@ -1245,7 +1245,7 @@ export const QUESTIONS = [
   {
     "id": 114,
     "text": "Wie viele Weihnachtsbäume wurden in Deutschland im Jahr 2011 verkauft?",
-    "answer": 29000000.0,
+    "answer": 29000000,
     "answerText": "29 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -1256,7 +1256,7 @@ export const QUESTIONS = [
   {
     "id": 115,
     "text": "Wie viele Minuten dauert die Herr der Ringe Trilogie (Kinofassung)?",
-    "answer": 558.0,
+    "answer": 558,
     "answerText": "558 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -1267,7 +1267,7 @@ export const QUESTIONS = [
   {
     "id": 116,
     "text": "Wie viele Rekord-Jahresringe wies eine Kiefer in den USA auf, die 1963 gefällt wurde?",
-    "answer": 4867.0,
+    "answer": 4867,
     "answerText": "4867",
     "unit": "",
     "tips": [
@@ -1278,7 +1278,7 @@ export const QUESTIONS = [
   {
     "id": 117,
     "text": "Wie viel Prozent der Deutschen würden lt. einer Umfrage von 2015 ein selbstfahrendes Auto kaufen?",
-    "answer": 37.0,
+    "answer": 37,
     "answerText": "37 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1289,7 +1289,7 @@ export const QUESTIONS = [
   {
     "id": 118,
     "text": "Wann wurde der Personalausweis in Scheckkartengröße eingeführt?",
-    "answer": 2010.0,
+    "answer": 2010,
     "answerText": "2010",
     "unit": "",
     "tips": [
@@ -1300,7 +1300,7 @@ export const QUESTIONS = [
   {
     "id": 119,
     "text": "Wie viel Gramm beträgt der Weltrekord im 5-Minuten-Spargelschälen? (Stand: April 2015)",
-    "answer": 3400.0,
+    "answer": 3400,
     "answerText": "3400 Gramm",
     "unit": "Gramm",
     "tips": [
@@ -1311,7 +1311,7 @@ export const QUESTIONS = [
   {
     "id": 120,
     "text": "Die gebärfreudigste Mutter brachte in ihrem Leben wie viele Kinder auf die Welt?",
-    "answer": 69.0,
+    "answer": 69,
     "answerText": "69 - 16 Paar Zwillinge, sieben Paar Drillinge und viermal Vierlinge",
     "unit": "- 16 Paar Zwillinge, sieben Paar Drillinge und viermal Vierlinge",
     "tips": [
@@ -1322,7 +1322,7 @@ export const QUESTIONS = [
   {
     "id": 121,
     "text": "Gegen wie viele Gegner hat der Weltrekordhalter im Simultan-Schach gleichzeitig gespielt? (Stand: Ende 2015)",
-    "answer": 604.0,
+    "answer": 604,
     "answerText": "604",
     "unit": "",
     "tips": [
@@ -1333,7 +1333,7 @@ export const QUESTIONS = [
   {
     "id": 122,
     "text": "Wie viele Mitglieder hatte die CDU Ende 2014?",
-    "answer": 457488.0,
+    "answer": 457488,
     "answerText": "457.488",
     "unit": "",
     "tips": [
@@ -1355,7 +1355,7 @@ export const QUESTIONS = [
   {
     "id": 124,
     "text": "Wie viel US-Dollar zahlte Nike Anfang der 70er für das Design des Firmen-Logos „Swoosh“ an die Designerin?",
-    "answer": 35.0,
+    "answer": 35,
     "answerText": "35 Dollar",
     "unit": "Dollar",
     "tips": [
@@ -1366,7 +1366,7 @@ export const QUESTIONS = [
   {
     "id": 125,
     "text": "Der wievielte Präsident der USA war Abraham Lincoln?",
-    "answer": 16.0,
+    "answer": 16,
     "answerText": "16",
     "unit": "",
     "tips": [
@@ -1388,7 +1388,7 @@ export const QUESTIONS = [
   {
     "id": 127,
     "text": "Wie viel Prozent der Deutschen halten lt. einer Umfrage von 2015 Sex mit dem Ex für unverzeihlich?",
-    "answer": 60.0,
+    "answer": 60,
     "answerText": "60%",
     "unit": "%",
     "tips": [
@@ -1399,7 +1399,7 @@ export const QUESTIONS = [
   {
     "id": 128,
     "text": "In welchem Jahr wurde in Berlin das erste deutsche Telefonbuch mit dem Titel \"Verzeichnis der bei der Fernsprecheinrichtung Beteiligten\" veröffentlicht?",
-    "answer": 1881.0,
+    "answer": 1881,
     "answerText": "1881 - Es hatte 185 Einträge.",
     "unit": "- Es hatte 185 Einträge",
     "tips": [
@@ -1410,7 +1410,7 @@ export const QUESTIONS = [
   {
     "id": 129,
     "text": "Wie viele Personen müssen sich mindestens in einem Raum befinden, damit die Wahrscheinlichkeit dass zwei oder mehr dieser Personen am gleichen Tag Geburtstag haben über 50 % ist?",
-    "answer": 23.0,
+    "answer": 23,
     "answerText": "23",
     "unit": "",
     "tips": [
@@ -1421,7 +1421,7 @@ export const QUESTIONS = [
   {
     "id": 130,
     "text": "Wie viele Einwohner hatte Braunschweig Ende 2013?",
-    "answer": 247227.0,
+    "answer": 247227,
     "answerText": "247.227",
     "unit": "",
     "tips": [
@@ -1432,7 +1432,7 @@ export const QUESTIONS = [
   {
     "id": 131,
     "text": "Jeremy Harper aus den USA hat in einer Reihe von Internet-Livesendungen lauf von 1 bis 1 Million gezählt. Wie viele Tage hat er gezählt?",
-    "answer": 89.0,
+    "answer": 89,
     "answerText": "89 Tage",
     "unit": "Tage",
     "tips": [
@@ -1443,7 +1443,7 @@ export const QUESTIONS = [
   {
     "id": 132,
     "text": "Wie viel Prozent der Deutschen glauben lt. einer Umfrage an Außerirdische?",
-    "answer": 56.0,
+    "answer": 56,
     "answerText": "56 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1454,18 +1454,18 @@ export const QUESTIONS = [
   {
     "id": 133,
     "text": "In wie vielen Ländern gilt offiziell der Linksverkehr?",
-    "answer": 59.0,
+    "answer": 59,
     "answerText": "59",
     "unit": "",
     "tips": [
-      "Joko und Klaas von Pro7 sind zusammen älter als diegesuchte Zahl.",
+      "Joko und Klaas von Pro7 sind zusammen älter als die gesuchte Zahl.",
       "Im Jahr n. Chr. der gesuchten Zahl liess Nero seine MutterAgrippina die Jüngere ermorden."
     ]
   },
   {
     "id": 134,
     "text": "Wie viele Schüler hatte 2010 die Schule mit den meisten Schülern pro Schule?",
-    "answer": 39437.0,
+    "answer": 39437,
     "answerText": "39.437 Kinder",
     "unit": "Kinder",
     "tips": [
@@ -1476,7 +1476,7 @@ export const QUESTIONS = [
   {
     "id": 135,
     "text": "Wie oft kommt im Queen-Song „We Will Rock You“ der bekannte Rhythmus aus Stampfen und Klatschen vor?",
-    "answer": 82.0,
+    "answer": 82,
     "answerText": "82 Mal",
     "unit": "Mal",
     "tips": [
@@ -1487,7 +1487,7 @@ export const QUESTIONS = [
   {
     "id": 136,
     "text": "Wie viel Umsatz in Mio. Euro hat die Branche der Kartoffelverarbeitung in Deutschland 2014 betragen?",
-    "answer": 1797.0,
+    "answer": 1797,
     "answerText": "1797",
     "unit": "",
     "tips": [
@@ -1498,7 +1498,7 @@ export const QUESTIONS = [
   {
     "id": 137,
     "text": "Wie hoch ist der Anteil der roten Haribo Gummibären in einer Tüte?",
-    "answer": 1.0,
+    "answer": 1,
     "answerText": "1/3 => 33,33%",
     "unit": "/3 => 33,33%",
     "tips": [
@@ -1509,7 +1509,7 @@ export const QUESTIONS = [
   {
     "id": 138,
     "text": "Wie viele Walnüsse knackte 2015 der Weltrekordhalter in 1 Minute durch Draufsetzen mit seinem Hinterteil?",
-    "answer": 108.0,
+    "answer": 108,
     "answerText": "108",
     "unit": "",
     "tips": [
@@ -1520,7 +1520,7 @@ export const QUESTIONS = [
   {
     "id": 139,
     "text": "Wie lange muss ein Mensch durchgehend schreien, um mit der produzierten Energie eine Tasse Kaffee erhitzen zu können?",
-    "answer": 8.0,
+    "answer": 8,
     "answerText": "8 1/2 Jahre",
     "unit": "1/2 Jahre",
     "tips": [
@@ -1531,7 +1531,7 @@ export const QUESTIONS = [
   {
     "id": 140,
     "text": "In wie viele Länder wurde „Schlag den Raab“ von der Produktionsfirma verkauft?",
-    "answer": 18.0,
+    "answer": 18,
     "answerText": "18",
     "unit": "",
     "tips": [
@@ -1542,7 +1542,7 @@ export const QUESTIONS = [
   {
     "id": 141,
     "text": "Wie oft wird der Deutsche Aktienindex (DAX) pro Stunde errechnet?",
-    "answer": 3600.0,
+    "answer": 3600,
     "answerText": "3600 Mal, also jede Sekunde.",
     "unit": "Mal, also jede Sekunde",
     "tips": [
@@ -1553,7 +1553,7 @@ export const QUESTIONS = [
   {
     "id": 142,
     "text": "Wie viele Folgen der TV-Serie „King of Queens“ gab es?",
-    "answer": 207.0,
+    "answer": 207,
     "answerText": "207",
     "unit": "",
     "tips": [
@@ -1564,18 +1564,18 @@ export const QUESTIONS = [
   {
     "id": 143,
     "text": "Wie lang ist der Begattungsapparat der Bananenschnecke?",
-    "answer": 80.0,
+    "answer": 80,
     "answerText": "ca. 80cm",
     "unit": "cm",
     "tips": [
       "Die Länge entspricht 550% seiner Körpergröße.",
-      "Mehr als 6x so groß wie der durchschnittlich lange Peniseines Mannes."
+      "Mehr als 6x so groß wie der durchschnittlich lange Penis eines Mannes."
     ]
   },
   {
     "id": 144,
     "text": "Wie viele Street Fighter Turniere (Videospiele) gewann Ryan Hart zwischen 1998 und 2011?",
-    "answer": 450.0,
+    "answer": 450,
     "answerText": "450",
     "unit": "",
     "tips": [
@@ -1586,7 +1586,7 @@ export const QUESTIONS = [
   {
     "id": 145,
     "text": "Wie viele Frauen tragen laut einer Umfrage aus dem Jahr 2010 eine Burka in Dänemark?",
-    "answer": 3.0,
+    "answer": 3,
     "answerText": "3",
     "unit": "",
     "tips": [
@@ -1597,18 +1597,18 @@ export const QUESTIONS = [
   {
     "id": 146,
     "text": "Wie viele Kilometer Luftlinie liegen zwischen San Francisco und Los Angeles?",
-    "answer": 559.0,
+    "answer": 559,
     "answerText": "559 Kilometer",
     "unit": "Kilometer",
     "tips": [
       "Las Vegas ist 670 km entfernt.",
-      "Berlin ist von Wien nur 36 Kilometer Luftlinie wenigerentfernt."
+      "Berlin ist von Wien nur 36 Kilometer Luftlinie weniger entfernt."
     ]
   },
   {
     "id": 147,
     "text": "In welchem Jahr kam das Galaxy Samsung Galaxy S auf den Markt?",
-    "answer": 2010.0,
+    "answer": 2010,
     "answerText": "2010",
     "unit": "",
     "tips": [
@@ -1619,18 +1619,18 @@ export const QUESTIONS = [
   {
     "id": 148,
     "text": "Wieviel Einkerbungen hat ein Golfball?",
-    "answer": 336.0,
+    "answer": 336,
     "answerText": "336",
     "unit": "",
     "tips": [
-      "Die Zahl ist 28x so groß wie die Anzahl der Edelsteine aufdem Brustschild des Hohenpriesters.",
+      "Die Zahl ist 28x so groß wie die Anzahl der Edelsteine auf dem Brustschild des Hohenpriesters.",
       "28x so groß wie das christliche Weihnachtsfest dauert."
     ]
   },
   {
     "id": 149,
     "text": "Wie viele Views hat das meistgeklickte YouTube-Video „Gangnam Style“ vom südkoreanischen Sänger Psy? (Stand: Januar 2016) – Bitte mit Stelle nach dem Komma tippen",
-    "answer": 2500000000.0,
+    "answer": 2500000000,
     "answerText": "2,5 Milliarden",
     "unit": "Milliarden",
     "tips": [
@@ -1641,7 +1641,7 @@ export const QUESTIONS = [
   {
     "id": 150,
     "text": "Mit wie vielen Partnern hat die durchschnittliche Berlinerin in ihrem Leben Sex?",
-    "answer": 7.0,
+    "answer": 7,
     "answerText": "7",
     "unit": "",
     "tips": [
@@ -1652,9 +1652,9 @@ export const QUESTIONS = [
   {
     "id": 151,
     "text": "Am 08.02.2017 waren es 17.330 Wie viele Autos - PKWs waren Ende 2014 in Deutschland offiziell angemeldet?",
-    "answer": 43851.0,
+    "answer": 43851230,
     "answerText": "43.851.230",
-    "unit": "230",
+    "unit": "",
     "tips": [
       "Etwas mehr als Einwohner in Argentinien.",
       "Mexiko hat fast 3x so wie viele Einwohner."
@@ -1663,7 +1663,7 @@ export const QUESTIONS = [
   {
     "id": 152,
     "text": "Wann wurde der erste McDonals-Drive-In überhaupt eingeführt?",
-    "answer": 1975.0,
+    "answer": 1975,
     "answerText": "1975 in Arizona (1980 in D)",
     "unit": "in Arizona (1980 in D",
     "tips": [
@@ -1674,7 +1674,7 @@ export const QUESTIONS = [
   {
     "id": 153,
     "text": "Wie oft hat Ferrari bei der Formel 1 die Konstrukteurs-Wertung von 1958-2016 gewonnen?",
-    "answer": 16.0,
+    "answer": 16,
     "answerText": "16 Mal",
     "unit": "Mal",
     "tips": [
@@ -1685,7 +1685,7 @@ export const QUESTIONS = [
   {
     "id": 154,
     "text": "Wie viel Liter Blut hat ein Mensch pro Kilo Körpergewicht?",
-    "answer": 75.0,
+    "answer": 75,
     "answerText": "75 ml - 0,075 Liter",
     "unit": "ml - 0,075 Liter",
     "tips": [
@@ -1696,9 +1696,9 @@ export const QUESTIONS = [
   {
     "id": 155,
     "text": "Wie viele Mitarbeiter/Soldaten beschäftigt die chinesische Volksbefreiungsarmee ungefähr?",
-    "answer": 2300.0,
+    "answer": 2300000,
     "answerText": "2.300.000",
-    "unit": "000",
+    "unit": "",
     "tips": [
       "Die Zahl liegt zwischen den Einwohnerzahlen von Slowenien und Jamaika.",
       "Die Armee ist zweitgrößter Arbeitgeber der Welt."
@@ -1707,7 +1707,7 @@ export const QUESTIONS = [
   {
     "id": 156,
     "text": "Wie viel Prozent der Frauen haben lt. einer Umfrage von 2015 schon nach wenigen Wochen für ihre Affäre echte Gefühle entwickelt und wollen mehr?",
-    "answer": 79.0,
+    "answer": 79,
     "answerText": "79 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1740,7 +1740,7 @@ export const QUESTIONS = [
   {
     "id": 159,
     "text": "Wie viele Hunde pro Quadratkilometer lebten 2007 in Herne, der dt. Stadt mit den durchschnittlichen meisten Hunden pro Quadratkilometer?",
-    "answer": 136.0,
+    "answer": 136,
     "answerText": "136",
     "unit": "",
     "tips": [
@@ -1751,7 +1751,7 @@ export const QUESTIONS = [
   {
     "id": 160,
     "text": "Vor wie viel Millionen Jahren lebte der Tyrannosaurus Rex?",
-    "answer": 66.0,
+    "answer": 66,
     "answerText": "66",
     "unit": "",
     "tips": [
@@ -1762,7 +1762,7 @@ export const QUESTIONS = [
   {
     "id": 161,
     "text": "Wie viele Kilometer ist der Fluss \"Rhein\" lang?",
-    "answer": 1238.0,
+    "answer": 1238,
     "answerText": "1238",
     "unit": "",
     "tips": [
@@ -1784,7 +1784,7 @@ export const QUESTIONS = [
   {
     "id": 163,
     "text": "Wie viel Prozent der Weltbevölkerung waren 2010 Christen?",
-    "answer": 33.0,
+    "answer": 33,
     "answerText": "33 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1795,7 +1795,7 @@ export const QUESTIONS = [
   {
     "id": 164,
     "text": "Wie viele Deutsche sagten 2015 in einer Umfrage, dass die DDR ein Unrechtsstaat war?",
-    "answer": 64.0,
+    "answer": 64,
     "answerText": "64 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -1806,7 +1806,7 @@ export const QUESTIONS = [
   {
     "id": 165,
     "text": "In welchem Jahr wurde in Deutschland die erste Herztransplantation durchgeführt?",
-    "answer": 1969.0,
+    "answer": 1969,
     "answerText": "1969",
     "unit": "",
     "tips": [
@@ -1817,7 +1817,7 @@ export const QUESTIONS = [
   {
     "id": 166,
     "text": "Wie viel Liter Wasser kann ein Kamel in 15 Minuten trinken?",
-    "answer": 200.0,
+    "answer": 200,
     "answerText": "200 Liter",
     "unit": "Liter",
     "tips": [
@@ -1850,7 +1850,7 @@ export const QUESTIONS = [
   {
     "id": 169,
     "text": "Wie viele Nebelpartikel müsste man sammeln, um einen Teelöffel zu füllen?",
-    "answer": 7000000000.0,
+    "answer": 7000000000,
     "answerText": "7 Milliarden",
     "unit": "Milliarden",
     "tips": [
@@ -1861,7 +1861,7 @@ export const QUESTIONS = [
   {
     "id": 170,
     "text": "Mit wie vielen Männern hatte die US-Pornodarstellerin Lisa Sparxxx beim weltgrößten Gangbang Sex?",
-    "answer": 919.0,
+    "answer": 919,
     "answerText": "919",
     "unit": "",
     "tips": [
@@ -1872,7 +1872,7 @@ export const QUESTIONS = [
   {
     "id": 171,
     "text": "In welchem Alter wurde Robert de Niro zum 6. Mal Vater?",
-    "answer": 68.0,
+    "answer": 68,
     "answerText": "68",
     "unit": "",
     "tips": [
@@ -1883,7 +1883,7 @@ export const QUESTIONS = [
   {
     "id": 172,
     "text": "Wie oft konnte Gerd Müller in der Fußball-Bundesliga einen lupenreinen Hattrick (3 Tore hintereinander in einer Halbzeit) erzie len?",
-    "answer": 7.0,
+    "answer": 7,
     "answerText": "7 Mal",
     "unit": "Mal",
     "tips": [
@@ -1894,7 +1894,7 @@ export const QUESTIONS = [
   {
     "id": 173,
     "text": "Wann wurde die Riesenschildkröte Adwiata geboren, die 2006 als älteste ihrer Art im Zoo von Kalkutta gestorben ist?",
-    "answer": 1750.0,
+    "answer": 1750,
     "answerText": "1750 - macht 256 Jahre",
     "unit": "- macht 256 Jahre",
     "tips": [
@@ -1905,7 +1905,7 @@ export const QUESTIONS = [
   {
     "id": 174,
     "text": "Wie viele Teile Besteck gibt es im Weißen Haus?",
-    "answer": 13092.0,
+    "answer": 13092,
     "answerText": "13.092",
     "unit": "",
     "tips": [
@@ -1916,7 +1916,7 @@ export const QUESTIONS = [
   {
     "id": 175,
     "text": "Wie viel Prozent der Deutschen haben lt. einer Umfrage von 2015 mehr Sex im Urlaub als zu Hause?",
-    "answer": 24.0,
+    "answer": 24,
     "answerText": "24",
     "unit": "",
     "tips": [
@@ -1938,7 +1938,7 @@ export const QUESTIONS = [
   {
     "id": 177,
     "text": "Innerhalb wie vieler Tage bestieg das Ehepaar Gambi aus Großbritannien alle höchsten Berge eines Kontinents?",
-    "answer": 404.0,
+    "answer": 404,
     "answerText": "404 Tage",
     "unit": "Tage",
     "tips": [
@@ -1949,7 +1949,7 @@ export const QUESTIONS = [
   {
     "id": 178,
     "text": "Wie viel Primzahlen gibt es zwischen 1 und 100?",
-    "answer": 25.0,
+    "answer": 25,
     "answerText": "25",
     "unit": "",
     "tips": [
@@ -1960,7 +1960,7 @@ export const QUESTIONS = [
   {
     "id": 179,
     "text": "Wie viele Erdenjahre benötigt der Uranus um die Sonne zu umrunden?",
-    "answer": 84.0,
+    "answer": 84,
     "answerText": "84 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -1971,7 +1971,7 @@ export const QUESTIONS = [
   {
     "id": 180,
     "text": "Seit wann herrscht in Deutschland die Gurtpflicht für PKW auch auf dem Rücksitz? Bitte ein genaues Datum tippen",
-    "answer": 1.0,
+    "answer": 1,
     "answerText": "1. August 1984",
     "unit": "August 1984",
     "tips": [
@@ -1982,7 +1982,7 @@ export const QUESTIONS = [
   {
     "id": 181,
     "text": "Wievielmal hört man in seinem Kultsong „Katzeklo“ Helge Schneider „Katze“ singen? Achtung: inkl. Aller Wörter, die „Katze“ enthalten.",
-    "answer": 39.0,
+    "answer": 39,
     "answerText": "39",
     "unit": "",
     "tips": [
@@ -1993,7 +1993,7 @@ export const QUESTIONS = [
   {
     "id": 182,
     "text": "Wieviel Prozent aller weltweiten Schäden beim Kopieren werden dadurch verursacht, dass Menschen ihr Hinterteil fotokopieren?",
-    "answer": 23.0,
+    "answer": 23,
     "answerText": "23 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2004,7 +2004,7 @@ export const QUESTIONS = [
   {
     "id": 183,
     "text": "Wie tief können Königspinguine (in m) tauchen?",
-    "answer": 535.0,
+    "answer": 535,
     "answerText": "535 Meter",
     "unit": "Meter",
     "tips": [
@@ -2015,9 +2015,9 @@ export const QUESTIONS = [
   {
     "id": 184,
     "text": "Wie viele deutschsprachige Hotelbewertungen wurden 2014 bei Holidaycheck abgegeben?",
-    "answer": 1003.0,
+    "answer": 1003185,
     "answerText": "1.003.185",
-    "unit": "185",
+    "unit": "",
     "tips": [
       "Auf allen Sprachen waren es 1.014.000.",
       "Die Anzahl von Bewertungen auf Nicht-deutschen Sprachenliegt bei circa 10.000."
@@ -2026,7 +2026,7 @@ export const QUESTIONS = [
   {
     "id": 185,
     "text": "Wie viele Berge auf der Erde sind über 8000 m hoch?",
-    "answer": 14.0,
+    "answer": 14,
     "answerText": "14",
     "unit": "",
     "tips": [
@@ -2037,7 +2037,7 @@ export const QUESTIONS = [
   {
     "id": 186,
     "text": "Laut Amnesty International wurden im Zeitraum von 1900 bis 1985 in den USA wie viele Menschen zum Tode verurteilt, deren Unschuld später bewiesen wurde?",
-    "answer": 350.0,
+    "answer": 350,
     "answerText": "350",
     "unit": "",
     "tips": [
@@ -2059,7 +2059,7 @@ export const QUESTIONS = [
   {
     "id": 188,
     "text": "Wie viele Beine kann ein Tausendfüßer höchstens haben?",
-    "answer": 750.0,
+    "answer": 750,
     "answerText": "750",
     "unit": "",
     "tips": [
@@ -2070,7 +2070,7 @@ export const QUESTIONS = [
   {
     "id": 189,
     "text": "Wie viel Zuschauer fast das größte noch existierende Stadion der Welt „Stadion erster Mai“ in Pjöngjang (Nordkorea)?",
-    "answer": 150000.0,
+    "answer": 150000,
     "answerText": "150.000",
     "unit": "",
     "tips": [
@@ -2081,7 +2081,7 @@ export const QUESTIONS = [
   {
     "id": 190,
     "text": "Mit wie vielen Frauen schlief der Pornodarsteller Jon Dough 1997 nacheinander in drei Tagen und hatte damit mit den meisten Frauen in einem Pornofilm Sex?",
-    "answer": 101.0,
+    "answer": 101,
     "answerText": "101",
     "unit": "",
     "tips": [
@@ -2092,7 +2092,7 @@ export const QUESTIONS = [
   {
     "id": 191,
     "text": "Wie viele Mobilfunkanschlüsse hatte die Telekom Ende 2014?",
-    "answer": 38990000.0,
+    "answer": 38990000,
     "answerText": "38,99 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -2103,7 +2103,7 @@ export const QUESTIONS = [
   {
     "id": 192,
     "text": "Wie viel Prozent der Deutschen haben lt. einer Umfrage von 2015 ein E-Book?",
-    "answer": 25.0,
+    "answer": 25,
     "answerText": "25 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2114,7 +2114,7 @@ export const QUESTIONS = [
   {
     "id": 193,
     "text": "Wie lange ist der Ostseeküstenradweg?",
-    "answer": 1100.0,
+    "answer": 1100,
     "answerText": "1100 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -2125,7 +2125,7 @@ export const QUESTIONS = [
   {
     "id": 194,
     "text": "Wie lang würde es dauern, wenn eine Schnecke eine Marathonstrecke bewältigen würde?",
-    "answer": 550.0,
+    "answer": 550,
     "answerText": "550 Tage",
     "unit": "Tage",
     "tips": [
@@ -2136,7 +2136,7 @@ export const QUESTIONS = [
   {
     "id": 195,
     "text": "Aus wie vielen verschiedenen Kameraeinstellungen betrachtet der Zuschauer die berühmte Duschszene des Films \"Psycho\" von 1960?",
-    "answer": 77.0,
+    "answer": 77,
     "answerText": "77",
     "unit": "",
     "tips": [
@@ -2147,7 +2147,7 @@ export const QUESTIONS = [
   {
     "id": 196,
     "text": "Wie viele Schiffe hatte der erfolgreichste Piratenkapitän aller Zeiten unter seiner Führung?",
-    "answer": 1500.0,
+    "answer": 1500,
     "answerText": "1.500",
     "unit": "",
     "tips": [
@@ -2158,7 +2158,7 @@ export const QUESTIONS = [
   {
     "id": 197,
     "text": "Im welchen Jahr wurde Facebook gegründet?",
-    "answer": 2004.0,
+    "answer": 2004,
     "answerText": "2004",
     "unit": "",
     "tips": [
@@ -2180,7 +2180,7 @@ export const QUESTIONS = [
   {
     "id": 199,
     "text": "Wie viele Deutsche besuchten 2014 durchschnittlich pro Jahr einen katholischen Gottesdienst?",
-    "answer": 2600000.0,
+    "answer": 2600000,
     "answerText": "2,6 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -2191,7 +2191,7 @@ export const QUESTIONS = [
   {
     "id": 200,
     "text": "Zu welcher Uhrzeit war in Hamburg 2015 der früheste Sonnenaufgang?",
-    "answer": 4.0,
+    "answer": 4,
     "answerText": "4:50 Uhr",
     "unit": ":50 Uhr",
     "tips": [
@@ -2202,7 +2202,7 @@ export const QUESTIONS = [
   {
     "id": 201,
     "text": "In welchem Jahr hob der Inder Baba Amar Bharati seinen Arm und hat ihn seitdem nicht mehr gesenkt?",
-    "answer": 1973.0,
+    "answer": 1973,
     "answerText": "1973",
     "unit": "",
     "tips": [
@@ -2213,7 +2213,7 @@ export const QUESTIONS = [
   {
     "id": 202,
     "text": "Wie viele Kilometer ist der mittlere Monddurchmesser?",
-    "answer": 3476.0,
+    "answer": 3476,
     "answerText": "3.476",
     "unit": "",
     "tips": [
@@ -2224,7 +2224,7 @@ export const QUESTIONS = [
   {
     "id": 203,
     "text": "Wie viele Wochen war Boris Becker auf Platz 1 der Tennis-Weltrangliste?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -2235,9 +2235,9 @@ export const QUESTIONS = [
   {
     "id": 204,
     "text": "Wie viele Menschen lebten Ende 2014 insgesamt in den 4 deutschen Millionenstädten?",
-    "answer": 7708.0,
+    "answer": 7708904,
     "answerText": "7.708.904",
-    "unit": "904",
+    "unit": "",
     "tips": [
       "In Köln lebten 1.046.680 Menschen.",
       "In Berlin lebten 3.469.849 Menschen."
@@ -2246,7 +2246,7 @@ export const QUESTIONS = [
   {
     "id": 205,
     "text": "Wie viele Stunden Videomaterial wurden im Dezember 2014 pro Minute weltweit bei YouTube hochgeladen?",
-    "answer": 300.0,
+    "answer": 300,
     "answerText": "300 Stunden",
     "unit": "Stunden",
     "tips": [
@@ -2257,7 +2257,7 @@ export const QUESTIONS = [
   {
     "id": 206,
     "text": "Wie viel Wasser geht pro Tag durch einen tropfenden Wasserhahn verloren?",
-    "answer": 15.0,
+    "answer": 15,
     "answerText": "15 Liter",
     "unit": "Liter",
     "tips": [
@@ -2268,7 +2268,7 @@ export const QUESTIONS = [
   {
     "id": 207,
     "text": "Wie viel Prozent der Erdoberfläche entfallen auf Meer?",
-    "answer": 71.0,
+    "answer": 71,
     "answerText": "71",
     "unit": "",
     "tips": [
@@ -2279,7 +2279,7 @@ export const QUESTIONS = [
   {
     "id": 208,
     "text": "Wie viele Menschen kann der australische Inlandtaipan mit einem Biss töten?",
-    "answer": 44.0,
+    "answer": 44,
     "answerText": "44 – der Film war Kind 44",
     "unit": "– der Film war Kind 44",
     "tips": [
@@ -2290,7 +2290,7 @@ export const QUESTIONS = [
   {
     "id": 209,
     "text": "Im Jahr 2013 gab es in Deutschland ungefähr 15.000 Tankstellen. Wie viele Tankstellen gab es vor noch 50 Jahren um das Jahr 1970?",
-    "answer": 60000.0,
+    "answer": 60000,
     "answerText": "60.000",
     "unit": "",
     "tips": [
@@ -2301,7 +2301,7 @@ export const QUESTIONS = [
   {
     "id": 210,
     "text": "Wann erschien das erste Harry Potter Buch „Der Stein der Weisen“ (englische Ausgabe)?",
-    "answer": 1997.0,
+    "answer": 1997,
     "answerText": "1997",
     "unit": "",
     "tips": [
@@ -2312,7 +2312,7 @@ export const QUESTIONS = [
   {
     "id": 211,
     "text": "Aus wie viel Kilo Oliven erhält man etwa 1 L Olivenöl?",
-    "answer": 5.0,
+    "answer": 5,
     "answerText": "5 Kilo",
     "unit": "Kilo",
     "tips": [
@@ -2323,7 +2323,7 @@ export const QUESTIONS = [
   {
     "id": 212,
     "text": "Wie viele Buchstaben hat das hawaiianische Alphabet?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -2334,7 +2334,7 @@ export const QUESTIONS = [
   {
     "id": 213,
     "text": "Wie viel Prozent der Deutschen besitzen die Blutgruppe „A Rh neg“?",
-    "answer": 6.0,
+    "answer": 6,
     "answerText": "6 %",
     "unit": "%",
     "tips": [
@@ -2345,7 +2345,7 @@ export const QUESTIONS = [
   {
     "id": 214,
     "text": "Wie viele Mitarbeiter beschäftigt McDonald's ungefähr weltweit?",
-    "answer": 1900.0,
+    "answer": 1900,
     "answerText": "Es sind 1.900.000 Mitarbeiter.",
     "unit": "000 Mitarbeiter",
     "tips": [
@@ -2356,9 +2356,9 @@ export const QUESTIONS = [
   {
     "id": 215,
     "text": "Wie viele Riesterverträge (Riester-Rente) wurden bis Ende 2014 in Deutschland abgeschlossen?",
-    "answer": 16291.0,
+    "answer": 16291000,
     "answerText": "16.291.000",
-    "unit": "000",
+    "unit": "",
     "tips": [
       "Bis 2001 waren es 1.400.000.",
       "Bis 2006 waren es 8.144.000."
@@ -2378,7 +2378,7 @@ export const QUESTIONS = [
   {
     "id": 217,
     "text": "Wie viel Prozent der Deutschen leben mit ihren Nachbarn lt. einer Umfrage von 2015 im Streit?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2389,7 +2389,7 @@ export const QUESTIONS = [
   {
     "id": 218,
     "text": "Wie lang ist die Chinesische Mauer nach dem chinesischen Amt für Kulturerbe im Juni 2012 insgesamt mal gewesen?",
-    "answer": 21196.0,
+    "answer": 21196,
     "answerText": "21.196,18 Kilometer",
     "unit": ",18 Kilometer",
     "tips": [
@@ -2411,7 +2411,7 @@ export const QUESTIONS = [
   {
     "id": 220,
     "text": "Wie viele Punkte hat Hansa Rostock in der Fußball-Bundesliga geholt? Stand: 2015/16",
-    "answer": 479.0,
+    "answer": 479,
     "answerText": "479",
     "unit": "",
     "tips": [
@@ -2422,7 +2422,7 @@ export const QUESTIONS = [
   {
     "id": 221,
     "text": "Wie hoch ist der Kilimandscharo?",
-    "answer": 5895.0,
+    "answer": 5895,
     "answerText": "5.895 Meter",
     "unit": "Meter",
     "tips": [
@@ -2433,7 +2433,7 @@ export const QUESTIONS = [
   {
     "id": 222,
     "text": "Wie viele Minuten beträgt der aktuelle Weltrekord im Luftanhalten? Stand: Ende 2015",
-    "answer": 22.0,
+    "answer": 22,
     "answerText": "22 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -2444,7 +2444,7 @@ export const QUESTIONS = [
   {
     "id": 223,
     "text": "Im Laufe eines 60 Jährigen Lebens hat ein Mann durchschnittlich wie lange eine Erektion während er schläft?",
-    "answer": 5.0,
+    "answer": 5,
     "answerText": "5 Jahre => 1826 Tage",
     "unit": "Jahre => 1826 Tage",
     "tips": [
@@ -2455,7 +2455,7 @@ export const QUESTIONS = [
   {
     "id": 224,
     "text": "Für wie viel $ wurde das weltweit am teuersten verkaufte Gemälde „Les femmes d’Alger (Version \"O\") von Picasso an den Mann gebracht?",
-    "answer": 179400000.0,
+    "answer": 179400000,
     "answerText": "179,4 Millionen Dollar",
     "unit": "Millionen Dollar",
     "tips": [
@@ -2466,7 +2466,7 @@ export const QUESTIONS = [
   {
     "id": 225,
     "text": "Wie viel Tage war Kurt Georg Kiesinger Bundeskanzler der BRD?",
-    "answer": 1055.0,
+    "answer": 1055,
     "answerText": "1055 Tage",
     "unit": "Tage",
     "tips": [
@@ -2477,7 +2477,7 @@ export const QUESTIONS = [
   {
     "id": 226,
     "text": "Wann stellte Rudolf Diesel den ersten nach ihm benannten Motor fertig?",
-    "answer": 1897.0,
+    "answer": 1897,
     "answerText": "1897",
     "unit": "",
     "tips": [
@@ -2488,7 +2488,7 @@ export const QUESTIONS = [
   {
     "id": 227,
     "text": "Wie oft würde Deutschland auf die gesamte Erdoberfläche (also Wasser- und Landfläche) passen?",
-    "answer": 1429.0,
+    "answer": 1429,
     "answerText": "1429",
     "unit": "",
     "tips": [
@@ -2499,7 +2499,7 @@ export const QUESTIONS = [
   {
     "id": 228,
     "text": "Aus wie vielen Staaten bestehen die Vereinten Nationen(UNO)?",
-    "answer": 193.0,
+    "answer": 193,
     "answerText": "193",
     "unit": "",
     "tips": [
@@ -2510,7 +2510,7 @@ export const QUESTIONS = [
   {
     "id": 229,
     "text": "Wie viele Bierbrauereien gab es 2013 in Deutschland?",
-    "answer": 1352.0,
+    "answer": 1352,
     "answerText": "1352",
     "unit": "",
     "tips": [
@@ -2521,7 +2521,7 @@ export const QUESTIONS = [
   {
     "id": 230,
     "text": "In der wievielten Minute fiel das 1:0 beim historischen 7:1 der deutschen Nationalmannschaft gegen Brasilien im WM-Halbfinale 2014?",
-    "answer": 11.0,
+    "answer": 11,
     "answerText": "11 Minute",
     "unit": "Minute",
     "tips": [
@@ -2543,7 +2543,7 @@ export const QUESTIONS = [
   {
     "id": 232,
     "text": "Wie oft gewann Anne Woods die Grimassenschneiden-WM der Frauen?",
-    "answer": 27.0,
+    "answer": 27,
     "answerText": "27 Mal",
     "unit": "Mal",
     "tips": [
@@ -2565,7 +2565,7 @@ export const QUESTIONS = [
   {
     "id": 234,
     "text": "Wie viel Prozent der Deutschen hatten lt. einer Umfrage von 2015 schon einmal Sex am Arbeitsplatz?",
-    "answer": 31.0,
+    "answer": 31,
     "answerText": "31 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2576,7 +2576,7 @@ export const QUESTIONS = [
   {
     "id": 235,
     "text": "Wie viele Wohngebäude wurden 2014 in Hamburg neu errichtet?",
-    "answer": 1400.0,
+    "answer": 1400,
     "answerText": "1.400",
     "unit": "",
     "tips": [
@@ -2587,7 +2587,7 @@ export const QUESTIONS = [
   {
     "id": 236,
     "text": "Wie viele Vornamen haben die Kinder von Angelina Jolie und Brad Pitt in der Summe?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -2598,18 +2598,18 @@ export const QUESTIONS = [
   {
     "id": 237,
     "text": "Wie viele Tatort-Folgen gab es bis Ende Januar 2016?",
-    "answer": 973.0,
+    "answer": 973,
     "answerText": "973",
     "unit": "",
     "tips": [
-      "Der erste Tatort mit den Titel „Taxi nach Leipzig“ lief am29. November 1970.",
+      "Der erste Tatort mit den Titel „Taxi nach Leipzig“ lief am 29. November 1970.",
       "Nora Tschirner gab Ihr Debüt als Tatort-Kommissarin inFolge 891."
     ]
   },
   {
     "id": 238,
     "text": "In welchem Jahr war der Release von Android 1.0 – Base (erste offizielle Androidversion)?",
-    "answer": 2008.0,
+    "answer": 2008,
     "answerText": "2008",
     "unit": "",
     "tips": [
@@ -2642,18 +2642,18 @@ export const QUESTIONS = [
   {
     "id": 241,
     "text": "Wie viele Straftraten wurden 2014 in Deutschland polizeilich registriert?",
-    "answer": 6082.0,
+    "answer": 6082064,
     "answerText": "6.082.064",
-    "unit": "064",
+    "unit": "",
     "tips": [
       "1991 waren es 4.752.175 Straftaten.",
-      "Dänemark hat nur etwas weniger Einwohner als diegesuchte Zahl."
+      "Dänemark hat nur etwas weniger Einwohner als die gesuchte Zahl."
     ]
   },
   {
     "id": 242,
     "text": "Der Ort mit dem längsten Ortsnamen in Europa hat wie viele Buchstaben?",
-    "answer": 58.0,
+    "answer": 58,
     "answerText": "58 - \"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch\" in Wales",
     "unit": "- \"Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch\" in Wales",
     "tips": [
@@ -2664,7 +2664,7 @@ export const QUESTIONS = [
   {
     "id": 243,
     "text": "Bei wie vielen Spielen bei einer Fußball-WM der Männer blieb die (bundes)-deutsche Mannschaft ohne Gegentor? Stand: 2016",
-    "answer": 39.0,
+    "answer": 39,
     "answerText": "39",
     "unit": "",
     "tips": [
@@ -2675,7 +2675,7 @@ export const QUESTIONS = [
   {
     "id": 244,
     "text": "Helene Fischer wurde 2015 in einer Umfrage zur heißesten deutschen Sängerin genannt. Von wie viel Prozent der Männer?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2686,7 +2686,7 @@ export const QUESTIONS = [
   {
     "id": 245,
     "text": "Wie viele Punkte hat der Führende der ewigen NBA-Scorerliste (Kareem Abdul-Jabbar – Stand: Ende 2016) insgesamt erzielt?",
-    "answer": 38387.0,
+    "answer": 38387,
     "answerText": "38.387",
     "unit": "",
     "tips": [
@@ -2697,7 +2697,7 @@ export const QUESTIONS = [
   {
     "id": 246,
     "text": "Sexualforscher luden 751 Personen in ihr Labor ein und wollten herausfinden, wie viele Orgasmen in einer Stunde erleben könnte. Wie viele Orgasmen erreichte die Frau mit den meisten?",
-    "answer": 163.0,
+    "answer": 163,
     "answerText": "163",
     "unit": "",
     "tips": [
@@ -2708,7 +2708,7 @@ export const QUESTIONS = [
   {
     "id": 247,
     "text": "In welchem Jahr hatten die Rolling Stones ihren ersten Auftritt?",
-    "answer": 1962.0,
+    "answer": 1962,
     "answerText": "1962",
     "unit": "",
     "tips": [
@@ -2719,7 +2719,7 @@ export const QUESTIONS = [
   {
     "id": 248,
     "text": "Wie viel Prozent der „Tinder“ Nutzer weltweit sind laut einer aktuellen Umfrage von Herbst 2015 Single?",
-    "answer": 54.0,
+    "answer": 54,
     "answerText": "54",
     "unit": "",
     "tips": [
@@ -2730,7 +2730,7 @@ export const QUESTIONS = [
   {
     "id": 249,
     "text": "Wie viele Millionenstädte gibt es in Europa (inklusive Istanbul)?",
-    "answer": 32.0,
+    "answer": 32,
     "answerText": "32",
     "unit": "",
     "tips": [
@@ -2741,7 +2741,7 @@ export const QUESTIONS = [
   {
     "id": 250,
     "text": "Wie viele Slam Dunks in einer Minute schaffte der Papagei Zac 2011 in den USA?",
-    "answer": 22.0,
+    "answer": 22,
     "answerText": "22",
     "unit": "",
     "tips": [
@@ -2752,7 +2752,7 @@ export const QUESTIONS = [
   {
     "id": 251,
     "text": "In wie vielen offiziellen James Bond Fimen waren Roger Moore oder Sean Connery James Bond?",
-    "answer": 13.0,
+    "answer": 13,
     "answerText": "13",
     "unit": "",
     "tips": [
@@ -2763,18 +2763,18 @@ export const QUESTIONS = [
   {
     "id": 252,
     "text": "Wie viele Schamhaare schluckt man lt. einer Studie jährlich durch das Essen in einem Fastfood Restaurant?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
-      "Es sind weniger als Schachfiguren am Anfang des Spiels aufdem Brett stehen.",
+      "Es sind weniger als Schachfiguren am Anfang des Spiels auf dem Brett stehen.",
       "Es sind mehr als die Anzahl der Bauern, die ein Spieler amAnfang des Schach-Spiels zur Verfügung hat."
     ]
   },
   {
     "id": 253,
     "text": "In welchem Jahr wurde Arnold Schwarzenegger Gouverneur von Kalifornien?",
-    "answer": 2003.0,
+    "answer": 2003,
     "answerText": "2003",
     "unit": "",
     "tips": [
@@ -2785,7 +2785,7 @@ export const QUESTIONS = [
   {
     "id": 254,
     "text": "Wie viel mal so schwer wie die Erde ist der Jupiter?",
-    "answer": 318.0,
+    "answer": 318,
     "answerText": "318 Mal",
     "unit": "Mal",
     "tips": [
@@ -2796,7 +2796,7 @@ export const QUESTIONS = [
   {
     "id": 255,
     "text": "Wie viel Prozent der Veganer sind lt. einer Umfrage von 2015 zufrieden mit ihrem Liebesleben?",
-    "answer": 72.0,
+    "answer": 72,
     "answerText": "72 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2807,7 +2807,7 @@ export const QUESTIONS = [
   {
     "id": 256,
     "text": "Im welchem Jahr war der Verkaufsstart des ersten iPhones in Deutschland?",
-    "answer": 2007.0,
+    "answer": 2007,
     "answerText": "2007",
     "unit": "",
     "tips": [
@@ -2818,7 +2818,7 @@ export const QUESTIONS = [
   {
     "id": 257,
     "text": "Wie lang ist ungefähr der Penis eines Blauwals (in cm)?",
-    "answer": 250.0,
+    "answer": 250,
     "answerText": "250 Zentimeter",
     "unit": "Zentimeter",
     "tips": [
@@ -2840,7 +2840,7 @@ export const QUESTIONS = [
   {
     "id": 259,
     "text": "Bis wann waren Robert Pattinson und Kirsten Stewart liiert?",
-    "answer": 2013.0,
+    "answer": 2013,
     "answerText": "2013",
     "unit": "",
     "tips": [
@@ -2851,7 +2851,7 @@ export const QUESTIONS = [
   {
     "id": 260,
     "text": "Wie viele Singles hatte Stefan Raab in den Top 10 der deutschen Single-Charts?",
-    "answer": 8.0,
+    "answer": 8,
     "answerText": "8",
     "unit": "",
     "tips": [
@@ -2862,7 +2862,7 @@ export const QUESTIONS = [
   {
     "id": 261,
     "text": "Wie hoch ist der höchste freifallende Wasserfall der Erde?",
-    "answer": 979.0,
+    "answer": 979,
     "answerText": "979 Meter",
     "unit": "Meter",
     "tips": [
@@ -2873,7 +2873,7 @@ export const QUESTIONS = [
   {
     "id": 262,
     "text": "Wie viele Schwestern hat Barbie?",
-    "answer": 3.0,
+    "answer": 3,
     "answerText": "3",
     "unit": "",
     "tips": [
@@ -2884,7 +2884,7 @@ export const QUESTIONS = [
   {
     "id": 263,
     "text": "Wie viele Kilometer Luftlinie liegen zwischen Hamburg und München?",
-    "answer": 612.0,
+    "answer": 612,
     "answerText": "612 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -2895,7 +2895,7 @@ export const QUESTIONS = [
   {
     "id": 264,
     "text": "Wie viele Piercings hat der meistgepiercte Mann der Welt laut Guinness-Buch der Rekorde? – Stand: Oktober 2015",
-    "answer": 453.0,
+    "answer": 453,
     "answerText": "453",
     "unit": "",
     "tips": [
@@ -2906,7 +2906,7 @@ export const QUESTIONS = [
   {
     "id": 265,
     "text": "Wie lange braucht der Schall um einen Kilometer zurückzulegen?",
-    "answer": 3.0,
+    "answer": 3,
     "answerText": "3 Sekunden",
     "unit": "Sekunden",
     "tips": [
@@ -2917,7 +2917,7 @@ export const QUESTIONS = [
   {
     "id": 266,
     "text": "Wie viele Federn hat ein ausgewachsener Schwan?",
-    "answer": 25000.0,
+    "answer": 25000,
     "answerText": "25.000",
     "unit": "",
     "tips": [
@@ -2928,7 +2928,7 @@ export const QUESTIONS = [
   {
     "id": 267,
     "text": "Wie oft passt das Saarland (flächenmäßig) in Deutschland?",
-    "answer": 139.0,
+    "answer": 139,
     "answerText": "139 Mal",
     "unit": "Mal",
     "tips": [
@@ -2939,7 +2939,7 @@ export const QUESTIONS = [
   {
     "id": 268,
     "text": "Wie hoch ist der höchste Berg der Erde in m (vom Meeresspiegel aus gesehen)?",
-    "answer": 8848.0,
+    "answer": 8848,
     "answerText": "8.848 Meter",
     "unit": "Meter",
     "tips": [
@@ -2950,7 +2950,7 @@ export const QUESTIONS = [
   {
     "id": 269,
     "text": "Wie viele Wochen war David Hasselhoff 1989 in Deutschland mit der Single „Looking For Freedom“ auf Position 1 der deutschen Charts?",
-    "answer": 8.0,
+    "answer": 8,
     "answerText": "8",
     "unit": "",
     "tips": [
@@ -2961,7 +2961,7 @@ export const QUESTIONS = [
   {
     "id": 270,
     "text": "Wie oft kam es in der Bundesliga-Saison 2015/2016 zu einer Roten Karte?",
-    "answer": 15.0,
+    "answer": 15,
     "answerText": "15",
     "unit": "",
     "tips": [
@@ -2972,7 +2972,7 @@ export const QUESTIONS = [
   {
     "id": 271,
     "text": "Wie viel Prozent der Firmen und Behörden in Deutschland wurden lt. einer Umfrage von 2015 schon einmal Ziel eines Cyber-Angriff?",
-    "answer": 58.0,
+    "answer": 58,
     "answerText": "58 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -2983,7 +2983,7 @@ export const QUESTIONS = [
   {
     "id": 272,
     "text": "Wie viele Zentimeter groß ist der weltgrößte Hund (Höhe von den Pfoten bis zum Widerrist)?",
-    "answer": 156.0,
+    "answer": 156,
     "answerText": "156",
     "unit": "",
     "tips": [
@@ -2994,7 +2994,7 @@ export const QUESTIONS = [
   {
     "id": 273,
     "text": "Für wie viel Prozent der Norddeutschen kommt lt. einer Umfrage von 2015 ein Jobwechsel nicht in Frage?",
-    "answer": 66.0,
+    "answer": 66,
     "answerText": "66 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -3005,7 +3005,7 @@ export const QUESTIONS = [
   {
     "id": 274,
     "text": "Wie viele Folgen der US-Sitcom \"Golden Girls\" wurden gedreht?",
-    "answer": 180.0,
+    "answer": 180,
     "answerText": "180",
     "unit": "",
     "tips": [
@@ -3016,7 +3016,7 @@ export const QUESTIONS = [
   {
     "id": 275,
     "text": "Wie viele Kilometer ist die Atmosphäre der Erde hoch?",
-    "answer": 640.0,
+    "answer": 640,
     "answerText": "640 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -3027,7 +3027,7 @@ export const QUESTIONS = [
   {
     "id": 276,
     "text": "Wie viele Minuten schläft der Deutsche pro Tag im Durchschnitt?",
-    "answer": 492.0,
+    "answer": 492,
     "answerText": "492 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -3038,7 +3038,7 @@ export const QUESTIONS = [
   {
     "id": 277,
     "text": "Wie hoch war 2014 der Umsatz der Daimler AG?",
-    "answer": 129900000000.0,
+    "answer": 129900000000,
     "answerText": "129,9 Milliarden",
     "unit": "Milliarden",
     "tips": [
@@ -3060,7 +3060,7 @@ export const QUESTIONS = [
   {
     "id": 279,
     "text": "In welchem Jahr eröffnete in Deutschland die erste Pizzeria?",
-    "answer": 1952.0,
+    "answer": 1952,
     "answerText": "1952",
     "unit": "",
     "tips": [
@@ -3071,7 +3071,7 @@ export const QUESTIONS = [
   {
     "id": 280,
     "text": "Wie viele Zuschauer im Schnitt hatte ein Spiel der Fußball-Bundesliga der Männer in der Saison 2015/2016?",
-    "answer": 42420.0,
+    "answer": 42420,
     "answerText": "42.420 Zuschauer",
     "unit": "Zuschauer",
     "tips": [
@@ -3082,7 +3082,7 @@ export const QUESTIONS = [
   {
     "id": 281,
     "text": "Ein wie großer prozentualer Teil Islands ist eisfrei?",
-    "answer": 15.0,
+    "answer": 15,
     "answerText": "15 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -3093,7 +3093,7 @@ export const QUESTIONS = [
   {
     "id": 282,
     "text": "Seit wann gibt es Afri-Cola?",
-    "answer": 1931.0,
+    "answer": 1931,
     "answerText": "1931",
     "unit": "",
     "tips": [
@@ -3104,7 +3104,7 @@ export const QUESTIONS = [
   {
     "id": 283,
     "text": "Wieviel Prozent des jährlichen weltweiten Salzabbaus werden zur Enteisung amerikanischer Straßen gebraucht?",
-    "answer": 10.0,
+    "answer": 10,
     "answerText": "10 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -3126,18 +3126,18 @@ export const QUESTIONS = [
   {
     "id": 285,
     "text": "Wie viele Räume hat der Buckingham Palast?",
-    "answer": 602.0,
+    "answer": 602,
     "answerText": "602",
     "unit": "",
     "tips": [
       "Es sind mehr als 4x so viel wie das Weiße Haus hat.",
-      "Christoph Kolumbus wäre im Jahr 2053 so alt wie diegesuchte Zahl."
+      "Christoph Kolumbus wäre im Jahr 2053 so alt wie die gesuchte Zahl."
     ]
   },
   {
     "id": 286,
     "text": "Seit wann existiert die Verkehrssünderkartei in Flensburg?",
-    "answer": 1958.0,
+    "answer": 1958,
     "answerText": "1958",
     "unit": "",
     "tips": [
@@ -3148,7 +3148,7 @@ export const QUESTIONS = [
   {
     "id": 287,
     "text": "Ein ausgewachsener Mensch besitzt 206 Knochen - aber mit wie vielen werden wir geboren?",
-    "answer": 301.0,
+    "answer": 301,
     "answerText": "301",
     "unit": "",
     "tips": [
@@ -3170,7 +3170,7 @@ export const QUESTIONS = [
   {
     "id": 289,
     "text": "Wieviel darf ein Boxer der Fliegengewichtklasse maximal wiegen?",
-    "answer": 51.0,
+    "answer": 51,
     "answerText": "51 Kilo",
     "unit": "Kilo",
     "tips": [
@@ -3181,7 +3181,7 @@ export const QUESTIONS = [
   {
     "id": 290,
     "text": "Wieviel Prozent der Weltbevölkerung hat noch nie einen Telefonanruf erhalten oder getätigt?",
-    "answer": 53.0,
+    "answer": 53,
     "answerText": "53 Prozent",
     "unit": "Prozent",
     "tips": [
@@ -3192,7 +3192,7 @@ export const QUESTIONS = [
   {
     "id": 291,
     "text": "Im welchen Jahr kam das erste Dosenbier der Welt auf den Markt?",
-    "answer": 1935.0,
+    "answer": 1935,
     "answerText": "1935",
     "unit": "",
     "tips": [
@@ -3203,7 +3203,7 @@ export const QUESTIONS = [
   {
     "id": 292,
     "text": "Wie viel Kilometer beträgt die Entfernung zwischen Erde und Mond?",
-    "answer": 384400.0,
+    "answer": 384400,
     "answerText": "384.400 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -3214,7 +3214,7 @@ export const QUESTIONS = [
   {
     "id": 293,
     "text": "Wie viele Studenten sind zur Zeit an der größten Universität der Welt in Indien eingeschrieben Inklusive Fernstudium!",
-    "answer": 2360000.0,
+    "answer": 2360000,
     "answerText": "2.36 Millionen Menschen",
     "unit": "Millionen Menschen",
     "tips": [
@@ -3225,7 +3225,7 @@ export const QUESTIONS = [
   {
     "id": 294,
     "text": "Wie viele Elfmeter hat Oliver Kahn in seiner Karriere gehalten?",
-    "answer": 17.0,
+    "answer": 17,
     "answerText": "17",
     "unit": "",
     "tips": [
@@ -3236,9 +3236,9 @@ export const QUESTIONS = [
   {
     "id": 295,
     "text": "Wie viele Einwohner hatte Hawaii 2010?",
-    "answer": 1360.0,
+    "answer": 1360301,
     "answerText": "1.360.301",
-    "unit": "301",
+    "unit": "",
     "tips": [
       "Platz 40 der US-Bundesstaaten nach Einwohnerzahlen.",
       "Nevada auf Platz 35 hat 2,7 Mio. Einwohner."
@@ -3247,18 +3247,18 @@ export const QUESTIONS = [
   {
     "id": 296,
     "text": "Wie lange muss man ein Straußenei kochen, bis es hartgekocht ist?",
-    "answer": 40.0,
+    "answer": 40,
     "answerText": "40 Minuten",
     "unit": "Minuten",
     "tips": [
-      "So viele Minuten länger wach waren Testpersonen 2015 ineinem Schlaflabor, weil sie eine Tasse Kaffee getrunken haben .",
+      "So viele Minuten länger wach waren Testpersonen 2015 in einem Schlaflabor, weil sie eine Tasse Kaffee getrunken haben .",
       "So lange dauert das Video, in dem man alle Toten der JamesBond Filme bis 2012 sehen kann."
     ]
   },
   {
     "id": 297,
     "text": "Wie viel mal so viele Männer wie Frauen sitzen weltweit durchschnittlich im Gefängnis?",
-    "answer": 30.0,
+    "answer": 30,
     "answerText": "30 Mal",
     "unit": "Mal",
     "tips": [
@@ -3269,7 +3269,7 @@ export const QUESTIONS = [
   {
     "id": 298,
     "text": "Wie viele deutsche Soldaten waren Anfang Oktober 2015 im Ausland im Einsatz?",
-    "answer": 2899.0,
+    "answer": 2899,
     "answerText": "2.899",
     "unit": "",
     "tips": [
@@ -3285,13 +3285,13 @@ export const QUESTIONS = [
     "unit": "Sekunden",
     "tips": [
       "Seine Durchschnittsgeschwindigkeit war 1 Stundenkilometer",
-      "Usain Bolt benötigte bei der WM 2015 über die 200 Meter fastexakt die gleiche Zeit."
+      "Usain Bolt benötigte bei der WM 2015 über die 200 Meter fast exakt die gleiche Zeit."
     ]
   },
   {
     "id": 300,
     "text": "Wann stellte die Deutsche Bahn die Machbarkeitsstudie vom Bauprojekt Stuttgart 21 offiziell vor? Bitte das genaue Datum schätzen.",
-    "answer": 16.0,
+    "answer": 16,
     "answerText": "Am 16. Januar 1995",
     "unit": "Januar 1995",
     "tips": [
@@ -3302,7 +3302,7 @@ export const QUESTIONS = [
   {
     "id": 301,
     "text": "Zu welcher Uhrzeit war in Hamburg 2015 der späteste Sonnenaufgang?",
-    "answer": 8.0,
+    "answer": 8,
     "answerText": "8:37 Uhr",
     "unit": ":37 Uhr",
     "tips": [
@@ -3313,7 +3313,7 @@ export const QUESTIONS = [
   {
     "id": 302,
     "text": "Am 26. März 1884 setzte in Colorado (USA) ein heftiger Sturm 8 Kohlewagen in Bewegung. Dabei fuhr der Geisterzug eine beachtliche Strecke zurück. Wie viele Kilometer?",
-    "answer": 160.0,
+    "answer": 160,
     "answerText": "160",
     "unit": "",
     "tips": [
@@ -3324,7 +3324,7 @@ export const QUESTIONS = [
   {
     "id": 303,
     "text": "Wie lang dauerte die längste Karriere als Flugbegleiter?",
-    "answer": 62.0,
+    "answer": 62,
     "answerText": "62 Jahre, 3 Monate und 6 Tage",
     "unit": "Jahre, 3 Monate und 6 Tage",
     "tips": [
@@ -3335,7 +3335,7 @@ export const QUESTIONS = [
   {
     "id": 304,
     "text": "Wie viele Mordopfer gab es 2014 in Deutschland?",
-    "answer": 298.0,
+    "answer": 298,
     "answerText": "298",
     "unit": "",
     "tips": [
@@ -3346,7 +3346,7 @@ export const QUESTIONS = [
   {
     "id": 305,
     "text": "Wie viel Kilometer betrug der Durchmesser des Todessterns aus dem ersten \"Star Wars\"-Film?",
-    "answer": 160.0,
+    "answer": 160,
     "answerText": "160",
     "unit": "",
     "tips": [
@@ -3357,7 +3357,7 @@ export const QUESTIONS = [
   {
     "id": 306,
     "text": "Wie viele Menschen lebten Ende 2014 in Deutschland, die 40 bis 59 Jahre alt waren?",
-    "answer": 24660000.0,
+    "answer": 24660000,
     "answerText": "24,66 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -3368,7 +3368,7 @@ export const QUESTIONS = [
   {
     "id": 307,
     "text": "Die Simpsons halten den Rekord für die meisten Gaststars in einer Serie. Wie viele Stars waren nach 300 Folgen zu sehen?",
-    "answer": 340.0,
+    "answer": 340,
     "answerText": "340",
     "unit": "",
     "tips": [
@@ -3379,7 +3379,7 @@ export const QUESTIONS = [
   {
     "id": 308,
     "text": "Wie viele Sterne kann man mit bloßem Auge in der Nacht sehen?",
-    "answer": 3000.0,
+    "answer": 3000,
     "answerText": "3.000",
     "unit": "",
     "tips": [
@@ -3390,7 +3390,7 @@ export const QUESTIONS = [
   {
     "id": 309,
     "text": "Seit wann gibt es den Videotext?",
-    "answer": 1980.0,
+    "answer": 1980,
     "answerText": "1980",
     "unit": "",
     "tips": [
@@ -3401,7 +3401,7 @@ export const QUESTIONS = [
   {
     "id": 310,
     "text": "Wie viele aktive Facebook-Nutzer gibt es in Deutschland (Stand: Januar 2015)?",
-    "answer": 28000000.0,
+    "answer": 28000000,
     "answerText": "28 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -3423,7 +3423,7 @@ export const QUESTIONS = [
   {
     "id": 312,
     "text": "Wie viele Haare wachsen durchschnittlich auf einem Quadratzentimeter europäischer Kopfhaut mit brauner Haarfarbe?",
-    "answer": 350.0,
+    "answer": 350,
     "answerText": "350",
     "unit": "",
     "tips": [
@@ -3445,7 +3445,7 @@ export const QUESTIONS = [
   {
     "id": 314,
     "text": "May Warden spielt Miss Sophie im Sketch Dinner For One. In welchem Jahr hätte May Warden tatsächlich ihren 90. Geburtstag gefeiert?",
-    "answer": 1981.0,
+    "answer": 1981,
     "answerText": "1981",
     "unit": "",
     "tips": [
@@ -3467,7 +3467,7 @@ export const QUESTIONS = [
   {
     "id": 316,
     "text": "Wie viele Menschen leben in China? Basis: Schätzung im Juli 2016",
-    "answer": 1373.0,
+    "answer": 1373,
     "answerText": "1.373.541.278",
     "unit": "541.278",
     "tips": [
@@ -3478,7 +3478,7 @@ export const QUESTIONS = [
   {
     "id": 317,
     "text": "Wie viele Apps gab es 2015 bei Google Play zu kaufen?",
-    "answer": 1500000.0,
+    "answer": 1500000,
     "answerText": "1,5 Millionen",
     "unit": "Millionen",
     "tips": [
@@ -3489,7 +3489,7 @@ export const QUESTIONS = [
   {
     "id": 318,
     "text": "In welchem Jahr erschien Daniel Defoes Robinson Crusoe?",
-    "answer": 1719.0,
+    "answer": 1719,
     "answerText": "1719",
     "unit": "",
     "tips": [
@@ -3500,7 +3500,7 @@ export const QUESTIONS = [
   {
     "id": 319,
     "text": "Wie viele Buchstaben hat das längste englische Wort laut dem Oxford Dictionary?",
-    "answer": 44.0,
+    "answer": 44,
     "answerText": "44 => pneumonoultramicroscopicsilicovolcanoconiosis",
     "unit": "=> pneumonoultramicroscopicsilicovolcanoconiosis",
     "tips": [
@@ -3511,7 +3511,7 @@ export const QUESTIONS = [
   {
     "id": 320,
     "text": "Wann betrat der bisher letzte Mensch den Mond?",
-    "answer": 1972.0,
+    "answer": 1972,
     "answerText": "1972",
     "unit": "",
     "tips": [
@@ -3522,7 +3522,7 @@ export const QUESTIONS = [
   {
     "id": 321,
     "text": "Wie viele Knochenbrüche zog sich der weltberühmte Stuntman Evel Knievel bis zu seinem Show-Rücktritt 1975 zu?",
-    "answer": 433.0,
+    "answer": 433,
     "answerText": "433",
     "unit": "",
     "tips": [
@@ -3533,7 +3533,7 @@ export const QUESTIONS = [
   {
     "id": 322,
     "text": "Wie viele aktive Satelliten befanden sich Ende 2014 im All?",
-    "answer": 1265.0,
+    "answer": 1265,
     "answerText": "1.265",
     "unit": "",
     "tips": [
@@ -3544,7 +3544,7 @@ export const QUESTIONS = [
   {
     "id": 323,
     "text": "Wie alt wurde der erste deutsche Bundeskanzler der Bundesrepublik Deutschland?",
-    "answer": 91.0,
+    "answer": 91,
     "answerText": "91 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -3555,7 +3555,7 @@ export const QUESTIONS = [
   {
     "id": 324,
     "text": "Glynn Wolfe gilt als der am häufigsten verheiratete Mann der Welt. Wie oft war er insgesamt verheiratet?",
-    "answer": 29.0,
+    "answer": 29,
     "answerText": "29 Mal",
     "unit": "Mal",
     "tips": [
@@ -3566,7 +3566,7 @@ export const QUESTIONS = [
   {
     "id": 325,
     "text": "Wie viel Zentimeter misst der Penis des Mexikaners Roberto Esquivel Cabrera, des Mannes mit dem wohl längsten Dödel der Welt?",
-    "answer": 48.0,
+    "answer": 48,
     "answerText": "48 Zentimeter",
     "unit": "Zentimeter",
     "tips": [
@@ -3577,7 +3577,7 @@ export const QUESTIONS = [
   {
     "id": 326,
     "text": "Wie oft belegte Deutschland beim Eurovision Song Contest einen der ersten 3 Plätze? Stand: Ende 2016",
-    "answer": 11.0,
+    "answer": 11,
     "answerText": "11 Mal",
     "unit": "Mal",
     "tips": [
@@ -3588,7 +3588,7 @@ export const QUESTIONS = [
   {
     "id": 327,
     "text": "Wie viele Selbstmorde wurden 2013 in Deutschland registriert?",
-    "answer": 10076.0,
+    "answer": 10076,
     "answerText": "10.076",
     "unit": "",
     "tips": [
@@ -3599,7 +3599,7 @@ export const QUESTIONS = [
   {
     "id": 328,
     "text": "Wie lange ist die Spieldauer der Hobbit-Trilogie insgesamt (Kinofassung)?",
-    "answer": 474.0,
+    "answer": 474,
     "answerText": "474 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -3610,7 +3610,7 @@ export const QUESTIONS = [
   {
     "id": 329,
     "text": "Wie viele Zähne hat ein Hund?",
-    "answer": 42.0,
+    "answer": 42,
     "answerText": "42",
     "unit": "",
     "tips": [
@@ -3621,7 +3621,7 @@ export const QUESTIONS = [
   {
     "id": 330,
     "text": "Wie viele tic tac befinden sich in einer Standard Packung?",
-    "answer": 37.0,
+    "answer": 37,
     "answerText": "37 Stück",
     "unit": "Stück",
     "tips": [
@@ -3632,7 +3632,7 @@ export const QUESTIONS = [
   {
     "id": 331,
     "text": "Wie viele km fließt der Fluss mit der größten Fließlänge in Deutschland durch Deutschland?",
-    "answer": 865.0,
+    "answer": 865,
     "answerText": "865 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -3643,7 +3643,7 @@ export const QUESTIONS = [
   {
     "id": 332,
     "text": "Der antarktische Riesenschwamm „Scolymastra joubini“ ist das Tier mit dem höchsten erreichten Alter aller uns bekannten Tiere. Wie viele Lebensjahre kann dieses Tier erreichen?",
-    "answer": 10000.0,
+    "answer": 10000,
     "answerText": "10.000 Jahre",
     "unit": "Jahre",
     "tips": [
@@ -3654,7 +3654,7 @@ export const QUESTIONS = [
   {
     "id": 333,
     "text": "Wie viele Briefkästen unterhielt die Deutsche Post in Deutschland 2013?",
-    "answer": 111666.0,
+    "answer": 111666,
     "answerText": "111.666",
     "unit": "",
     "tips": [
@@ -3665,18 +3665,18 @@ export const QUESTIONS = [
   {
     "id": 334,
     "text": "Wie viele Nieten wurden beim Bau der Titanic verwendet?",
-    "answer": 3000.0,
+    "answer": 3000000,
     "answerText": "ca. 3.000.000",
-    "unit": "000",
+    "unit": "",
     "tips": [
-      "Es sind nur etwas mehr Nieten als Kinozuschauer, die derFilm Titanic nach 2 Wochen in Deutschland hatte.",
+      "Es sind nur etwas mehr Nieten als Kinozuschauer, die der Film Titanic nach 2 Wochen in Deutschland hatte.",
       "Lionel Messi verdient diese Zahl in Euro im Monat beim FC Barcelona."
     ]
   },
   {
     "id": 335,
     "text": "Wie viele Studioalben haben die Beatles veröffentlicht?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -3687,9 +3687,9 @@ export const QUESTIONS = [
   {
     "id": 336,
     "text": "Wie viele Bürger haben bei der Bundestagswahl 2013 gewählt?",
-    "answer": 44309.0,
+    "answer": 44309925,
     "answerText": "44.309.925",
-    "unit": "925",
+    "unit": "",
     "tips": [
       "Die Piratenpartei hatte 963.623 Stimmen.",
       "Wahlberechtigt waren fast 62 Millionen Menschen."
@@ -3698,7 +3698,7 @@ export const QUESTIONS = [
   {
     "id": 337,
     "text": "Wie viele Zentimeter groß ist Taylor Swift?",
-    "answer": 178.0,
+    "answer": 178,
     "answerText": "178",
     "unit": "",
     "tips": [
@@ -3709,7 +3709,7 @@ export const QUESTIONS = [
   {
     "id": 338,
     "text": "Wie viele Buchstaben hat das Vaterunser?",
-    "answer": 297.0,
+    "answer": 297,
     "answerText": "297",
     "unit": "",
     "tips": [
@@ -3720,7 +3720,7 @@ export const QUESTIONS = [
   {
     "id": 339,
     "text": "Wie lange dauerte Neil Armstrongs erster Spaziergang auf dem Mond?",
-    "answer": 151.0,
+    "answer": 151,
     "answerText": "151 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -3742,7 +3742,7 @@ export const QUESTIONS = [
   {
     "id": 341,
     "text": "Wie viele Gründungsmitglieder hatte die Nato?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -3764,7 +3764,7 @@ export const QUESTIONS = [
   {
     "id": 343,
     "text": "Wie viele Jahre lagen zwischen Nenas ersten und letzten Nummer-1-Hit?",
-    "answer": 22.0,
+    "answer": 22,
     "answerText": "22 (1983-2005)",
     "unit": "1983-2005",
     "tips": [
@@ -3775,7 +3775,7 @@ export const QUESTIONS = [
   {
     "id": 344,
     "text": "Wie oft verpasste sich Joshua William Reed aus den USA 2011 einen Tritt an den eigenen Kopf innerhalb einer Minute?",
-    "answer": 115.0,
+    "answer": 115,
     "answerText": "115",
     "unit": "",
     "tips": [
@@ -3786,7 +3786,7 @@ export const QUESTIONS = [
   {
     "id": 345,
     "text": "Was ist der Weltrekord der meisten gleichzeitig getragenen T-Shirts?",
-    "answer": 227.0,
+    "answer": 227,
     "answerText": "227",
     "unit": "",
     "tips": [
@@ -3797,7 +3797,7 @@ export const QUESTIONS = [
   {
     "id": 346,
     "text": "Wann wurde die älteste Universität Englands gegründet?",
-    "answer": 1136.0,
+    "answer": 1136,
     "answerText": "1136",
     "unit": "",
     "tips": [
@@ -3808,7 +3808,7 @@ export const QUESTIONS = [
   {
     "id": 347,
     "text": "Wie groß ist Tom Cruise in Zentimetern?",
-    "answer": 170.0,
+    "answer": 170,
     "answerText": "170 cm",
     "unit": "cm",
     "tips": [
@@ -3819,7 +3819,7 @@ export const QUESTIONS = [
   {
     "id": 348,
     "text": "Wie viele Strophen umfasst die griechische Nationalhymne?",
-    "answer": 158.0,
+    "answer": 158,
     "answerText": "158",
     "unit": "",
     "tips": [
@@ -3830,18 +3830,18 @@ export const QUESTIONS = [
   {
     "id": 349,
     "text": "Wie viele Wörter sagt Eminem in den schnellsten 15 Sekunden seines Liedes „Rap God“?",
-    "answer": 97.0,
+    "answer": 97,
     "answerText": "97",
     "unit": "",
     "tips": [
       "Die Wörter a und to kommen 3x, das Wort I 4x vor.",
-      "Insgesamt hat Eminem 1.560 Wörter in dem 6:04 Minutendauernden Song verpackt."
+      "Insgesamt hat Eminem 1.560 Wörter in dem 6:04 Minuten dauernden Song verpackt."
     ]
   },
   {
     "id": 350,
     "text": "Wie viele Zacken haben die heute weltweit üblichen Kronkorken auf Bierflaschen?",
-    "answer": 21.0,
+    "answer": 21,
     "answerText": "21",
     "unit": "",
     "tips": [
@@ -3852,7 +3852,7 @@ export const QUESTIONS = [
   {
     "id": 351,
     "text": "In welchem Jahr wurde das Spiel „Pacman“ veröffentlicht?",
-    "answer": 1980.0,
+    "answer": 1980,
     "answerText": "1980",
     "unit": "",
     "tips": [
@@ -3863,7 +3863,7 @@ export const QUESTIONS = [
   {
     "id": 352,
     "text": "In welchem Jahr war der Wendehals Vogel des Jahres?",
-    "answer": 1988.0,
+    "answer": 1988,
     "answerText": "1988",
     "unit": "",
     "tips": [
@@ -3874,7 +3874,7 @@ export const QUESTIONS = [
   {
     "id": 353,
     "text": "Wie alt wurde Bernie Ecclestone am 28.10.2016?",
-    "answer": 86.0,
+    "answer": 86,
     "answerText": "86",
     "unit": "",
     "tips": [
@@ -3885,7 +3885,7 @@ export const QUESTIONS = [
   {
     "id": 354,
     "text": "Wie oft fällt im Lied „Astronaut“ von Sido und Andreas Bourani das Wort „Wir“?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -3896,7 +3896,7 @@ export const QUESTIONS = [
   {
     "id": 355,
     "text": "Wie viele Artikel hat das deutsche Grundgesetz?",
-    "answer": 146.0,
+    "answer": 146,
     "answerText": "146",
     "unit": "",
     "tips": [
@@ -3907,7 +3907,7 @@ export const QUESTIONS = [
   {
     "id": 356,
     "text": "Wie viele Tore wurden bei der FIFA Frauen-Weltmeisterschaft in Kanada 2015 erzielt?",
-    "answer": 146.0,
+    "answer": 146,
     "answerText": "146",
     "unit": "",
     "tips": [
@@ -3918,7 +3918,7 @@ export const QUESTIONS = [
   {
     "id": 357,
     "text": "Wie viele Wörter enthält die Bibel?",
-    "answer": 738765.0,
+    "answer": 738765,
     "answerText": "738.765",
     "unit": "",
     "tips": [
@@ -3929,7 +3929,7 @@ export const QUESTIONS = [
   {
     "id": 358,
     "text": "Wie viele Stück Würfelzucker sind in einem Liter Coca-Cola enthalten?",
-    "answer": 35.0,
+    "answer": 35,
     "answerText": "35",
     "unit": "",
     "tips": [
@@ -3940,7 +3940,7 @@ export const QUESTIONS = [
   {
     "id": 359,
     "text": "Wie viele Großstädte mit über 100.000 Einwohnern gab es in Deutschland 2015?",
-    "answer": 79.0,
+    "answer": 79,
     "answerText": "79",
     "unit": "",
     "tips": [
@@ -3951,7 +3951,7 @@ export const QUESTIONS = [
   {
     "id": 360,
     "text": "Wie viele Schlümpfe gibt es laut der Fernsehserie?",
-    "answer": 106.0,
+    "answer": 106,
     "answerText": "106",
     "unit": "",
     "tips": [
@@ -3962,7 +3962,7 @@ export const QUESTIONS = [
   {
     "id": 361,
     "text": "Wie viele Prozent der deutschen Bevölkerung sind zwischen 18 und 49 Jahre alt? (in%)",
-    "answer": 42.0,
+    "answer": 42,
     "answerText": "42%",
     "unit": "%",
     "tips": [
@@ -3973,7 +3973,7 @@ export const QUESTIONS = [
   {
     "id": 362,
     "text": "Wie hoch ist der größte Legoturm der Welt laut Guiness World Records in Metern?",
-    "answer": 35.0,
+    "answer": 35,
     "answerText": "35 Meter",
     "unit": "Meter",
     "tips": [
@@ -3984,7 +3984,7 @@ export const QUESTIONS = [
   {
     "id": 363,
     "text": "Wie lang ist die dänische Landesgrenze in Kilometern?",
-    "answer": 68.0,
+    "answer": 68,
     "answerText": "68 Kilometer",
     "unit": "Kilometer",
     "tips": [
@@ -3995,7 +3995,7 @@ export const QUESTIONS = [
   {
     "id": 364,
     "text": "Wie lang dauert das am meisten geklickte Video auf Youtube in Sekunden?",
-    "answer": 252.0,
+    "answer": 252,
     "answerText": "252 Sekunden",
     "unit": "Sekunden",
     "tips": [
@@ -4006,7 +4006,7 @@ export const QUESTIONS = [
   {
     "id": 365,
     "text": "Wie viele Stufen gilt es beim Empire State Building Run-Up zu bewältigen?",
-    "answer": 1576.0,
+    "answer": 1576,
     "answerText": "1.576 Stufen",
     "unit": "Stufen",
     "tips": [
@@ -4017,7 +4017,7 @@ export const QUESTIONS = [
   {
     "id": 366,
     "text": "Wie viele BMW 6er Gran Coupé kann ich mir mit 1.000.000 € kaufen?",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -4028,7 +4028,7 @@ export const QUESTIONS = [
   {
     "id": 367,
     "text": "Wie viele Muskeln besitzt der Mensch?",
-    "answer": 656.0,
+    "answer": 656,
     "answerText": "656",
     "unit": "",
     "tips": [
@@ -4039,7 +4039,7 @@ export const QUESTIONS = [
   {
     "id": 368,
     "text": "In welchem Jahr tauchte erstmals OMG nachweislich als Abkürzung für „Oh My God“ auf?",
-    "answer": 1917.0,
+    "answer": 1917,
     "answerText": "1917",
     "unit": "",
     "tips": [
@@ -4050,7 +4050,7 @@ export const QUESTIONS = [
   {
     "id": 369,
     "text": "Wie laut ist das Schnurren des lautesten Katers in Dezibel?",
-    "answer": 68.0,
+    "answer": 68,
     "answerText": "68 Dezibel",
     "unit": "Dezibel",
     "tips": [
@@ -4061,7 +4061,7 @@ export const QUESTIONS = [
   {
     "id": 370,
     "text": "Wie lang ist ein DNA-Strang in der menschlichen Zelle (entwunden) in Metern?",
-    "answer": 1.0,
+    "answer": 1,
     "answerText": "1 Meter!",
     "unit": "Meter!",
     "tips": [
@@ -4072,7 +4072,7 @@ export const QUESTIONS = [
   {
     "id": 371,
     "text": "Welches Jahr haben wir laut dem Buddhistischen Kalender?",
-    "answer": 2560.0,
+    "answer": 2560,
     "answerText": "2560 war es im Jahr 2016 nach unserer Zeitrechnung.",
     "unit": "war es im Jahr 2016 nach unserer Zeitrechnung",
     "tips": [
@@ -4083,7 +4083,7 @@ export const QUESTIONS = [
   {
     "id": 372,
     "text": "Wie viel Meter groß war der Rotordurchmesser des größten Hubschraubers der Welt?",
-    "answer": 67.0,
+    "answer": 67,
     "answerText": "67 Meter",
     "unit": "Meter",
     "tips": [
@@ -4094,7 +4094,7 @@ export const QUESTIONS = [
   {
     "id": 373,
     "text": "Wie schwer ist 1 Liter Kuhmilch in Gramm?",
-    "answer": 1032.0,
+    "answer": 1032,
     "answerText": "1032 Gramm.",
     "unit": "Gramm",
     "tips": [
@@ -4105,7 +4105,7 @@ export const QUESTIONS = [
   {
     "id": 374,
     "text": "Wie groß ist Neil Patrick Harris in Zentimetern?",
-    "answer": 183.0,
+    "answer": 183,
     "answerText": "183 cm",
     "unit": "cm",
     "tips": [
@@ -4116,7 +4116,7 @@ export const QUESTIONS = [
   {
     "id": 375,
     "text": "Wie viel Euro kostet eine Geschwindigkeitsüberschreitung innerorts mit 42 km/h?",
-    "answer": 200.0,
+    "answer": 200,
     "answerText": "200 Euro",
     "unit": "Euro",
     "tips": [
@@ -4127,7 +4127,7 @@ export const QUESTIONS = [
   {
     "id": 376,
     "text": "Wie groß ist die mittlere Trächtigkeitsdauer bei einem Goldhamster in Tagen?",
-    "answer": 16.0,
+    "answer": 16,
     "answerText": "16 Tage",
     "unit": "Tage",
     "tips": [
@@ -4138,7 +4138,7 @@ export const QUESTIONS = [
   {
     "id": 377,
     "text": "Wie viele Schönheits-OPs hatte die „Weltrekordhalterin“ Cindy Jackson – Stand 2015?",
-    "answer": 52.0,
+    "answer": 52,
     "answerText": "52",
     "unit": "",
     "tips": [
@@ -4149,7 +4149,7 @@ export const QUESTIONS = [
   {
     "id": 378,
     "text": "Wie viele Menschen betraten bisher die Mondoberfläche? Stand: 2015",
-    "answer": 12.0,
+    "answer": 12,
     "answerText": "12",
     "unit": "",
     "tips": [
@@ -4160,7 +4160,7 @@ export const QUESTIONS = [
   {
     "id": 379,
     "text": "Im welchen Jahr wurde die erste Email versendet?",
-    "answer": 1971.0,
+    "answer": 1971,
     "answerText": "1971",
     "unit": "",
     "tips": [
@@ -4182,7 +4182,7 @@ export const QUESTIONS = [
   {
     "id": 381,
     "text": "Wie lange steht man in Deutschland durchschnittlich an der Supermarktkasse?",
-    "answer": 7.0,
+    "answer": 7,
     "answerText": "7 Minuten",
     "unit": "Minuten",
     "tips": [
@@ -4193,9 +4193,9 @@ export const QUESTIONS = [
   {
     "id": 382,
     "text": "Wie viele Streichholzbriefchen umfasste 2012 die größte Sammlung aller Zeiten?",
-    "answer": 3159.0,
+    "answer": 3159119,
     "answerText": "3.159.119",
-    "unit": "119",
+    "unit": "",
     "tips": [
       "Die sechstgrößte Sammlung umfasste 439.900 Knöpfe.",
       "Die zweitgrößte Sammlung umfasste 2.000.744 menschlicheZähne."
@@ -4204,7 +4204,7 @@ export const QUESTIONS = [
   {
     "id": 383,
     "text": "Wann erschien in Deutschland die erste drahtlose Fernsehfernbedienung?",
-    "answer": 1956.0,
+    "answer": 1956,
     "answerText": "1956",
     "unit": "",
     "tips": [
@@ -4215,18 +4215,18 @@ export const QUESTIONS = [
   {
     "id": 384,
     "text": "Wie teuer waren die Produktionskosten des Spiderman-Musical am Broadway, dass bis Ende 2015 teuerste Musical aller Zeiten?",
-    "answer": 56730000.0,
+    "answer": 56730000,
     "answerText": "56,73 Millionen Euro",
     "unit": "Millionen Euro",
     "tips": [
-      "Etwas weniger Geld spielte Star Wars 7 2015 in Deutschlandan der Kinokasse ein..",
+      "Etwas weniger Geld spielte Star Wars 7 2015 in Deutschlandan der Kinokasse ein.",
       "Fack Ju Göhte 2 spielte mit über 62 Mio. Euro mehr ein alsdie gesuchte Zahl."
     ]
   },
   {
     "id": 385,
     "text": "Jamie Jackson ist Weltrekordhalterin im Brautsträuße fangen. Wie oft war sie die Fängerin bei offiziellen Hochzeiten?",
-    "answer": 46.0,
+    "answer": 46,
     "answerText": "46 Mal",
     "unit": "Mal",
     "tips": [
@@ -4237,7 +4237,7 @@ export const QUESTIONS = [
   {
     "id": 386,
     "text": "In welchem Jahr wurde Google gegründet?",
-    "answer": 1998.0,
+    "answer": 1998,
     "answerText": "1998",
     "unit": "",
     "tips": [
@@ -4248,7 +4248,7 @@ export const QUESTIONS = [
   {
     "id": 387,
     "text": "Wie viel Euro gewann der IBM-Computer „Watson“ 2011 bei Jeopardy?",
-    "answer": 58362.0,
+    "answer": 58362,
     "answerText": "58.362 Euro",
     "unit": "Euro",
     "tips": [
@@ -4264,13 +4264,13 @@ export const QUESTIONS = [
     "unit": "Zentimeter",
     "tips": [
       "Es war höher als die normale Hauskatze hoch ist.",
-      "Es war niedriger als ein durchschnittlicher Ozelot hoch ist.."
+      "Es war niedriger als ein durchschnittlicher Ozelot hoch ist."
     ]
   },
   {
     "id": 389,
     "text": "Wie oft kommt das Wort „da“ im Titel „Da da da“ von Trio vor?",
-    "answer": 75.0,
+    "answer": 75,
     "answerText": "75 Mal",
     "unit": "Mal",
     "tips": [
@@ -4280,7 +4280,7 @@ export const QUESTIONS = [
   },
   {
     "id": 390,
-    "text": "Bei wie viele Sekunden liegt der Weltrekord über 100 Meter der Männer der über 105-jährigen? Stand: Ende 2015",
+    "text": "Bei wie vielen Sekunden liegt der Weltrekord über 100 Meter der Männer der über 105-Jährigen? Stand: Ende 2015",
     "answer": 42.22,
     "answerText": "42,22 Sekunden",
     "unit": "Sekunden",
@@ -4292,7 +4292,7 @@ export const QUESTIONS = [
   {
     "id": 391,
     "text": "Wie viele Springfields gibt es in den USA?",
-    "answer": 64.0,
+    "answer": 64,
     "answerText": "64",
     "unit": "",
     "tips": [
@@ -4303,7 +4303,7 @@ export const QUESTIONS = [
   {
     "id": 392,
     "text": "Wie viele Kilo Fleisch isst der Durchschnittsdeutsche im Jahr?",
-    "answer": 64.0,
+    "answer": 64,
     "answerText": "64",
     "unit": "",
     "tips": [
@@ -4325,7 +4325,7 @@ export const QUESTIONS = [
   {
     "id": 394,
     "text": "Bei wie viel Tagen steht der offizielle Rekord bei Weltmeisterschaften im Pfahlsitzen?",
-    "answer": 196.0,
+    "answer": 196,
     "answerText": "196 Tage",
     "unit": "Tage",
     "tips": [
@@ -4336,7 +4336,7 @@ export const QUESTIONS = [
   {
     "id": 395,
     "text": "Wie oft lief vom 1. Juli 2014 bis zum 30. Juli 2015 eine Folge von Big Bang Theory im deutschen Fernsehen?",
-    "answer": 2267.0,
+    "answer": 2267,
     "answerText": "2.267 Mal",
     "unit": "Mal",
     "tips": [
@@ -4347,7 +4347,7 @@ export const QUESTIONS = [
   {
     "id": 396,
     "text": "Wie oft war Benfica Lissabon portugiesischer Fußball-Meister der Herren? Stand: 2016",
-    "answer": 35.0,
+    "answer": 35,
     "answerText": "35 Mal",
     "unit": "Mal",
     "tips": [
@@ -4369,7 +4369,7 @@ export const QUESTIONS = [
   {
     "id": 398,
     "text": "Wie oft war Rekordhalterin Meryl Streep schon für einen Schauspiel-Oscar nominiert? Stand: Februar 2017",
-    "answer": 20.0,
+    "answer": 20,
     "answerText": "20 Mal",
     "unit": "Mal",
     "tips": [
@@ -4380,7 +4380,7 @@ export const QUESTIONS = [
   {
     "id": 399,
     "text": "Wie lange dauerte der am längstem andauernde Beischlaf. Die US-Schauspielerin Mae West und ihr Liebhaber Ted hatten wie viele Stunden Sex vor einem Augenzeugen?",
-    "answer": 15.0,
+    "answer": 15,
     "answerText": "15",
     "unit": "",
     "tips": [
@@ -4391,7 +4391,7 @@ export const QUESTIONS = [
   {
     "id": 400,
     "text": "Wie viele Wochen war das Album My Fair Lady in Deutschland auf Platz 1 der Albencharts, was Rekord ist.",
-    "answer": 84.0,
+    "answer": 84,
     "answerText": "84",
     "unit": "",
     "tips": [
@@ -4402,7 +4402,7 @@ export const QUESTIONS = [
   {
     "id": 401,
     "text": "Wie viele Euro kostet eine 0375-Liter-Flasche des exklusivsten Biers der Welt?",
-    "answer": 270.0,
+    "answer": 270,
     "answerText": "270",
     "unit": "",
     "tips": [
@@ -4413,7 +4413,7 @@ export const QUESTIONS = [
   {
     "id": 402,
     "text": "In welchem Jahr gab es den ersten Dollar-Milliardär?",
-    "answer": 1916.0,
+    "answer": 1916,
     "answerText": "1916",
     "unit": "",
     "tips": [
