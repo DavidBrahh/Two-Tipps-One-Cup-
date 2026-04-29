@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   onSnapshot,
@@ -165,20 +166,28 @@ function phaseLabel(room) {
   return "Warteraum";
 }
 
+function actionWithNext(actionText, nextTurnId, players) {
+  const nextName = playerName(players, nextTurnId, "niemanden");
+  return nextTurnId ? `${actionText}. Als nächstes ist ${nextName} dran.` : actionText;
+}
+
 function useRoom(roomCode) {
   const [room, setRoom] = useState(null);
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(Boolean(roomCode));
+  const [playersLoading, setPlayersLoading] = useState(Boolean(roomCode));
 
   useEffect(() => {
     if (!roomCode) {
       setRoom(null);
       setPlayers([]);
       setLoading(false);
+      setPlayersLoading(false);
       return undefined;
     }
 
     setLoading(true);
+    setPlayersLoading(true);
     const roomRef = doc(db, "rooms", roomCode);
     const unsubRoom = onSnapshot(roomRef, (snap) => {
       setRoom(snap.exists() ? { id: snap.id, ...snap.data() } : null);
@@ -187,6 +196,7 @@ function useRoom(roomCode) {
     const playersQuery = query(collection(db, "rooms", roomCode, "players"), orderBy("seat", "asc"));
     const unsubPlayers = onSnapshot(playersQuery, (snap) => {
       setPlayers(snap.docs.map((playerDoc) => ({ id: playerDoc.id, ...playerDoc.data() })));
+      setPlayersLoading(false);
     });
 
     return () => {
@@ -195,7 +205,7 @@ function useRoom(roomCode) {
     };
   }, [roomCode]);
 
-  return { room, players, loading };
+  return { room, players, loading, playersLoading };
 }
 
 function Logo() {
@@ -378,7 +388,7 @@ function Join({ roomCode, onJoined }) {
   );
 }
 
-function LobbyV2({ room, players, isHost, onStart }) {
+function LobbyV2({ room, players, isHost, userId, onStart, onKickPlayer }) {
   const joinUrl = `${window.location.origin}/join/${room.id}`;
   const canStart = players.length >= 2;
 
@@ -414,6 +424,11 @@ function LobbyV2({ room, players, isHost, onStart }) {
                 {player.role === "host-player" && <em>Host</em>}
                 {player.role !== "host-player" && <em className="playerBadge">Spieler</em>}
                 <strong>{player.coins} Coins</strong>
+                {isHost && player.id !== userId && (
+                  <button className="kickButton" onClick={() => onKickPlayer(player.id, player.name)}>
+                    Kick
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -529,8 +544,8 @@ function ResultOverlay({ result, question, onClose }) {
           {(result.responses || []).map((entry) => (
             <React.Fragment key={entry.playerId}>
               <strong className={entry.won ? "winnerName" : ""}>{entry.name}</strong>
-              <span>{entry.folded ? "Fold" : formatNumber(entry.answer)}</span>
-              <span>{entry.folded ? "-" : formatNumber(entry.distance)}</span>
+              <span>{entry.hasAnswer ? formatNumber(entry.answer) : "Keine Antwort"}</span>
+              <span>{entry.hasAnswer ? formatNumber(entry.distance) : "-"}</span>
               <span>{entry.won ? `Gewinnt ${result.share} Coins` : entry.folded ? `Gefoldet · verliert ${entry.committed || 0}` : `Verloren · verliert ${entry.committed || 0}`}</span>
               <strong>{entry.coinsAfter ?? "-"}</strong>
             </React.Fragment>
@@ -556,7 +571,7 @@ function ActionFeed({ action }) {
   return <div className="actionToast">{action.text}</div>;
 }
 
-function HostTools({ room, players, onForceStreet, onForceResult, onNextRound, onSaveCoins }) {
+function HostTools({ room, players, userId, onForceStreet, onForceResult, onNextRound, onSaveCoins, onKickPlayer }) {
   const [open, setOpen] = useState(false);
   const [coins, setCoins] = useState({});
 
@@ -583,6 +598,11 @@ function HostTools({ room, players, onForceStreet, onForceResult, onNextRound, o
                 value={coins[player.id] ?? 0}
                 onChange={(event) => setCoins({ ...coins, [player.id]: Number(event.target.value) })}
               />
+              {player.id !== userId && (
+                <button type="button" className="kickButton" onClick={() => onKickPlayer(player.id, player.name)}>
+                  Kick
+                </button>
+              )}
             </label>
           ))}
           <button className="primary" onClick={() => onSaveCoins(coins)}>Zuteilung speichern</button>
@@ -627,13 +647,14 @@ function GameOver({ room, players, me, isHost, onRematch, onStartRematch }) {
   );
 }
 
-function Game({ room, players, userId }) {
+function Game({ room, players, userId, onKickPlayer }) {
   const [answerInput, setAnswerInput] = useState("");
   const [raiseInput, setRaiseInput] = useState("");
   const [overlay, setOverlay] = useState(null);
   const [showResult, setShowResult] = useState(false);
   const [actionError, setActionError] = useState("");
   const [lastOverlayKey, setLastOverlayKey] = useState("");
+  const [seenBlindNoticeKey, setSeenBlindNoticeKey] = useState("");
   const me = players.find((player) => player.id === userId);
   const currentQuestion = getCurrentQuestion(room);
   const isHost = isHostUser(room, userId, me);
@@ -725,6 +746,9 @@ function Game({ room, players, userId }) {
     }
 
     if (room.blindNotice) {
+      const blindNoticeKey = room.blindNotice.id || `${room.gameNumber || 1}-${room.roundNumber || 0}-${room.blindNotice.bigBlind}`;
+      if (blindNoticeKey === seenBlindNoticeKey) return undefined;
+      setSeenBlindNoticeKey(blindNoticeKey);
       setOverlay({
         kind: "blind",
         kicker: "Blinds angepasst",
@@ -734,7 +758,7 @@ function Game({ room, players, userId }) {
     }
 
     return undefined;
-  }, [room.phase, room.street, room.currentTurn, room.result, room.blindNotice, room.roundNumber, currentQuestion, currentTurnName, winnerText, lastOverlayKey]);
+  }, [room.phase, room.street, room.currentTurn, room.result, room.blindNotice, room.roundNumber, room.gameNumber, currentQuestion, currentTurnName, winnerText, lastOverlayKey, seenBlindNoticeKey]);
 
   async function submitAnswer() {
     const numeric = parseAnswerInput(answerInput);
@@ -750,7 +774,7 @@ function Game({ room, players, userId }) {
     setActionError("");
   }
 
-  async function handlePostAction(updatedPlayers, actedThisStreet) {
+  async function handlePostAction(updatedPlayers, actedThisStreet, actionText = "") {
     const remaining = activePlayers(updatedPlayers);
     if (remaining.length <= 1) {
       await finishRound(updatedPlayers);
@@ -768,7 +792,10 @@ function Game({ room, players, userId }) {
     }
 
     const nextTurn = nextTurnFrom(updatedPlayers, userId);
-    await updateDoc(doc(db, "rooms", room.id), { currentTurn: nextTurn });
+    await updateDoc(doc(db, "rooms", room.id), {
+      currentTurn: nextTurn,
+      actionFeed: { text: actionWithNext(actionText, nextTurn, updatedPlayers), at: Date.now() }
+    });
   }
 
   async function act(type, amount = 0) {
@@ -823,7 +850,7 @@ function Game({ room, players, userId }) {
       bettingStart: type === "raise" ? userId : room.bettingStart,
       actionFeed: { text: actionText, at: Date.now() }
     });
-    await handlePostAction(updatedPlayers, actedThisStreet);
+    await handlePostAction(updatedPlayers, actedThisStreet, actionText);
   }
 
   async function advanceStreet(updatedPlayers) {
@@ -861,11 +888,13 @@ function Game({ room, players, userId }) {
     const responses = afterPayout.map((player) => {
       const answer = Number(player.answer);
       const folded = Boolean(player.folded || player.eliminated);
+      const hasAnswer = Number.isFinite(answer);
       return {
         playerId: player.id,
         name: player.name,
         answer: player.answer,
-        distance: folded || !Number.isFinite(answer) ? null : Math.abs(answer - currentQuestion.answer),
+        hasAnswer,
+        distance: hasAnswer ? Math.abs(answer - currentQuestion.answer) : null,
         committed: Number(player.committed || 0),
         coinsAfter: Number(player.coins || 0),
         folded,
@@ -982,7 +1011,9 @@ function Game({ room, players, userId }) {
       actedThisStreet: {},
       raiseCounts: {},
       result: null,
-      blindNotice: previousBlinds.bigBlind !== nextBlinds.bigBlind ? nextBlinds : null
+      blindNotice: previousBlinds.bigBlind !== nextBlinds.bigBlind
+        ? { ...nextBlinds, id: `${room.gameNumber || 1}-${nextRoundNumber}-${nextBlinds.bigBlind}` }
+        : null
     });
     setShowResult(false);
   }
@@ -1101,7 +1132,7 @@ function Game({ room, players, userId }) {
               <button className="primary" onClick={nextRound}><Play size={18} />Nächste Runde</button>
             </div>
           )}
-          <HostTools room={room} players={players} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} />
+          <HostTools room={room} players={players} userId={userId} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} onKickPlayer={onKickPlayer} />
         </section>
         <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
         {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
@@ -1182,7 +1213,7 @@ function Game({ room, players, userId }) {
 
         {room.phase === "gameOver" && <GameOver room={room} players={players} me={me} isHost={isHost} onRematch={markRematch} onStartRematch={startRematch} />}
 
-        {isHost && <HostTools room={room} players={players} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} />}
+        {isHost && <HostTools room={room} players={players} userId={userId} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} onKickPlayer={onKickPlayer} />}
       </section>
       <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
       {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
@@ -1198,7 +1229,7 @@ export default function App() {
     return joinMatch?.[1]?.toUpperCase() || sessionStorage.getItem("ttocRoomCode") || "";
   });
   const [screen, setScreen] = useState(() => (window.location.pathname.startsWith("/join/") ? "join" : "home"));
-  const { room, players, loading } = useRoom(roomCode);
+  const { room, players, loading, playersLoading } = useRoom(roomCode);
   const me = players.find((player) => player.id === userId);
   const isHostController = room?.hostId && userId === room.hostId;
 
@@ -1269,6 +1300,19 @@ export default function App() {
     });
   }
 
+  async function kickPlayer(playerId, playerNameToKick = "Spieler") {
+    if (!room || !isHostUser(room, userId, me) || playerId === userId) return;
+    const remainingPlayers = players.filter((player) => player.id !== playerId);
+    const nextTurn = room.currentTurn === playerId
+      ? nextTurnFrom(remainingPlayers, playerId) || actors(remainingPlayers)[0]?.id || null
+      : room.currentTurn || null;
+    await deleteDoc(doc(db, "rooms", room.id, "players", playerId));
+    await updateDoc(doc(db, "rooms", room.id), {
+      currentTurn: nextTurn,
+      actionFeed: { text: `${playerNameToKick} wurde aus dem Raum entfernt.`, at: Date.now() }
+    });
+  }
+
   function joined(code, uid) {
     setUserId(uid);
     setRoomCode(code);
@@ -1297,9 +1341,31 @@ export default function App() {
     return <main className="shell"><Logo /><section className="panel"><h2>Raum nicht gefunden</h2><button className="primary" onClick={() => setScreen("home")}>Zur Startseite</button></section></main>;
   }
 
-  if (room.phase === "lobby") {
-    return <LobbyV2 room={room} players={players} isHost={isHostUser(room, userId, me)} onStart={startGame} />;
+  if (userId && !isHostController && !playersLoading && !me) {
+    return (
+      <main className="shell">
+        <Logo />
+        <section className="panel">
+          <h2>Du bist nicht mehr in diesem Raum</h2>
+          <p className="turnHint">Der Host hat dich aus dem Spiel entfernt.</p>
+          <button
+            className="primary"
+            onClick={() => {
+              sessionStorage.removeItem("ttocPlayerId");
+              setUserId(sessionStorage.getItem("ttocControllerId") || "");
+              setScreen("home");
+            }}
+          >
+            Zur Startseite
+          </button>
+        </section>
+      </main>
+    );
   }
 
-  return <Game room={room} players={players} userId={userId} />;
+  if (room.phase === "lobby") {
+    return <LobbyV2 room={room} players={players} isHost={isHostUser(room, userId, me)} userId={userId} onStart={startGame} onKickPlayer={kickPlayer} />;
+  }
+
+  return <Game room={room} players={players} userId={userId} onKickPlayer={kickPlayer} />;
 }
