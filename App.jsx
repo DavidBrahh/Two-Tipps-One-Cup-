@@ -563,12 +563,19 @@ function ActionFeed({ action }) {
   useEffect(() => {
     if (!action?.text) return undefined;
     setVisible(true);
-    const timeout = window.setTimeout(() => setVisible(false), 3500);
+    const timeout = window.setTimeout(() => setVisible(false), 3000);
     return () => window.clearTimeout(timeout);
   }, [action?.at, action?.text]);
 
   if (!action?.text || !visible) return null;
-  return <div className="actionToast">{action.text}</div>;
+  return (
+    <div className="actionOverlay">
+      <div className="actionPopup">
+        <p>Aktion</p>
+        <strong>{action.text}</strong>
+      </div>
+    </div>
+  );
 }
 
 function HostTools({ room, players, userId, onForceStreet, onForceResult, onNextRound, onSaveCoins, onKickPlayer }) {
@@ -682,13 +689,14 @@ function Game({ room, players, userId, onKickPlayer }) {
     if (!isHost || room.phase !== "answer") return;
     const inRound = livePlayers(players);
     if (!inRound.length || !inRound.every((player) => player.answered || player.folded || player.eliminated)) return;
+    const first = nextTurnFrom(players, room.bigBlindId) || room.smallBlindId || inRound[0]?.id;
     updateDoc(doc(db, "rooms", room.id), {
       phase: "betting",
-      currentTurn: nextTurnFrom(players, room.bigBlindId) || room.smallBlindId || inRound[0]?.id,
-      bettingStart: nextTurnFrom(players, room.bigBlindId) || room.smallBlindId || inRound[0]?.id,
+      currentTurn: first,
+      bettingStart: first,
       actedThisStreet: {},
       raiseCounts: {},
-      actionFeed: { text: "Erste Setzphase startet", at: Date.now() }
+      actionFeed: { text: actionWithNext("Erste Setzphase startet", first, players), at: Date.now() }
     }).catch(console.error);
   }, [isHost, players, room.id, room.phase, room.bigBlindId, room.smallBlindId]);
 
@@ -739,10 +747,8 @@ function Game({ room, players, userId, onKickPlayer }) {
           ? `Split-Pot: ${room.result.pot} Coins · je ${room.result.share} Coins`
           : `Pot: ${room.result.pot} Coins`,
         sub: `Antwort: ${room.result.winnerAnswers?.join(", ") || "-"}`,
-        duration: 2700
+        duration: 3000
       });
-      const timeout = window.setTimeout(() => setShowResult(true), 2700);
-      return () => window.clearTimeout(timeout);
     }
 
     if (room.blindNotice) {
@@ -759,6 +765,13 @@ function Game({ room, players, userId, onKickPlayer }) {
 
     return undefined;
   }, [room.phase, room.street, room.currentTurn, room.result, room.blindNotice, room.roundNumber, room.gameNumber, currentQuestion, currentTurnName, winnerText, lastOverlayKey, seenBlindNoticeKey]);
+
+  function closeTimedOverlay() {
+    if (overlay?.kind === "winner" && room.phase === "result" && room.result) {
+      setShowResult(true);
+    }
+    setOverlay(null);
+  }
 
   async function submitAnswer() {
     const numeric = parseAnswerInput(answerInput);
@@ -787,7 +800,7 @@ function Game({ room, players, userId, onKickPlayer }) {
     }
 
     if (shouldEndStreet(updatedPlayers, actedThisStreet)) {
-      await advanceStreet(updatedPlayers);
+      await advanceStreet(updatedPlayers, actionText);
       return;
     }
 
@@ -847,13 +860,12 @@ function Game({ room, players, userId, onKickPlayer }) {
     await updateDoc(doc(db, "rooms", room.id), {
       actedThisStreet,
       raiseCounts: nextRaiseCounts,
-      bettingStart: type === "raise" ? userId : room.bettingStart,
-      actionFeed: { text: actionText, at: Date.now() }
+      bettingStart: type === "raise" ? userId : room.bettingStart
     });
     await handlePostAction(updatedPlayers, actedThisStreet, actionText);
   }
 
-  async function advanceStreet(updatedPlayers) {
+  async function advanceStreet(updatedPlayers, actionText = "") {
     if (actors(updatedPlayers).length <= 1) {
       await finishRound(updatedPlayers);
       return;
@@ -871,7 +883,12 @@ function Game({ room, players, userId, onKickPlayer }) {
       bettingStart: nextStarter,
       actedThisStreet: {},
       raiseCounts: {},
-      actionFeed: { text: nextStreet === 2 ? "Letzte Setzphase startet" : "Nächste Setzphase startet", at: Date.now() }
+      actionFeed: {
+        text: actionText
+          ? actionWithNext(actionText, nextStarter, updatedPlayers)
+          : actionWithNext(nextStreet === 2 ? "Letzte Setzphase startet" : "Nächste Setzphase startet", nextStarter, updatedPlayers),
+        at: Date.now()
+      }
     });
   }
 
@@ -1026,7 +1043,8 @@ function Game({ room, players, userId, onKickPlayer }) {
       currentTurn: first,
       bettingStart: first,
       actedThisStreet: {},
-      raiseCounts: {}
+      raiseCounts: {},
+      actionFeed: { text: actionWithNext("Erste Setzphase startet", first, players), at: Date.now() }
     });
   }
 
@@ -1039,7 +1057,7 @@ function Game({ room, players, userId, onKickPlayer }) {
       bettingStart: first,
       actedThisStreet: {},
       raiseCounts: {},
-      actionFeed: { text: street === 2 ? "Tipp 2 wurde eingeblendet" : "Tipp 1 wurde eingeblendet", at: Date.now() }
+      actionFeed: { text: actionWithNext(street === 2 ? "Tipp 2 wurde eingeblendet" : "Tipp 1 wurde eingeblendet", first, players), at: Date.now() }
     });
   }
 
@@ -1127,14 +1145,14 @@ function Game({ room, players, userId, onKickPlayer }) {
             <div className="result">
               <Trophy size={28} />
               <h2>{winnerText}</h2>
-              <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
+              <p className="resultAnswerLine">Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
               <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
               <button className="primary" onClick={nextRound}><Play size={18} />Nächste Runde</button>
             </div>
           )}
           <HostTools room={room} players={players} userId={userId} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} onKickPlayer={onKickPlayer} />
         </section>
-        <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
+        <TimedOverlay overlay={overlay} onClose={closeTimedOverlay} />
         {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
         <ActionFeed action={room.actionFeed} />
       </main>
@@ -1205,7 +1223,7 @@ function Game({ room, players, userId, onKickPlayer }) {
           <div className="result">
             <Trophy size={28} />
             <h2>{winnerText}</h2>
-            <p>Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
+            <p className="resultAnswerLine">Richtige Antwort: {currentQuestion.answerText || `${formatNumber(room.result.answer)} ${room.result.unit || ""}`}</p>
             <button className="secondary" onClick={() => setShowResult(true)}>Antworttabelle anzeigen</button>
             {isHost && <button className="primary" onClick={nextRound}><Play size={18} />Nächste Runde</button>}
           </div>
@@ -1215,7 +1233,7 @@ function Game({ room, players, userId, onKickPlayer }) {
 
         {isHost && <HostTools room={room} players={players} userId={userId} onForceStreet={forceStreet} onForceResult={() => finishRound(players)} onNextRound={nextRound} onSaveCoins={saveCoins} onKickPlayer={onKickPlayer} />}
       </section>
-      <TimedOverlay overlay={overlay} onClose={() => setOverlay(null)} />
+      <TimedOverlay overlay={overlay} onClose={closeTimedOverlay} />
       {showResult && <ResultOverlay result={room.result} question={currentQuestion} onClose={() => setShowResult(false)} />}
       <ActionFeed action={room.actionFeed} />
     </main>
@@ -1348,16 +1366,6 @@ export default function App() {
         <section className="panel">
           <h2>Du bist nicht mehr in diesem Raum</h2>
           <p className="turnHint">Der Host hat dich aus dem Spiel entfernt.</p>
-          <button
-            className="primary"
-            onClick={() => {
-              sessionStorage.removeItem("ttocPlayerId");
-              setUserId(sessionStorage.getItem("ttocControllerId") || "");
-              setScreen("home");
-            }}
-          >
-            Zur Startseite
-          </button>
         </section>
       </main>
     );

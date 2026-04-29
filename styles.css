@@ -711,8 +711,21 @@ h2 {
   font-size: clamp(1.15rem, 3vw, 1.6rem);
 }
 
-.answerLine {
-  color: #fff6d1;
+.answerLine,
+.resultAnswerLine {
+  background: rgba(243, 198, 77, 0.14);
+  border: 1px solid rgba(243, 198, 77, 0.34);
+  border-radius: 8px;
+  color: #ffe27a;
+  display: inline-block;
+  font-size: 1.08rem;
+  font-weight: 950;
+  padding: 0.45rem 0.7rem;
+}
+
+.answerLine strong {
+  color: #ffffff;
+  font-weight: 950;
 }
 
 .resultTable {
@@ -739,19 +752,42 @@ h2 {
   color: #33d69f;
 }
 
-.actionToast {
-  background: rgba(18, 20, 24, 0.96);
-  border: 1px solid rgba(243, 198, 77, 0.38);
-  border-radius: 8px;
-  bottom: 1rem;
-  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.38);
-  color: #fff6d1;
-  font-weight: 950;
-  max-width: min(90vw, 360px);
-  padding: 0.85rem 1rem;
+.actionOverlay {
+  align-items: center;
+  background: rgba(7, 10, 18, 0.28);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
   position: fixed;
-  right: 1rem;
-  z-index: 60;
+  z-index: 75;
+}
+
+.actionPopup {
+  background: rgba(18, 20, 24, 0.96);
+  border: 1px solid rgba(243, 198, 77, 0.45);
+  border-radius: 8px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+  color: #fff6d1;
+  max-width: min(92vw, 680px);
+  padding: 1.3rem 1.5rem;
+  text-align: center;
+}
+
+.actionPopup p {
+  color: #8feaff;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0;
+  margin: 0 0 0.45rem;
+  text-transform: uppercase;
+}
+
+.actionPopup strong {
+  display: block;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  line-height: 1.25;
 }
 
 .standings {
