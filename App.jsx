@@ -455,7 +455,7 @@ function PlayerTable({ players, currentTurn, pot, blinds, roundNumber, smallBlin
   const seatedPlayers = players.length ? players : [];
 
   return (
-    <div className="tableScene" aria-label="Spieltisch">
+    <div className="tableScene desktopTableScene" aria-label="Spieltisch">
       <div className="feltTable">
         <div className="tableCenter">
           <span>Pot</span>
@@ -484,6 +484,55 @@ function PlayerTable({ players, currentTurn, pot, blinds, roundNumber, smallBlin
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function MobilePokerTable({ players, currentTurn, pot, blinds, roundNumber, smallBlindId, bigBlindId, winnerIds = [], actionText = "" }) {
+  const seatedPlayers = players.length ? players : [];
+  const activePlayer = seatedPlayers.find((player) => player.id === currentTurn);
+  const mobilePlayers = activePlayer
+    ? [activePlayer, ...seatedPlayers.filter((player) => player.id !== currentTurn)]
+    : seatedPlayers;
+  const activePlayerName = playerName(players, currentTurn, "niemand");
+
+  return (
+    <div className="mobileTableScene" aria-label="Mobiler Spieltisch">
+      <div className="mobileTableTop">
+        <span>Runde {roundNumber}</span>
+        <strong>SB {blinds.smallBlind} / BB {blinds.bigBlind}</strong>
+      </div>
+
+      <div className="mobileFelt">
+        <div className="mobilePot">
+          <span>Pot</span>
+          <strong>{pot}</strong>
+          <small>Dran: {activePlayerName}</small>
+        </div>
+      </div>
+
+      <div className="mobileSeatRail" aria-label="Spieler">
+        {mobilePlayers.map((player) => {
+          const isActive = player.id === currentTurn;
+          return (
+            <div
+              className={`mobileSeat ${isActive ? "active" : ""} ${player.folded || player.eliminated ? "folded" : ""} ${winnerIds.includes(player.id) ? "winnerSeat" : ""}`}
+              key={player.id}
+            >
+              <div className="mobileSeatBadges">
+                {player.id === smallBlindId && <b className="blindChip">SB</b>}
+                {player.id === bigBlindId && <b className="blindChip big">BB</b>}
+                {isActive && <em>DRAN</em>}
+              </div>
+              <span>{player.name}</span>
+              <strong>{player.coins} Coins</strong>
+              <small>{player.eliminated ? `Platz ${player.placement || "-"}` : player.folded ? "Gefoldet" : `gesetzt ${player.committed || 0}`}</small>
+            </div>
+          );
+        })}
+      </div>
+
+      {actionText && <p className="mobileActionLine">{actionText}</p>}
     </div>
   );
 }
@@ -1111,16 +1160,29 @@ function Game({ room, players, userId, onKickPlayer }) {
   }
 
   const commonTable = (
-    <PlayerTable
-      players={players}
-      currentTurn={room.currentTurn}
-      pot={pot}
-      blinds={blinds}
-      roundNumber={room.roundNumber}
-      smallBlindId={room.smallBlindId}
-      bigBlindId={room.bigBlindId}
-      winnerIds={winnerIds}
-    />
+    <>
+      <PlayerTable
+        players={players}
+        currentTurn={room.currentTurn}
+        pot={pot}
+        blinds={blinds}
+        roundNumber={room.roundNumber}
+        smallBlindId={room.smallBlindId}
+        bigBlindId={room.bigBlindId}
+        winnerIds={winnerIds}
+      />
+      <MobilePokerTable
+        players={players}
+        currentTurn={room.currentTurn}
+        pot={pot}
+        blinds={blinds}
+        roundNumber={room.roundNumber}
+        smallBlindId={room.smallBlindId}
+        bigBlindId={room.bigBlindId}
+        winnerIds={winnerIds}
+        actionText={room.actionFeed?.text || ""}
+      />
+    </>
   );
 
   if (!me && isHost) {
